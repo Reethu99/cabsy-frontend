@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabsy - Complete your Payment</title>
+    <link rel="stylesheet" href="../RiderPayment/RiderPayment.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header-banner">
+        <div class="header-content">
+            <img src="../cab-project-frontend1/cab-project-frontend/public/Assets/RegistrationLogo.png" alt="Cabsy Logo" class="cabsy-logo">
+            <h1>Cabsy</h1>
+        </div>
+    </div>
+ 
+    <div class="payment-wrapper">
+        <div class="payment-container">
+            <header class="payment-header">
+                <i class="fas fa-arrow-left back-button"></i>
+                <h2>Complete your Payment</h2>
+            </header>
+ 
+            <div class="payment-content-columns">
+                <section class="ride-summary-column">
+                    <h3>Your Ride Details</h3>
+                    <div class="ride-details-card">
+                        <p><i class="fas fa-user-circle"></i> Driver: <strong>Rajesh S.</strong></p>
+                        <p><i class="fas fa-location-dot"></i> From: <strong>Anna Nagar</strong></p>
+                        <p><i class="fas fa-location-dot"></i> To: <strong>T. Nagar</strong></p>
+                        <p><i class="fas fa-tag"></i> Ride ID: <strong>#CBY123456</strong></p>
+                        <hr>
+                        <div class="fare-summary-section">
+                            <p class="total-amount-label">Total Amount Due:</p>
+                            <p class="total-amount">₹ 250.00</p>
+                        </div>
+                        <button class="fare-breakdown-toggle" id="fareBreakdownToggle">View Fare Details <i class="fas fa-chevron-down toggle-icon"></i></button>
+                        <div class="fare-breakdown" id="fareBreakdown">
+                            <p><span>Base Fare:</span> <span>₹ 80.00</span></p>
+                            <p><span>Distance Charges:</span> <span>₹ 120.00</span></p>
+                            <p><span>Time Charges:</span> <span>₹ 30.00</span></p>
+                            <p><span>Taxes/Tolls:</span> <span>₹ 20.00</span></p>
+                            <p class="discount"><span>Discounts:</span> <span>-₹ 0.00</span></p>
+                        </div>
+                    </div>
+                </section>
+ 
+                <div class="payment-options-column">
+                    <section class="payment-method-selection">
+                        <h3>Choose Payment Method</h3>
+                        <div class="payment-option selected" data-method="upi">
+                            <i class="fas fa-money-check-dollar icon"></i>
+                            <span>UPI (Unified Payments Interface)</span>
+                            <i class="fas fa-check-circle check-icon"></i>
+                        </div>
+                        <div class="payment-option" data-method="wallet">
+                            <i class="fas fa-wallet icon"></i>
+                            <span>Cabsy Wallet</span>
+                            <i class="fas fa-circle check-icon empty"></i>
+                        </div>
+                        <div class="payment-option" data-method="card">
+                            <i class="fas fa-credit-card icon"></i>
+                            <span>Credit/Debit Card</span>
+                            <i class="fas fa-circle check-icon empty"></i>
+                        </div>
+                    </section>
+ 
+                   
+                               
+ 
+           
+        </div>
+    </div>
+ 
+    <script src="../RiderPayment/RiderPayment.js"></script>
+</body>
+</html>

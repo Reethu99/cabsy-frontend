@@ -1,0 +1,202 @@
+/* General Layout & Hero Section for Security Page */
+ 
+/* Ensure the main content pushes down for fixed header */
+.security-content {
+    padding-top: 70px; /* Adjust based on your actual header height */
+    min-height: calc(100vh - 120px); /* Adjust to ensure footer is at bottom */
+    display: flex;
+    flex-direction: column;
+}
+ 
+/* Hero section specific to the security page */
+.hero-security {
+    background-color: #000000; /* Dark background */
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../Assets/SecurityHeroBackground.jpg'); /* Optional: Add a background image for hero */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+ 
+.hero-security .hero-text {
+    max-width: 900px;
+    margin: 0 auto;
+}
+ 
+.hero-security h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+ 
+.hero-security p {
+    font-size: 1.1em;
+    max-width: 700px;
+    margin: 0 auto;
+}
+ 
+/* Common Section Styles */
+.security-measures,
+.your-role-security,
+.emergency-info {
+    padding: 60px 20px;
+    text-align: center;
+}
+ 
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+ 
+h2 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+ 
+/* Security Measures & Your Role sections */
+.security-measures {
+    background-color: #f8f8f8; /* Light background */
+}
+ 
+.your-role-security {
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+ 
+.measure-grid,
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+ 
+.measure-item,
+.tip-item {
+    background-color: #f2f2f2;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+ 
+.measure-item:hover,
+.tip-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+ 
+.measure-item i,
+.tip-item i {
+    font-size: 3em;
+    color: #000000; /* Main brand color for icons */
+    margin-bottom: 15px;
+}
+ 
+.measure-item h3,
+.tip-item h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+ 
+.measure-item p,
+.tip-item p {
+    font-size: 0.95em;
+    color: #666;
+    margin: 0;
+}
+ 
+/* Emergency Info Section */
+.emergency-info {
+    background-color: #eef2f5; /* Another light background for contrast */
+    padding: 50px 20px;
+    margin-top: 0; /* No top margin if following a section */
+    border-top: 1px solid #ddd;
+}
+ 
+.emergency-info p {
+    font-size: 1.1em;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    color: #555;
+}
+ 
+/* Buttons (reusing from RiderHome.css if linked, otherwise define here) */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+ 
+.primary-btn {
+    background-color: #000000; /* Dark background */
+    color: #ffffff;
+    border: 2px solid #000000;
+}
+ 
+.primary-btn:hover {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #333333;
+}
+ 
+ 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-security h1 {
+        font-size: 2.5em;
+    }
+ 
+    .hero-security p {
+        font-size: 1em;
+    }
+ 
+    h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+ 
+    .measure-grid,
+    .tips-grid {
+        grid-template-columns: 1fr; /* Stack items vertically on small screens */
+    }
+ 
+    .measure-item,
+    .tip-item {
+        padding: 25px;
+    }
+ 
+    .emergency-info {
+        padding: 40px 20px;
+    }
+    .emergency-info p {
+        font-size: 1em;
+        margin-bottom: 20px;
+    }
+}
+ 
+@media (max-width: 480px) {
+    .hero-security {
+        padding: 40px 15px;
+    }
+    .hero-security h1 {
+        font-size: 2em;
+    }
+    .security-measures,
+    .your-role-security,
+    .emergency-info {
+        padding: 30px 15px;
+    }
+    h2 {
+        font-size: 1.8em;
+    }
+}

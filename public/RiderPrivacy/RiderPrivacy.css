@@ -1,0 +1,150 @@
+/* General Layout & Hero Section for Privacy Page */
+ 
+/* Ensure the main content pushes down for fixed header */
+.privacy-content {
+    padding-top: 70px; /* Adjust based on your actual header height */
+    min-height: calc(100vh - 120px); /* Adjust to ensure footer is at bottom */
+    display: flex;
+    flex-direction: column;
+}
+ 
+/* Hero section specific to the privacy page */
+.hero-privacy {
+    background-color: #000000; /* Dark background */
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../Assets/PrivacyHeroBackground.jpg'); /* Optional: Add a background image for hero */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+ 
+.hero-privacy .hero-text {
+    max-width: 900px;
+    margin: 0 auto;
+}
+ 
+.hero-privacy h1 {
+    font-size: 3em;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+ 
+.hero-privacy p {
+    font-size: 1.1em;
+    max-width: 700px;
+    margin: 0 auto;
+}
+ 
+/* Policy Details Section */
+.policy-details {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    margin-top: 30px; /* Space from the hero section */
+    margin-bottom: 30px; /* Space before footer */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: left; /* Align text left for readability */
+    max-width: 1000px; /* Keep consistent max-width for content */
+    margin-left: auto;
+    margin-right: auto;
+}
+ 
+.policy-details h2 {
+    font-size: 2.2em;
+    color: #000000;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee; /* Subtle separator */
+    padding-bottom: 10px;
+}
+ 
+.policy-details h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+ 
+.policy-details p {
+    font-size: 1em;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: #555;
+}
+ 
+.policy-details ul {
+    list-style-type: disc;
+    margin-left: 25px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+ 
+.policy-details li {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.95em;
+}
+ 
+.policy-details a {
+    color: #000000; /* Link color matching your brand */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+ 
+.policy-details a:hover {
+    text-decoration: underline;
+    color: #333333;
+}
+ 
+ 
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-privacy h1 {
+        font-size: 2.5em;
+    }
+ 
+    .hero-privacy p {
+        font-size: 1em;
+    }
+ 
+    .policy-details {
+        padding: 30px 15px;
+        margin: 20px auto;
+    }
+ 
+    .policy-details h2 {
+        font-size: 1.8em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+ 
+    .policy-details h3 {
+        font-size: 1.3em;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+ 
+    .policy-details p,
+    .policy-details li {
+        font-size: 0.9em;
+    }
+}
+ 
+@media (max-width: 480px) {
+    .hero-privacy {
+        padding: 40px 15px;
+    }
+    .hero-privacy h1 {
+        font-size: 2em;
+    }
+    .policy-details {
+        padding: 20px 10px;
+    }
+    .policy-details ul {
+        margin-left: 15px;
+    }
+}
+ 

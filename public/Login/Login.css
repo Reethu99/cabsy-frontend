@@ -1,0 +1,161 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../Assets/Background.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+  }
+
+ 
+.toggle-container {
+    display: flex;
+    align-items: center;
+}
+ 
+.toggle-option {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+ 
+.yin-yang {
+    font-size: 24px;
+    margin: 0 20px;
+}
+ 
+.highlight-line {
+    width: 100px;
+    height: 4px;
+    background-color: #000;
+    position: absolute;
+    bottom: 0;
+    transition: left 1s;
+}
+ 
+#option1.selected {
+    color:rgba(59,21,231);
+}
+ 
+#option2.selected {
+    color:rgba(154,8,8);
+}
+   
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    max-width: 900px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(8, 7, 7, 0.4);
+    border-radius: 15px;
+    color: white;
+  }
+   
+  .left-section,
+  .right-section {
+    flex: 1;
+    padding: 20px;
+    min-width: 280px;
+  }
+   
+  .left-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+   
+  #logo {
+    width: 100%;
+    /* max-width: 300px; */
+    border-radius: 500px;
+  }
+   
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+   
+  h2 {
+    margin-bottom: 20px;
+  }
+   
+  select,
+  input {
+    width: 80%;
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+   
+  .login-btn {
+    width: 80%;
+    padding: 10px;
+    background-color: #547793;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+  }
+   
+  .login-btn:hover {
+    background-color: #658b9a;
+  }
+   
+  .options {
+    width: 80%;
+    text-align: right;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+   
+  a {
+    text-decoration: none;
+    color: #547793;
+  }
+   
+  a:hover {
+    text-decoration: underline;
+  }
+   
+  #forgot {
+    font-size: 12px;
+  }
+   
+  .logo-small{
+    display: none;
+  }
+  #logo-small{
+    display: none;
+   }
+ 
+ 
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      text-align: center;
+    }
+   
+    .options {
+      text-align: center;
+    }
+    .left-section{
+      display: none;
+    }
+    .login-btn{
+      align-items: flex-end;
+    }
+    #logo-small{
+      display: inline-block;
+      height: 50px;
+     }
+   
+  }
+ 

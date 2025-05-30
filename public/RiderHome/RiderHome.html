@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CABsy</title>
+    <link rel="stylesheet" href="../RiderHome/RiderHome.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
+                <a href="#" class="cabsy-title">Cabsy</a>
+                    <a href="#ride" class="nav">Ride</a>
+                    <a href="#drive" class="nav">Drive</a>
+                    <a href="/riderabout" class="nav">About</a>
+                    <a href="/riderhelp" class="nav">Help</a>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-container">
+                    <a href="/riderprofile" class="profile-link">
+                        <i class="fas fa-user-circle profile-icon"></i> </a>
+                </div>
+                <a href="/login" class="nav-button login-btn">Login</a>
+                <a href="/registration" class="nav-button signup-btn">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="left-side">
+            <div class="form">
+                <h1>Go anywhere with CABSY</h1>
+                <div class="input-with-icon">
+                    <div class="input-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="start-circle-icon">
+                            <path
+                                d="M480.28-96Q401-96 331-126t-122.5-82.5Q156-261 126-330.96t-30-149.5Q96-560 126-629.5q30-69.5 82.5-122T330.96-834q69.96-30 149.5-30t149.04 30q69.5 30 122 82.5T834-629.28q30 69.73 30 149Q864-401 834-331t-82.5 122.5Q699-156 629.28-126q-69.73 30-149 30Z" />
+                        </svg>
+                        <select id="pickup">
+                            <option value="">Select pickup location</option>
+                            </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="end-icon" height="20px"
+                            viewBox="0 -960 960 960" width="20px" fill="#1f1f1f">
+                            <path d="M517-144 416-416 144-517v-35l672-264-264 672h-35Z" />
+                        </svg>
+                    </div>
+
+                    <div class="line-connector"></div>
+
+                    <div class="input-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="start-box-icon" viewBox="0 -960 960 960"
+                            fill="#1f1f1f">
+                            <path d="M264-264v-432h432v432H264Z" />
+                        </svg>
+                        <select id="dropoff">
+                            <option value="">Select dropoff location</option>
+                            </select>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="end-icon" height="20px"
+                            viewBox="0 -960 960 960" width="20px" fill="#1f1f1f">
+                            <path d="M517-144 416-416 144-517v-35l672-264-264 672h-35Z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="datetime">
+                    <input type="date" id="date" />
+                    <input type="time" id="time" />
+                </div>
+                <button id="seePrices">See Prices</button>
+                <p><a href="/login">Log in to see your recent activity</a></p>
+            </div>
+        </div>
+
+        <!-- <div class="map-placeholder">
+            <img src="../Assets/RiderHero.jfif" alt="Map of Bengaluru" id="hero-img" />
+        </div> -->
+
+            <div class="slideshow-container">
+      <div class="mySlides fade">
+          <img src="../Assets/hero1.jpg" style="width:100%" alt="Image One">
+          </div>
+  
+      <div class="mySlides fade">
+          <img src="../Assets/hero2.jpg" style="width:100%" alt="Image Two">
+      </div>
+  
+      <div class="mySlides fade">
+          <img src="../Assets/hero3.jpg" style="width:100%" alt="Image Three">
+      </div>
+  
+      <div class="mySlides fade">
+          <img src="../Assets/hero4.jpg" style="width:100%" alt="Image Four">
+      </div>
+  
+     
+  </div>
+  <br>
+
+    </div>
+    <footer>
+        <p>&copy; 2025 Cabsy. All rights reserved.</p>
+    </footer>
+
+    <div id="cabSelectionModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-button" id="closeModalButton">&times;</span>
+            <h2>Select Your Cab</h2>
+            <p id="routeSummary"></p>
+            <div class="cab-options-list" id="cabOptionsList">
+                </div>
+        </div>
+    </div>
+
+    <script src="../RiderHome/RiderHome.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,243 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+}
+ 
+/* Main Content Area */
+.about-content {
+    padding-top: 60px; /* Space for fixed header/navbar */
+}
+ 
+/* Hero Section */
+.hero-about {
+    background-color: #000000; /* Dark background for a sleek look */
+    color: #fff;
+    text-align: center;
+    padding: 80px 20px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../Assets/AboutUsHero.jpg'); /* Example background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+ 
+.hero-about .hero-text {
+    max-width: 800px;
+    margin: 0 auto;
+}
+ 
+.hero-about h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+ 
+.hero-about p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin: 0 auto;
+}
+ 
+/* Sections Styling */
+.mission-values,
+.how-we-work,
+.team-cta {
+    padding: 60px 20px;
+    text-align: center;
+}
+ 
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+ 
+h2 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+ 
+/* Mission & Values Section */
+.mission-values {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+ 
+.mission-values p {
+    font-size: 1.1em;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
+ 
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+ 
+.value-item {
+    background-color: #f2f2f2;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+ 
+.value-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+ 
+.value-item i {
+    font-size: 3em;
+    color: #000000; /* Primary color for icons */
+    margin-bottom: 15px;
+}
+ 
+.value-item h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+ 
+.value-item p {
+    font-size: 0.95em;
+    color: #666;
+    margin: 0;
+}
+ 
+/* How We Work Section */
+.how-we-work {
+    background-color: #eef2f5; /* Light grey background */
+}
+ 
+.how-we-work p {
+    font-size: 1.1em;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
+ 
+.about-image {
+    max-width: 100%;
+    width:40% ;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+ 
+/* Call to Action Section */
+.team-cta {
+    background-color: #000000; /* Dark background to stand out */
+    color: #fff;
+    padding: 80px 20px;
+}
+ 
+.team-cta h2 {
+    color: #fff;
+}
+ 
+.team-cta p {
+    font-size: 1.1em;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+}
+ 
+.cta-buttons {
+    margin-top: 30px;
+}
+ 
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+ 
+.primary-btn {
+    background-color: #ffffff; /* White background for primary */
+    color: #000000;
+    border: 2px solid #ffffff;
+}
+ 
+.primary-btn:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+ 
+.secondary-btn {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+}
+ 
+.secondary-btn:hover {
+    background-color: #ffffff;
+    color: #000000;
+}
+ 
+/* Footer (assuming shared styling, if not, add here) */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 0; /* No top margin needed after sections */
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9em;
+}
+ 
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .hero-about h1 {
+        font-size: 2.5em;
+    }
+ 
+    .hero-about p,
+    .mission-values p,
+    .how-we-work p,
+    .team-cta p {
+        font-size: 1em;
+    }
+ 
+    .values-grid {
+        grid-template-columns: 1fr; /* Stack values vertically on small screens */
+    }
+ 
+    .value-item {
+        padding: 20px;
+    }
+ 
+    .btn {
+        display: block; /* Stack buttons vertically */
+        margin: 15px auto;
+    }
+}
+ 
+@media (max-width: 480px) {
+    .hero-about {
+        padding: 60px 15px;
+    }
+ 
+    .hero-about h1 {
+        font-size: 2em;
+    }
+ 
+    h2 {
+        font-size: 2em;
+    }
+ 
+    .mission-values,
+    .how-we-work,
+    .team-cta {
+        padding: 40px 15px;
+    }
+}
+ 

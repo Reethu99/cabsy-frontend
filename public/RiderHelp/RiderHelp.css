@@ -1,0 +1,117 @@
+/* Basic Reset & Body Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #21548a;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2.5em;
+}
+
+h2 {
+    color: #447bb6;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.8em;
+}
+
+/* Accordion Styles */
+.accordion-item {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background-color: #e9f0f9;
+    padding: 5px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1.1em;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: #dbe7f7;
+}
+
+.accordion-header::after {
+    content: '+';
+    font-size: 1.0em;
+    transition: transform 0.3s ease;
+}
+
+.accordion-header.active::after {
+    content: '-';
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    padding: 0 20px;
+    background-color: #f9f9f9;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+}
+
+.accordion-content p {
+    padding-bottom: 15px; /* Add padding to the bottom of the paragraph */
+}
+
+
+.accordion-content.show {
+    max-height: 200px; /* Adjust as needed, should be larger than actual content */
+    padding-top: 15px;
+    padding-bottom: 15px;
+    transition: max-height 0.6s ease-in, padding 0.6s ease-in;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .accordion-header {
+        font-size: 1em;
+        padding: 12px 15px;
+    }
+
+    .accordion-content {
+        padding: 0 15px;
+    }
+}

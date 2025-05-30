@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+  <link rel="stylesheet" href="../Login/Login.css" />
+</head>
+
+<body>
+  <div class="container">
+    <!-- Left section -->
+    <div class="left-section">
+      <img id="logo" src="../Assets/shared image.jpg" alt="cabsy logo" />
+    </div>
+
+    <!-- Right section Login form -->
+    <div class="right-section">
+      <img id="logo-small" src="../Assets/shared image.jpg" alt="cabsy logo" />
+      <h2>Login</h2>
+      <!-- <select id="role">
+        <option value="rider">User</option>
+        <option value="driver">Driver</option>
+      </select> -->
+      <div class="toggle-container">
+        <div class="toggle-option" id="option1">RIDER</div>
+        <div class="yin-yang">&#9775;</div>
+        <div class="toggle-option" id="option2">CAPTAIN</div>
+      </div>
+      <div class="highlight-line" id="highlight-line"></div>
+      <input type="text" placeholder="Username" />
+      <input type="password" placeholder="Password" />
+      <div class="options"><a href="#" id="forgot">Forgot Password?</a></div><br>
+      <button class="login-btn">Login</button>
+      <p>Don't have an account? <a href="../Registration/">Create Account</a></p>
+    </div>
+  </div>
+  <script src="../Login/Login.js"></script>
+</body>
+
+</html>

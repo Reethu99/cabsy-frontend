@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Account - Personal Info</title>
+    <link rel="stylesheet" href="../RiderProfile/RiderProfile.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1>Cabsy Account</h1>
+    
+</header>
+
+<div class="container">
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li class="active"><a href="#">Personal Info</a></li>
+                <li><a href="/ridersecurity">Security</a></li>
+                <li><a href="/riderprivacy">Privacy & Data</a></li>
+                <li><a href="/rideractivity">Your Activity</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- <h2>👤Personal Info</h2> -->
+
+
+    <div class="profile-picture-container">
+        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profilePicture">
+        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+        <button onclick="document.getElementById('profilePictureInput').click()" class="edit-picture-button">Change Picture</button>
+    </div>
+
+        <div class="info-block">
+            <p><strong>Name</strong></p>
+            <div class="info-row">
+                <span>Reethika Dumpa</span>
+                <a href="/editname" class="edit-icon">✏️</a>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <p><strong>Phone Number</strong></p>
+            <div class="info-row">
+                <span>+91 9100288407</span>
+                <a href="/editphone" class="edit-icon">✏️</a>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <p><strong>Email</strong></p>
+            <div class="info-row">
+                <span>dumpareethika@gmail.com</span>
+                <a href="/editemail" class="edit-icon">✏️</a>
+            </div>
+        </div>
+
+        <div class="info-block info-row">
+            <p><strong>Change Password</strong></p>
+          
+                <!-- <span>dumpareethika@gmail.com</span> -->
+                <a href="/editpwd" class="edit-icon">✏️</a>
+            
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="../Registration/Registration.css">
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h1 id="signin">Registration</h1>
+            <div class="tabs">
+                <button onclick="showForm('rider')" id="rider-tab" class="active">Rider</button>
+                <button onclick="showForm('captain')" id="captain-tab">Captain</button>
+            </div>
+            <form id="rider-form" class="form active-form" action="/registration" method="post">
+                <input type="text" placeholder="User Name" name="username" required>
+                <div class="input-with-button">
+                    <input type="email" placeholder="Email Address" required id="rider-email" name="email">
+                    <button type="button" class="otp-button" onclick="sendOtp('rider-email')">Send OTP</button>
+                </div>
+                <div class="otp-input-group" id="rider-email-otp-group" style="display: none;">
+                    <input type="text" placeholder="Enter Email OTP" maxlength="6" name="emailOtp">
+                    <button type="button" class="otp-button" onclick="verifyOtp('rider-email')">Verify OTP</button>
+                </div>
+                <p class="verification-status" id="rider-email-status"></p>
+
+                <div class="input-with-button">
+                    <input type="tel" placeholder="Phone Number" pattern="[0-9]{10}" required id="rider-phone" name="phone">
+                    <button type="button" class="otp-button" onclick="sendOtp('rider-phone')">Send OTP</button>
+                </div>
+                <div class="otp-input-group" id="rider-phone-otp-group" style="display: none;">
+                    <input type="text" placeholder="Enter Phone OTP" maxlength="6" name="phoneOtp">
+                    <button type="button" class="otp-button" onclick="verifyOtp('rider-phone')">Verify OTP</button>
+                </div>
+                <p class="verification-status" id="rider-phone-status"></p>
+
+                <input type="password" placeholder="Password" minlength="6" required name="password" id="rider-password">
+                <div id="rider-passwordMessage" class="message"></div>
+
+                <input type="password" placeholder="Confirm Password" required name="confirmPassword" id="rider-confirmPassword">
+                <div id="rider-confirmMessage" class="message"></div>
+
+                <label class="term" style="width: 75%;"><input type="checkbox" name="termsAccepted" required> I accept the terms & conditions</label>
+                <div style="width: 75%;">
+                    <p class="acc ">Already have an account? <a href="../Login/"><u class="login-data">LOGIN</u></a></p>
+                    <button type="submit" class="register">REGISTER</button>
+                </div>
+            </form>
+
+            <form id="captain-form" class="form" action="/registration" method="post" enctype="multipart/form-data">
+                <div class="captain-div">
+                    <div class="left">
+                        <input type="text" placeholder="User Name" name="captainUsername" required>
+                        <div class="input-with-button">
+                            <input type="email" placeholder="Email Address" required id="captain-email" name="captainEmail">
+                            <button type="button" class="otp-button" onclick="sendOtp('captain-email')">Send OTP</button>
+                        </div>
+                        <div class="otp-input-group" id="captain-email-otp-group" style="display: none;">
+                            <input type="text" placeholder="Enter Email OTP" maxlength="6" name="captainEmailOtp">
+                            <button type="button" class="otp-button" onclick="verifyOtp('captain-email')">Verify OTP</button>
+                        </div>
+                        <p class="verification-status" id="captain-email-status"></p>
+
+                        <div class="input-with-button">
+                            <input type="tel" placeholder="Phone Number" pattern="[0-9]{10}" required id="captain-phone" name="captainPhone">
+                            <button type="button" class="otp-button" onclick="sendOtp('captain-phone')">Send OTP</button>
+                        </div>
+                        <div class="otp-input-group" id="captain-phone-otp-group" style="display: none;">
+                            <input type="text" placeholder="Enter Phone OTP" maxlength="6" name="captainPhoneOtp">
+                            <button type="button" class="otp-button" onclick="verifyOtp('captain-phone')">Verify OTP</button>
+                        </div>
+                        <p class="verification-status" id="captain-phone-status"></p>
+                    </div>
+                    <div class="right">
+                        <input type="password" placeholder="Password" minlength="6" required name="captainPassword" id="captain-password">
+                        <div id="captain-passwordMessage" class="message"></div>
+
+                        <input type="password" placeholder="Confirm Password" required name="captainConfirmPassword" id="captain-confirmPassword">
+                        <div id="captain-confirmMessage" class="message"></div>
+
+                        <label class="files">Upload Aadhar Card:
+                            <input type="file" accept="image/*" required title="Upload Profile Picture" name="captainAadhar">
+                        </label>
+                        <label class="files">Driving license:
+                            <input type="file" accept=".pdf,.jpg,.png" required title="Upload Driver License" placeholder="Driving license" name="captainLicense">
+                        </label>
+                    </div>
+                </div>
+                <div style="margin-left:3%" class="flex-start">
+                    <label class="term"><input type="checkbox" name="captainTermsAccepted" required> I accept the terms & conditions</label>
+                    <p class="acc">Already have an account? <a href="/login"><u class="login-data">LOGIN</u></a></p>
+                    <button type="submit" class="register">REGISTER</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../Registration/Registration.js"></script>
+</body>
+
+</html>
