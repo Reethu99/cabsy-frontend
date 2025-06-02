@@ -1,5 +1,101 @@
 /* General Layout & Hero Section for Privacy Page */
- 
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  header {
+    background-color: #000000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .navbar-left,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-img {
+    height: 5%;
+    width: 5%;
+    margin-right: 6px;
+    border-radius: 500px;
+  }
+  
+  .cabsy-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  .nav {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    margin: 5px;
+  }
+  
+  .nav:hover {
+    color: #547793;
+  }
+  
+  .profile-container {
+    margin-right: 5px;
+  }
+  
+  .profile-icon {
+    font-size: 40px;
+    color: #555;
+  }
+  
+  .nav-button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .login-btn {
+    color: #4c6d87;
+    border: 1px solid #547793;
+    background-color: transparent;
+  }
+  
+  .login-btn:hover {
+    background-color: #547793;
+    color: #fff;
+  }
+  
+  .signup-btn {
+    background-color: #4c6d87;
+    color: #fff;
+    border: 1px solid #547793;
+  }
+  
+  .signup-btn:hover {
+    background-color: #547793;
+    border-color: #547793;
+  }
+  
 /* Ensure the main content pushes down for fixed header */
 .privacy-content {
     padding-top: 70px; /* Adjust based on your actual header height */
