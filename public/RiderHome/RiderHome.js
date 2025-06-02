@@ -8,16 +8,16 @@
 //   });
   
 const locations = {
-  "Chennai": { lat: 13.0827, lng: 80.2707 },
-  "Bangalore": { lat: 12.9716, lng: 77.5946 },
-  "Mumbai": { lat: 19.0760, lng: 72.8777 },
-  "Delhi": { lat: 28.7041, lng: 77.1025 },
-  "Hyderabad": { lat: 17.3850, lng: 78.4867 },
-  "Kolkata": { lat: 22.5726, lng: 88.3639 },
-  "Pune": { lat: 18.5204, lng: 73.8567 },
-  "Ahmedabad": { lat: 23.0225, lng: 72.5714 },
-  "Jaipur": { lat: 26.9124, lng: 75.7873 },
-  "Lucknow": { lat: 26.8467, lng: 80.9462 }
+    "Indiranagar": { lat: 12.9734, lng: 77.6409 },
+    "Koramangala": { lat: 12.9345, lng: 77.6186 },
+    "Electronic City": { lat: 12.8407, lng: 77.6785 },
+    "HSR Layout": { lat: 12.9116, lng: 77.6387 },
+    "Marathahalli": { lat: 12.9553, lng: 77.7011 },
+    "BTM Layout": { lat: 12.9165, lng: 77.6101 },
+    "Jayanagar": { lat: 12.9293, lng: 77.5845 },
+    "Whitefield": { lat: 12.9699, lng: 77.7499 },
+    "Malleshwaram": { lat: 13.0039, lng: 77.5684 },
+    "Basavanagudi": { lat: 12.9416, lng: 77.5755 }
 };
 
 // Dummy data for cab types and their base prices
