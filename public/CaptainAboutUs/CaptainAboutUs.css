@@ -1,0 +1,449 @@
+/* Color Theme Variables (Blue) */
+:root {
+    --primary-blue: #2f6b9b; /* A vibrant blue */
+    --dark-blue: #233d58;    /* Darker blue for hover/accents */
+    --light-blue: #E3F2FD;   /* Very light blue for background sections */
+    --text-color: #333;
+    --white: #fff;
+    --gray-text: #555;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* General Reset & Body */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--white);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-blue);
+}
+
+a:hover {
+    color: var(--dark-blue);
+}
+
+ul {
+    list-style: none;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.primary-btn {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+}
+
+.primary-btn:hover {
+    background-color: var(--white);
+    transform: translateY(-2px);
+}
+
+.large-btn {
+    padding: 15px 35px;
+    font-size: 1.1em;
+}
+
+/* Header */
+header {
+    background-color: var(--primary-blue);
+    padding: 20px 0;
+    box-shadow: var(--box-shadow);
+    color: var(--white);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--white);
+}
+
+nav ul {
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 25px;
+}
+
+nav ul li a {
+    color: var(--white);
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    opacity: 0.8;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    opacity: 1;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--white);
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after,
+nav ul li a.active::after {
+    width: 100%;
+}
+
+/* Sections */
+.section-padded {
+    padding: 80px 0;
+}
+
+.bg-light-blue {
+    background-color: var(--light-blue);
+}
+
+h1, h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    color: var(--primary-blue);
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: var(--text-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Hero Section */
+.hero-section {
+    margin-top: 50px;
+    background-color: var(--color-muted-blue-gray);
+    color: var(--white);
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero-section h1 {
+    font-size: 3.2em;
+    margin-bottom: 20px;
+    color: var(--white);
+}
+
+.hero-section p {
+    font-size: 1.15em;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* Commitment Grid */
+.commitment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.commitment-item {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid var(--primary-blue);
+}
+
+.commitment-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.commitment-item h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: var(--primary-blue);
+}
+
+.commitment-item p {
+    color: var(--gray-text);
+}
+
+/* Why Drive With Us section */
+#why-drive-with-us p {
+    font-size: 1.1em;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul {
+        margin-top: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav ul li {
+        margin: 0 10px 10px 10px;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5em;
+    }
+
+    .section-padded {
+        padding: 60px 0;
+    }
+
+    h1, h2 {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .commitment-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 60px 15px;
+    }
+
+    .hero-section h1 {
+        font-size: 2em;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .large-btn {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    nav ul li {
+        margin: 0 5px 10px 5px;
+    }
+}
+
+
+:root {
+    /* Color Palette */
+    --color-black: #000000;
+    --color-dark-gray: #1a1a1a;
+    --color-light-gray-bg: #f0f2f5;
+    --color-white: #ffffff;
+    --color-steel-blue: #4c6d87; /* Main navbar color */
+    --color-muted-blue-gray: #547793;
+    --color-green-success: #28a745;
+    --color-red-danger: #dc3545;
+    --color-orange-warning: #ffc107;
+    --color-info-blue: #17a2b8;
+    --color-highlight: rgba(76, 109, 135, 0.1); /* Lighter steel blue for highlighting */
+    --color-highlight-border: var(--color-steel-blue);
+
+
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 15px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+
+    /* Border Radius */
+    --border-radius-sm: 5px;
+    --border-radius-md: 10px;
+
+    /* Navbar Widths */
+    --navbar-desktop-collapsed-width: 70px; /* Width when only icons visible */
+    --navbar-desktop-expanded-width-percentage: 25vw; /* 25% of viewport width */
+    --navbar-mobile-width: 280px; /* Fixed width for mobile overlay */
+}
+
+a.active {
+    color: white;
+    text-decoration: none;
+    position: relative;
+    margin-left: 40px;
+}
+
+a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+a.active:hover::after {
+    width: 100%;
+}
+
+/* --- Header --- */
+
+header {
+    grid-area: header;
+    background-color: var(--color-black);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Menu Toggle at start of header (for mobile) */
+.menu-toggle {
+    font-size: 2.2em;
+    cursor: pointer;
+    color: var(--color-white);
+    margin-right: var(--spacing-md); /* Space from logo */
+    display: none; /* Hidden on desktop, shown on mobile */
+    transition: color 0.3s ease;
+}
+.menu-toggle:hover {
+    color: var(--color-muted-blue-gray);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    margin-right: var(--spacing-xs);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cabsy-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--color-white);
+    transition: color 0.3s ease;
+}
+.cabsy-title:hover {
+    color: var(--color-muted-blue-gray);
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    color: var(--color-white);
+    font-size: 1.05em;
+    font-weight: 500;
+    margin-right: var(--spacing-md);
+}
+
+.driver-avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-muted-blue-gray);
+    margin-left: var(--spacing-xs);
+}
+
+.logout-btn {
+    background-color: var(--color-steel-blue);
+    color: var(--color-white);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+.logout-btn i {
+    margin-right: var(--spacing-xs);
+}
+.logout-btn:hover {
+    background-color: var(--color-muted-blue-gray);
+    transform: translateY(-1px);
+}
+
+
+/* --- Footer --- */
+footer {
+    grid-area: footer;
+    text-align: center;
+    padding: var(--spacing-md);
+    background-color: var(--color-black); /* Darker footer for contrast */
+    color: #bbb;
+    font-size: 0.9em;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+footer p {
+    color: #8dc1f5;
+    text-decoration: none;
+    margin: 0 var(--spacing-xs);
+}
+footer a:hover {
+    text-decoration: underline;
+}

@@ -17,6 +17,7 @@
 
     <!-- Right section Login form -->
     <div class="right-section">
+
       <img id="logo-small" src="../Assets/shared image.jpg" alt="cabsy logo" />
       <h2>Login</h2>
       <!-- <select id="role">
@@ -29,11 +30,13 @@
         <div class="toggle-option" id="option2">CAPTAIN</div>
       </div>
       <div class="highlight-line" id="highlight-line"></div>
-      <input type="text" placeholder="Username" />
-      <input type="password" placeholder="Password" />
+      <form id="loginForm">
+      <input id="username" type="text" placeholder="Username" />
+      <input id="password" type="password" placeholder="Password" />
       <div class="options"><a href="#" id="forgot">Forgot Password?</a></div><br>
-      <button class="login-btn">Login</button>
-      <p>Don't have an account? <a href="../Registration/">Create Account</a></p>
+      <button class="login-btn" type="submit">Login</button>
+      <p>Don't have an account? <a href="/registration">Create Account</a></p>
+    </form>
     </div>
   </div>
   <script src="../Login/Login.js"></script>
