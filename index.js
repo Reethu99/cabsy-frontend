@@ -70,7 +70,9 @@ app.get('/ridersecurity', (req, res) => {
 app.get('/riderpayment', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPayment', 'RiderPayment.html'));
 });
-
+app.get("/captain",(req,res)=>{
+    res.sendFile(path.join(__dirname,"public",""))
+})
 
 // POST route for registration
 // body-parser.json() will handle parsing the request body now

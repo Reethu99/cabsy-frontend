@@ -1,161 +1,265 @@
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: url('../Assets/Background.png') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-  }
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('../Assets/Background.png') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+}
 
- 
+
 .toggle-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
- 
+
 .toggle-option {
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: color 0.3s;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: color 0.3s;
 }
- 
+
 .yin-yang {
-    font-size: 24px;
-    margin: 0 20px;
+  font-size: 24px;
+  margin: 0 20px;
 }
- 
+
 .highlight-line {
-    width: 100px;
-    height: 4px;
-    background-color: #000;
-    position: absolute;
-    bottom: 0;
-    transition: left 1s;
+  width: 100px;
+  height: 4px;
+  background-color: #000;
+  position: absolute;
+  bottom: 0;
+  transition: left 1s;
 }
- 
+
 #option1.selected {
-    color:rgba(59,21,231);
+  color:rgba(59,21,231);
+}
+
+#option2.selected {
+  color:rgba(154,8,8);
 }
  
-#option2.selected {
-    color:rgba(154,8,8);
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  max-width: 900px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(8, 7, 7, 0.4);
+  border-radius: 15px;
+  color: white;
 }
-   
+ 
+.left-section,
+.right-section {
+  flex: 1;
+  padding: 20px;
+  min-width: 280px;
+}
+ 
+.left-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ 
+#logo {
+  width: 100%;
+  /* max-width: 300px; */
+  border-radius: 500px;
+}
+ 
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ 
+h2 {
+  margin-bottom: 20px;
+}
+ 
+select,
+input {
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+}
+ 
+.login-btn {
+  width: 80%;
+  padding: 10px;
+  background-color: #547793;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1em;
+}
+ 
+.login-btn:hover {
+  background-color: #658b9a;
+}
+ 
+.options {
+  width: 80%;
+  text-align: right;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+ 
+a {
+  text-decoration: none;
+  color: #547793;
+}
+ 
+a:hover {
+  text-decoration: underline;
+}
+ 
+#forgot {
+  font-size: 12px;
+}
+ 
+.logo-small{
+  display: none;
+}
+#logo-small{
+  display: none;
+ }
+
+
+@media (max-width: 768px) {
+  .right-section {
+    position: relative; /* Make right-section the positioning context for its children */
+    height: 100%; /* Ensure it has height for absolute children */
+    overflow: hidden; /* Hide content that slides outside */
+}
+#logo-small-forgot {
+    display: inline-block; /* Show on small screens */
+}
   .container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 90%;
-    max-width: 900px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(8, 7, 7, 0.4);
-    border-radius: 15px;
-    color: white;
-  }
-   
-  .left-section,
-  .right-section {
-    flex: 1;
-    padding: 20px;
-    min-width: 280px;
-  }
-   
-  .left-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-   
-  #logo {
-    width: 100%;
-    /* max-width: 300px; */
-    border-radius: 500px;
-  }
-   
-  .right-section {
-    display: flex;
     flex-direction: column;
-    align-items: center;
+    text-align: center;
   }
-   
-  h2 {
-    margin-bottom: 20px;
-  }
-   
-  select,
-  input {
-    width: 80%;
-    margin: 10px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
-  }
-   
-  .login-btn {
-    width: 80%;
-    padding: 10px;
-    background-color: #547793;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1em;
-  }
-   
-  .login-btn:hover {
-    background-color: #658b9a;
-  }
-   
+ 
   .options {
-    width: 80%;
-    text-align: right;
-    font-size: 0.9em;
-    margin-top: 5px;
+    text-align: center;
   }
-   
-  a {
-    text-decoration: none;
-    color: #547793;
-  }
-   
-  a:hover {
-    text-decoration: underline;
-  }
-   
-  #forgot {
-    font-size: 12px;
-  }
-   
-  .logo-small{
+  .left-section{
     display: none;
+  }
+  .login-btn{
+    align-items: flex-end;
   }
   #logo-small{
-    display: none;
+    display: inline-block;
+    height: 50px;
    }
  
+}
+
+
+.login-form-container,
+.forgot-password-container {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    /* Ensure these containers are positioned relative if you want absolute children */
+    position: relative;
+    z-index: 1; /* Ensure they layer correctly during transition */
+}
+
+.fade-out-left {
+  opacity: 0;
+  transform: translateX(-30px); /* Slides slightly left while fading */
+}
+
+/* Classes for fade-in and slide-in */
+.fade-in-right {
+  opacity: 1;
+  transform: translateX(0); /* Slides from right to center */
+}
+
+/* Initial state for forgot password container */
+.forgot-password-container {
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
  
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-      text-align: center;
-    }
-   
-    .options {
-      text-align: center;
-    }
-    .left-section{
-      display: none;
-    }
-    .login-btn{
-      align-items: flex-end;
-    }
-    #logo-small{
-      display: inline-block;
-      height: 50px;
-     }
-   
-  }
- 
+  transform: translateX(30px); /* Initially off-screen to the right */
+  box-sizing: border-box; /* Include padding in width/height */
+  padding: 20px;
+  /* Match background and border-radius of the parent right-section */
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  z-index: 0; /* Below login form initially */
+}
+
+/* Utility class to truly hide elements from layout */
+.hidden {
+  display: none !important;
+}
+
+/* Specific styles for forgot password elements to match login form styling */
+#forgot-password-container input,
+#forgot-password-container button {
+  width: 80%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+#forgot-password-container .login-btn {
+  background-color: #547793;
+  color: white;
+  cursor: pointer;
+}
+
+#forgot-password-container .login-btn:hover {
+  background-color: #658b9a;
+}
+
+#forgot-password-container h2 {
+  margin-bottom: 20px;
+  color: white;
+}
+#forgot-password-container p a {
+  color: #547793;
+}
+#forgot-password-container p a:hover {
+  text-decoration: underline;
+}
+
+/* Styling for OTP and New Password sections */
+#otp-section, #new-password-section {
+  width: 100%; /* Ensure these sections take full width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Add transitions for these sections if you want them to fade/slide in */
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+  opacity: 0; /* Initially hidden with opacity */
+  transform: translateY(10px); /* Slight shift down */
+}
+
+/* Ensure small logo for forgot password on mobile */
+#logo-small-forgot {
+  display: none; /* Hidden by default */
+  height: 50px;
+  margin-bottom: 10px;
+}
