@@ -31,6 +31,10 @@ app.get('/registration', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 
+app.get('/riderhome', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'RiderHome', 'RiderHome.html'));
+});
+
 app.get('/riderprofile', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'RiderProfile.html'));
 });
@@ -70,9 +74,33 @@ app.get('/ridersecurity', (req, res) => {
 app.get('/riderpayment', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPayment', 'RiderPayment.html'));
 });
-app.get("/captain",(req,res)=>{
-    res.sendFile(path.join(__dirname,"public",""))
-})
+
+//Captain routes
+app.get('/captain', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'Captain', 'captain.html')); // Use path.join to ensure correct file path
+});
+
+app.get('/captainaboutus', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CaptainAboutUs', 'CaptainAboutUS.html')); // Use path.join to ensure correct file path
+});
+
+app.get('/captainhelp', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CaptainHelp', 'help.html')); // Use path.join to ensure correct file path
+});
+
+app.get('/captainhome', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CaptainHome', 'captainhome.html')); // Use path.join to ensure correct file path
+});
+
+app.get('/captainsecurity', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'CaptainSecurity', 'CaptainSecurity.html')); // Use path.join to ensure correct file path
+});
+
+app.get('/editcaptainprofile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'EditCaptainProfile', 'editcaptainprofile.html')); // Use path.join to ensure correct file path
+});
+
+
 
 // POST route for registration
 // body-parser.json() will handle parsing the request body now

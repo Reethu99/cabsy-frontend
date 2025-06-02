@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Help - Cab Booking System</title>
+    <link rel="stylesheet" href="Help.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <div class="menu-toggle" id="menuToggle"> <i class="fas fa-bars"></i>
+            </div>
+            <a href="#" class="logo">
+                <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
+                <span class="cabsy-title">Cabsy</span>
+            </a>
+            <a href="/captain" class="active">Captain</a>
+            <a href="/captainaboutus" class="active">About Us</a>
+        </div>
+        <div class="header-right">
+            <div class="driver-info">
+                <span id="driver-name">Hi, Captain John Doe</span>
+                <img src="https://via.placeholder.com/40" alt="Driver Avatar" class="driver-avatar">
+            </div>
+            <button class="logout-btn" title="Logout" onclick="window.location.href='/login'"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="help-categories">
+            <h2>Popular Help Topics</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <h3><a href="#account-issues">Account & Profile</a></h3>
+                    <p>Issues with your account, login, or profile details.</p>
+                </div>
+                <div class="category-item">
+                    <h3><a href="#ride-management">Ride Management</a></h3>
+                    <p>Accepting rides, navigation, cancellations, and more.</p>
+                </div>
+                <div class="category-item">
+                    <h3><a href="#payment-earnings">Payments & Earnings</a></h3>
+                    <p>Understanding your earnings, payouts, and payment issues.</p>
+                </div>
+                <div class="category-item">
+                    <h3><a href="#app-technical">App & Technical Issues</a></h3>
+                    <p>Troubleshooting app crashes, GPS problems, and other technical issues.</p>
+                </div>
+                <div class="category-item">
+                    <h3><a href="#safety-support">Safety & Support</a></h3>
+                    <p>Emergency assistance, reporting incidents, and safety guidelines.</p>
+                </div>
+                <div class="category-item">
+                    <h3><a href="#other-faq">Other FAQs</a></h3>
+                    <p>General questions not covered elsewhere.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item" id="account-issues">
+                <button class="faq-question">How do I update my profile picture?</button>
+                <div class="faq-answer">
+                    <p>You can update your profile picture from the "Settings" section of your app. Go to "Profile" and then tap on your current picture to upload a new one.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What should I do if I forgot my password?</button>
+                <div class="faq-answer">
+                    <p>On the login screen, tap "Forgot Password?" and follow the instructions to reset it using your registered email or phone number.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="ride-management">
+                <button class="faq-question">How do I accept a ride request?</button>
+                <div class="faq-answer">
+                    <p>When a ride request comes in, you will see a notification on your screen. Tap "Accept" to take the ride. Make sure your app is online to receive requests.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">What if a passenger cancels a ride?</button>
+                <div class="faq-answer">
+                    <p>If a passenger cancels a ride, you may be eligible for a cancellation fee depending on the time of cancellation and your location. Check your earnings section for details.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="payment-earnings">
+                <button class="faq-question">When do I receive my earnings?</button>
+                <div class="faq-answer">
+                    <p>Earnings are typically processed daily/weekly, depending on your region and payment method. You can view your payout schedule in the "Earnings" section.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="app-technical">
+                <button class="faq-question">My app is crashing frequently, what should I do?</button>
+                <div class="faq-answer">
+                    <p>Try clearing the app's cache and data, or reinstalling the app. Ensure your operating system is up to date. If the issue persists, contact support.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="safety-support">
+                <button class="faq-question">How do I report an incident?</button>
+                <div class="faq-answer">
+                    <p>In case of an incident, go to the "Help" section and select "Report an Incident" or contact our emergency support line immediately.</p>
+                </div>
+            </div>
+
+            <div class="faq-item" id="other-faq">
+                <button class="faq-question">How can I contact customer support?</button>
+                <div class="faq-answer">
+                    <p>You can contact customer support via the in-app chat, phone, or email. Details are available in the "Contact Us" section.</p>
+                </div>
+            </div>
+            </section>
+
+        <section class="contact-support">
+            <h2>Still need help?</h2>
+            <p>If you can't find the answer you're looking for, feel free to reach out to our support team.</p>
+            <div class="contact-options">
+                <a href="mailto:support@yourcabapp.com" class="btn">Email Support</a>
+                <a href="tel:+1234567890" class="btn">Call Support</a>
+                <a href="#" class="btn">Live Chat (Coming Soon)</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Cabsy. All rights reserved.</p>
+    </footer>
+
+    <script src="Help.js"></script>
+</body>
+</html>
