@@ -7,6 +7,95 @@ body {
     color: #333;
     line-height: 1.6;
 }
+  
+  header {
+    background-color: #000000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .navbar-left,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-img {
+    height: 5%;
+    width: 5%;
+    margin-right: 6px;
+    border-radius: 500px;
+  }
+  
+  .cabsy-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  .nav {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    margin: 5px;
+  }
+  
+  .nav:hover {
+    color: #547793;
+  }
+  
+  .profile-container {
+    margin-right: 5px;
+  }
+  
+  .profile-icon {
+    font-size: 40px;
+    color: #555;
+  }
+  
+  .nav-button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .login-btn {
+    color: #4c6d87;
+    border: 1px solid #547793;
+    background-color: transparent;
+  }
+  
+  .login-btn:hover {
+    background-color: #547793;
+    color: #fff;
+  }
+  
+  .signup-btn {
+    background-color: #4c6d87;
+    color: #fff;
+    border: 1px solid #547793;
+  }
+  
+  .signup-btn:hover {
+    background-color: #547793;
+    border-color: #547793;
+  }
+  
 
 .container {
     max-width: 960px;
@@ -19,14 +108,14 @@ body {
 
 h1 {
     text-align: center;
-    color: #21548a;
+    color: #000000;
     margin-bottom: 30px;
     font-weight: 700;
     font-size: 2.5em;
 }
 
 h2 {
-    color: #447bb6;
+    color: #000000;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
     margin-top: 40px;
@@ -44,7 +133,7 @@ h2 {
 }
 
 .accordion-header {
-    background-color: #e9f0f9;
+    background-color: #f4f7f6;
     padding: 5px 20px;
     cursor: pointer;
     display: flex;
@@ -57,7 +146,7 @@ h2 {
 }
 
 .accordion-header:hover {
-    background-color: #dbe7f7;
+    background-color: #f4f7f6;
 }
 
 .accordion-header::after {
@@ -73,7 +162,7 @@ h2 {
 
 .accordion-content {
     padding: 0 20px;
-    background-color: #f9f9f9;
+    background-color: #f4f7f6;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-out, padding 0.4s ease-out;

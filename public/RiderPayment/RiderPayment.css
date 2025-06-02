@@ -3,43 +3,97 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f2f5; /* Light grey background */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     min-height: 100vh;
 }
- 
-.header-banner {
-    width: 100%;
-    background-color: black; /* Cabsy brand color */
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
- 
-.header-content {
+
+  header {
+    background-color: #000000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .navbar-left,
+  .navbar-right {
     display: flex;
     align-items: center;
-    justify-content: center;
-    max-width: 1200px; /* Constrain content width */
-    margin: 0 auto;
-    padding: 0 20px;
-}
- 
-.cabsy-logo {
-    height: 40px;
-    width: 40px;
-    margin-right: 15px;
-    border-radius: 50%;
-    background-color: white; /* Placeholder for logo background */
-}
- 
-.header-banner h1 {
-    margin: 0;
+  }
+  
+  .logo-img {
+    height: 5%;
+    width: 5%;
+    margin-right: 6px;
+    border-radius: 500px;
+  }
+  
+  .cabsy-title {
     font-size: 1.8em;
-    font-weight: 600;
-}
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+  }
+  
+  .nav {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    margin: 5px;
+  }
+  
+  .nav:hover {
+    color: #547793;
+  }
+  
+  .profile-container {
+    margin-right: 5px;
+  }
+  
+  .profile-icon {
+    font-size: 40px;
+    color: #555;
+  }
+  
+  .nav-button {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .login-btn {
+    color: #4c6d87;
+    border: 1px solid #547793;
+    background-color: transparent;
+  }
+  
+  .login-btn:hover {
+    background-color: #547793;
+    color: #fff;
+  }
+  
+  .signup-btn {
+    background-color: #4c6d87;
+    color: #fff;
+    border: 1px solid #547793;
+  }
+  
+  .signup-btn:hover {
+    background-color: #547793;
+    border-color: #547793;
+  }
+  
  
 .payment-wrapper {
     flex-grow: 1;

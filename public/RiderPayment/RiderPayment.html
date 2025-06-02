@@ -8,17 +8,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="header-banner">
-        <div class="header-content">
-            <img src="../cab-project-frontend1/cab-project-frontend/public/Assets/RegistrationLogo.png" alt="Cabsy Logo" class="cabsy-logo">
-            <h1>Cabsy</h1>
-        </div>
-    </div>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
+                <a href="#" class="cabsy-title">Cabsy</a>
+                    <a href="/riderabout" class="nav">About</a>
+                    <a href="/riderhelp" class="nav">Help</a>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-container">
+                    <a href="/riderprofile" class="profile-link">
+                        <i class="fas fa-user-circle profile-icon"></i> </a>
+                </div>
+                <a href="/login" class="nav-button login-btn">Login</a>
+                <a href="/registration" class="nav-button signup-btn">Sign Up</a>
+            </div>
+        </nav>
+    </header>
  
     <div class="payment-wrapper">
         <div class="payment-container">
             <header class="payment-header">
-                <i class="fas fa-arrow-left back-button"></i>
+               
                 <h2>Complete your Payment</h2>
             </header>
  
