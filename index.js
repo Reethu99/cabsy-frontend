@@ -77,8 +77,6 @@ app.get('/riderpayment', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPayment', 'RiderPayment.html'));
 });
 
-
-
 //Captain routes
 app.get('/captain', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Captain', 'captain.html')); // Use path.join to ensure correct file path
