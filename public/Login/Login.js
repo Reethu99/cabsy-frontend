@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Existing Toggle Elements ---
-    const option1 = document.getElementById('option1');
-    const option2 = document.getElementById('option2');
+    const option1 = document.getElementById('option1'); // Rider option
+    const option2 = document.getElementById('option2'); // Captain option
     const highlightLine = document.getElementById('highlight-line');
 
     // --- Login/Forgot Password Section Elements ---
@@ -10,9 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const forgotLink = document.getElementById('forgot');
     const backToLoginLink = document.getElementById('back-to-login');
 
-    // --- Login Form Specific Elements (New/Re-added) ---
+    // --- Login Form Specific Elements ---
+    // IMPORTANT: Assuming 'username' input is actually for 'email' as per backend LoginDTO
     const mainLoginForm = document.getElementById('mainLoginForm'); // Get the form element
-    const usernameInput = document.getElementById('username'); // Get username input
+    const emailInput = document.getElementById('username'); // Renamed for clarity, corresponds to backend 'email'
     const passwordInput = document.getElementById('password'); // Get password input
 
     // --- Forgot Password Specific Elements ---
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedOptionId = 'option1'; // Default to RIDER
 
     // --- Utility Function for CSS Transitions (Promisified) ---
+    // (Keeping your existing animation utility function as is)
     function animateAndHide(element, classesToAdd, classesToRemove, finalHidden = true, transitionDuration = 350) {
         return new Promise(resolve => {
             if (!element) {
@@ -117,19 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
     highlightLine.style.left = '0';
 
 
-    // --- Login Form Submission Logic ---
+    // --- Login Form Submission Logic (MODIFIED) ---
     mainLoginForm.addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevent default form submission
 
-        const username = usernameInput.value;
-        const password = passwordInput.value;
+        const email = emailInput.value.trim(); // Get email (from 'username' input)
+        const password = passwordInput.value.trim(); // Get password
 
-        console.log('Username:', username);
+        console.log('Attempting login with Email:', email);
         console.log('Password:', password);
-        console.log('Selected ID:', selectedOptionId);
+        console.log('Selected Role ID:', selectedOptionId);
 
-        if (!username || !password) {
-            alert("Please enter both username and password.");
+        if (!email || !password) {
+            alert("Please enter both email and password.");
             return;
         }
 
@@ -138,43 +140,47 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Simulate login based on selected option
-        // In a real application, you would make an API call here
-        if (selectedOptionId === 'option1') {
-            window.location.href = '/riderhome'; // Redirect for Rider
-        } else if (selectedOptionId === 'option2') {
-            window.location.href = '/captain'; // Redirect for Captain
-        }
-
-        // Example of a commented-out fetch request (as in your previous code)
-        /*
         try {
-            const response = await fetch("https://your-api-endpoint.com/login", {
+            // Make POST request to your Express backend's /login endpoint
+            const response = await fetch("/login", { // Relative path to Express server
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password, role: selectedOptionId === 'option1' ? 'rider' : 'captain' }),
+                body: JSON.stringify({ email, password, role: selectedOptionId === 'option1' ? 'rider' : 'captain' }),
             });
 
-            const data = await response.json();
+            const data = await response.json(); // Parse the JSON response from Express
 
-            if (response.ok) {
-                alert("Login successful!");
-                // Redirect or store token, e.g.:
-                // window.location.href = "/dashboard";
+            if (response.ok && data.success) { // Check both HTTP status and custom 'success' field from Express
+                alert(data.message); // "Login successful!"
+
+                // Express server should send redirectUrl
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl; // Redirect to riderhome or captainhome
+                } else {
+                    console.warn("No redirectUrl received from server.");
+                    // Fallback redirect if Express doesn't provide it
+                    if (selectedOptionId === 'option1') {
+                        window.location.href = '/riderhome';
+                    } else if (selectedOptionId === 'option2') {
+                        window.location.href = '/captainhome';
+                    }
+                }
             } else {
+                // Handle login error from Express/Backend
                 alert(data.message || "Login failed. Please try again.");
+                console.error("Login failed details:", data.error);
             }
         } catch (error) {
-            console.error("Error during login:", error);
+            console.error("Error during login request:", error);
             alert("An error occurred. Please try again later.");
         }
-        */
     });
 
 
     // --- Forgot Password Flow Logic ---
+    // (Keeping your existing forgot password logic as is)
 
     async function showForgotPasswordForm() {
         // Reset z-index
@@ -337,64 +343,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
-
-let selectedOptionId = null;
-
-document.querySelectorAll('.toggle-option').forEach(option => {
-  option.addEventListener('click', () => {
-    selectedOptionId = option.id;
-
-    document.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('active'));
-    option.classList.add('active');
-  });
-});
-
-
-document.getElementById("loginForm").addEventListener("submit", async function (e) {
-    
-e.preventDefault(); // Prevent form from refreshing the page
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    console.log('Selected ID:', selectedOptionId);
-    
-    if (selectedOptionId === 'option1') {
-        window.location.href = '/riderhome';
-    } else if (selectedOptionId === 'option2') {
-        window.location.href = '/captain';
-    } else {
-        alert("Please select an option.");
-    }
-    // Determine selected role
-    const role = document.getElementById("option1").classList.contains("active") ? "rider" : "captain";
-
-    // try {
-    //     const response = await fetch("https://your-api-endpoint.com/login", {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify({ username, password, role }),
-    //     });
-
-    //     const data = await response.json();
-
-    //     if (response.ok) {
-    //         // Handle successful login
-    //         alert("Login successful!");
-    //         // Redirect or store token
-    //         // window.location.href = "/dashboard";
-    //     } else {
-    //         // Handle login error
-    //         alert(data.message || "Login failed. Please try again.");
-    //     }
-    // } catch (error) {
-    //     console.error("Error during login:", error);
-    //     alert("An error occurred. Please try again later.");
-    // }
-});
-
