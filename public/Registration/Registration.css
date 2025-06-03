@@ -178,7 +178,7 @@ label {
     margin-top: 1rem;
 }
 
-.files input[type="file"] {
+.proof input {
     width: calc(100% - 20px);
     max-width: none;
     margin-top: 5px;

@@ -51,7 +51,7 @@
                 </div>
             </form>
 
-            <form id="captain-form" class="form" action="/registration" method="post" enctype="multipart/form-data">
+            <form id="captain-form" class="form" action="/registration" method="post">
                 <div class="captain-div">
                     <div class="left">
                         <input type="text" placeholder="User Name" name="captainUsername" required>
@@ -82,11 +82,11 @@
                         <input type="password" placeholder="Confirm Password" required name="captainConfirmPassword" id="captain-confirmPassword">
                         <div id="captain-confirmMessage" class="message"></div>
 
-                        <label class="files">Upload Aadhar Card:
-                            <input type="file" accept="image/*" required title="Upload Profile Picture" name="captainAadhar">
+                        <label class="proof">Aadhar Card Number:
+                            <input type="text" required title="Aadhar Card Number" name="captainAadhar">
                         </label>
-                        <label class="files">Driving license:
-                            <input type="file" accept=".pdf,.jpg,.png" required title="Upload Driver License" placeholder="Driving license" name="captainLicense">
+                        <label class="proof">Driving license:
+                            <input type="text" required title="Driver License Number" placeholder="Driving license" name="captainLicense">
                         </label>
                     </div>
                 </div>

@@ -188,7 +188,7 @@ app.post('/login', async (req, res) => {
             };
 
             // Determine redirect URL based on user type
-            const redirectUrl = role === 'captain' ? '/captainhome' : '/riderhome';
+            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
 
             // Send a success response back to the client, indicating where to redirect
             res.status(200).json({
@@ -223,10 +223,11 @@ app.post('/registration', async (req, res) => {
         let backendResponse;
         let registrationData;
         let backendEndpoint;
-
+        const role="";
         // Differentiate between Rider and Captain registrations based on expected fields
         if (req.body.username && req.body.email && req.body.phone && req.body.password) {
-            console.log('Rider Registration Attempt:', req.body);
+            console.log('Rider Registration Attempt:');
+            role="rider";
             registrationData = {
                 name: req.body.username,
                 email: req.body.email,
@@ -234,13 +235,14 @@ app.post('/registration', async (req, res) => {
                 password: req.body.password
             };
             backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
-        } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.licenseNumber && req.body.captainPassword) {
-            console.log('Captain Registration Attempt:', req.body);
+        } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
+            console.log('Captain Registration Attempt:');
+            role="captain";
             registrationData = {
                 name: req.body.captainUsername,
                 email: req.body.captainEmail,
                 phoneNumber: req.body.captainPhone,
-                licenseNumber: req.body.licenseNumber,
+                licenseNumber: req.body.captainLicense,
                 password: req.body.captainPassword
             };
             backendEndpoint = `${BACKEND_API_BASE_URL}/auth/driver/register`;
@@ -252,13 +254,43 @@ app.post('/registration', async (req, res) => {
                 error: 'Incomplete registration data.'
             });
         }
-
+        
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
 
+        // Check if the backend registration was successful (assuming it returns a 'success' field)
+        if (backendResponse.status === 200 && backendResponse.data.success) 
+        {
+            // Registration successful: Store relevant user data in the session
+            // IMPORTANT: Only store non-sensitive data, or data needed for subsequent requests.
+            req.session.user = {
+                id: backendResponse.data.data.id,
+                email: backendResponse.data.data.email,
+                name: backendResponse.data.data.name,
+                userType: role, // Store the role directly from the request
+                // You might store a JWT token here if your backend issues one:
+                // jwtToken: backendResponse.data.data.token
+            };
+        
         // Send the backend's response directly back to the client
-        res.status(backendResponse.status).json(backendResponse.data);
+        // Determine redirect URL based on user type
+        const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
 
+        // Send a success response back to the client, indicating where to redirect
+        
+        res.status(200).json({
+            success: true,
+            message: 'Registration successful!',
+            redirectUrl: redirectUrl
+        });
+    }
+    else{
+        res.status(400).json({
+            success: false,
+            message: backendResponse.data.message || 'Registration failed.',
+            error: backendResponse.data.error || 'Invalid input or user already exists.'
+        });        
+    }
     } catch (error) {
         // Handle errors from the axios request
         console.error('Error forwarding registration to backend:', error.response ? error.response.data : error.message);

@@ -205,3 +205,4 @@ function validateConfirmPassword(passwordInput, confirmPasswordInput, confirmMes
         confirmMessageElement.classList.add("success");
     }
 }
+
