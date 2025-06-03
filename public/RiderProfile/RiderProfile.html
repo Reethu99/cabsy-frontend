@@ -34,41 +34,79 @@
         <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
         <button onclick="document.getElementById('profilePictureInput').click()" class="edit-picture-button">Change Picture</button>
     </div>
-
-        <div class="info-block">
-            <p><strong>Name</strong></p>
-            <div class="info-row">
-                <span>Reethika Dumpa</span>
-                <a href="/editname" class="edit-icon">✏️</a>
+    
+    <div class="profile-container">
+   
+        <section class="profile-section" id="username-section">
+            <div class="field-display">
+                <label>Username:</label>
+                <span class="field-value" id="display-username">john.doe</span>
+                <button class="edit-btn" data-field="username">Edit</button>
             </div>
-        </div>
-
-        <div class="info-block">
-            <p><strong>Phone Number</strong></p>
-            <div class="info-row">
-                <span>+91 9100288407</span>
-                <a href="/editphone" class="edit-icon">✏️</a>
+            <div class="field-edit hidden">
+                <input type="text" id="edit-username" value="john.doe">
+                <button class="save-btn" data-field="username">Save</button>
+                <button class="cancel-btn" data-field="username">Cancel</button>
+                <p class="error-message" id="error-username"></p>
             </div>
-        </div>
+        </section>
 
-        <div class="info-block">
-            <p><strong>Email</strong></p>
-            <div class="info-row">
-                <span>dumpareethika@gmail.com</span>
-                <a href="/editemail" class="edit-icon">✏️</a>
+        <section class="profile-section" id="email-section">
+            <div class="field-display">
+                <label>Email:</label>
+                <span class="field-value" id="display-email">john.doe@example.com</span>
+                <button class="edit-btn" data-field="email">Edit</button>
             </div>
-        </div>
+            <div class="field-edit hidden">
+                <input type="email" id="edit-email" value="john.doe@example.com">
+                <button class="save-btn" data-field="email">Save</button>
+                <button class="cancel-btn" data-field="email">Cancel</button>
+                <p class="error-message" id="error-email"></p>
+            </div>
+        </section>
 
-        <div class="info-block info-row">
-            <p><strong>Change Password</strong></p>
-          
-                <!-- <span>dumpareethika@gmail.com</span> -->
-                <a href="/editpwd" class="edit-icon">✏️</a>
-            
-        </div>
+        <section class="profile-section" id="phone-section">
+            <div class="field-display">
+                <label>Phone Number:</label>
+                <span class="field-value" id="display-phone">+1234567890</span>
+                <button class="edit-btn" data-field="phone">Edit</button>
+            </div>
+            <div class="field-edit hidden">
+                <input type="tel" id="edit-phone" value="+1234567890">
+                <button class="save-btn" data-field="phone">Save</button>
+                <button class="cancel-btn" data-field="phone">Cancel</button>
+                <p class="error-message" id="error-phone"></p>
+            </div>
+        </section>
+
+        <section class="profile-section" id="password-section">
+            <div class="field-display">
+                <div>
+                <label>Password:</label>
+                <span style="color:#e0e0e0">********</span>
+            </div>
+                <!-- <button class="edit-btn" data-field="password">Change Password</button> -->
+                <div >
+                    <button class="edit-btn" data-field="password">Change Password</button>
+                </div>
+            </div>
+           
+            <div class="field-edit hidden">
+                <label for="old-password">Old Password:</label>
+                <input type="password" id="old-password">
+                <label for="new-password">New Password:</label>
+                <input type="password" id="new-password">
+                <label for="confirm-password">Confirm New Password:</label>
+                <input type="password" id="confirm-password">
+                <button class="save-btn" data-field="password">Save Password</button>
+                <button class="cancel-btn" data-field="password">Cancel</button>
+                <p class="error-message" id="error-password"></p>
+            </div>
+        </section>
+    </div>
 
     </main>
 </div>
-
+<script src="../RiderProfile/RiderProfile.js"></script>
 </body>
 </html>
