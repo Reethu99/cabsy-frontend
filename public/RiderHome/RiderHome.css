@@ -73,13 +73,13 @@ header {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.login-btn {
+.logout-btn {
   color: #4c6d87;
   border: 1px solid #547793;
   background-color: transparent;
 }
 
-.login-btn:hover {
+.logout-btn:hover {
   background-color: #547793;
   color: #fff;
 }
