@@ -261,16 +261,6 @@ app.post('/registration', async (req, res) => {
         // Check if the backend registration was successful (assuming it returns a 'success' field)
         if (backendResponse.status === 200 && backendResponse.data.success) 
         {
-            // Registration successful: Store relevant user data in the session
-            // IMPORTANT: Only store non-sensitive data, or data needed for subsequent requests.
-            req.session.user = {
-                id: backendResponse.data.data.id,
-                email: backendResponse.data.data.email,
-                name: backendResponse.data.data.name,
-                userType: role, // Store the role directly from the request
-                // You might store a JWT token here if your backend issues one:
-                // jwtToken: backendResponse.data.data.token
-            };
         
         // Send the backend's response directly back to the client
         // Determine redirect URL based on user type
