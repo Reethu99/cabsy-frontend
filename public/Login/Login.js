@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Login Form Specific Elements ---
     // IMPORTANT: Assuming 'username' input is actually for 'email' as per backend LoginDTO
     const mainLoginForm = document.getElementById('mainLoginForm'); // Get the form element
-    const emailInput = document.getElementById('username'); // Renamed for clarity, corresponds to backend 'email'
+    const emailInput = document.getElementById('email'); // Renamed for clarity, corresponds to backend 'email'
     const passwordInput = document.getElementById('password'); // Get password input
 
     // --- Forgot Password Specific Elements ---
