@@ -44,14 +44,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Authentication Middleware ---
 // This middleware checks if a user is logged in before allowing access to certain routes.
-function isAuthenticated(req, res, next) {
-    if (req.session.user) { // Check if user data exists in the session
-        next(); // User is authenticated, proceed to the next route handler
-    } else {
-        // User is not authenticated, redirect to the login page
-        res.redirect('/login');
-    }
-}
+// function isAuthenticated(req, res, next) {
+//     if (req.session.user) { 
+//         next();
+//     } else {
+//         res.redirect('/login');
+//     }
+// }
 // --- End Authentication Middleware ---
 
 
@@ -77,74 +76,74 @@ app.get('/registration', (req, res) => {
 });
 
 // Rider routes (protected by isAuthenticated middleware)
-app.get('/riderhome', isAuthenticated, (req, res) => {
+app.get('/riderhome', (req, res) => {
     // If we reach here, req.session.user contains the logged-in user's data
-    console.log('User accessing rider home:', req.session.user.email);
+    // console.log('User accessing rider home:', req.session.user.email);
     res.sendFile(path.join(__dirname, 'public', 'RiderHome', 'RiderHome.html'));
 });
 
-app.get('/riderprofile', isAuthenticated, (req, res) => {
+app.get('/riderprofile',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'RiderProfile.html'));
 });
 
-app.get('/riderhelp', isAuthenticated, (req, res) => {
+app.get('/riderhelp',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderHelp', 'RiderHelp.html'));
 });
 
-app.get('/riderabout', isAuthenticated, (req, res) => {
+app.get('/riderabout',(req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderAbout', 'RiderAbout.html'));
 });
 
-app.get('/editphone', isAuthenticated, (req, res) => {
+app.get('/editphone',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditPhone.html'));
 });
-app.get('/editemail', isAuthenticated, (req, res) => {
+app.get('/editemail',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditEmail.html'));
 });
-app.get('/editname', isAuthenticated, (req, res) => {
+app.get('/editname',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditName.html'));
 });
-app.get('/editpwd', isAuthenticated, (req, res) => {
+app.get('/editpwd',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditPwd.html'));
 });
 
-app.get('/riderprivacy', isAuthenticated, (req, res) => {
+app.get('/riderprivacy',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPrivacy', 'RiderPrivacy.html'));
 });
 
-app.get('/rideractivity', isAuthenticated, (req, res) => {
+app.get('/rideractivity',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderActivity', 'RiderActivity.html'));
 });
-app.get('/ridersecurity', isAuthenticated, (req, res) => {
+app.get('/ridersecurity',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderSecurity', 'RiderSecurity.html'));
 });
 
-app.get('/riderpayment', isAuthenticated, (req, res) => {
+app.get('/riderpayment',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPayment', 'RiderPayment.html'));
 });
 
 // Captain routes (protected by isAuthenticated middleware)
-app.get('/captain', isAuthenticated, (req, res) => {
+app.get('/captain',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Captain', 'captain.html'));
 });
 
-app.get('/captainaboutus', isAuthenticated, (req, res) => {
+app.get('/captainaboutus',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CaptainAboutUs', 'CaptainAboutUS.html'));
 });
 
-app.get('/captainhelp', isAuthenticated, (req, res) => {
+app.get('/captainhelp',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CaptainHelp', 'help.html'));
 });
 
-app.get('/captainhome', isAuthenticated, (req, res) => {
+app.get('/captainhome',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CaptainHome', 'captainhome.html'));
 });
 
-app.get('/captainsecurity', isAuthenticated, (req, res) => {
+app.get('/captainsecurity',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CaptainSecurity', 'CaptainSecurity.html'));
 });
 
-app.get('/editcaptainprofile', isAuthenticated, (req, res) => {
+app.get('/editcaptainprofile',  (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'EditCaptainProfile', 'editcaptainprofile.html'));
 });
 
