@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
+dotenv.config();
 
 // --- Backend API Base URL ---
 // Use process.env.BACKEND_API_URL, defaulting to localhost if not set
@@ -166,14 +166,14 @@ app.post('/login', async (req, res) => {
             error: 'Role must be "rider" or "captain".'
         });
     }
-
+    
     try {
         // Make a POST request to the specific Spring Boot backend's login endpoint
         const backendResponse = await axios.post(backendLoginEndpoint, {
             email: email,
             password: password
         });
-
+        
         // Check if the backend login was successful (assuming it returns a 'success' field)
         if (backendResponse.status === 200 && backendResponse.data.success) {
             // Login successful: Store relevant user data in the session
@@ -182,15 +182,20 @@ app.post('/login', async (req, res) => {
                 id: backendResponse.data.data.id,
                 email: backendResponse.data.data.email,
                 name: backendResponse.data.data.name,
-                userType: role, // Store the role directly from the request
+                phoneNumber:backendResponse.data.data.phoneNumber,
+                licenseNumber:backendResponse.data.data.licenseNumber,
+                status:backendResponse.data.data.status,
+                rating:backendResponse.data.data.rating,
+                userType: role,
+                 // Store the role directly from the request
                 // You might store a JWT token here if your backend issues one:
                 // jwtToken: backendResponse.data.data.token
             };
-
+       
+            console.log('Backend Response:',req.session.user)
             // Determine redirect URL based on user type
             const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
-
-            // Send a success response back to the client, indicating where to redirect
+  
             res.status(200).json({
                 success: true,
                 message: 'Login successful!',
@@ -215,6 +220,11 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/session-user',(req,res)=>{
+    res.send(req.session.user);
+    console.log("Session data requested....")
+});
+
 // --- POST route for Registration (No change needed here, it already differentiates) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
@@ -223,11 +233,11 @@ app.post('/registration', async (req, res) => {
         let backendResponse;
         let registrationData;
         let backendEndpoint;
-        const role="";
+        let role = "";
         // Differentiate between Rider and Captain registrations based on expected fields
         if (req.body.username && req.body.email && req.body.phone && req.body.password) {
             console.log('Rider Registration Attempt:');
-            role="rider";
+            role = "rider";
             registrationData = {
                 name: req.body.username,
                 email: req.body.email,
@@ -236,8 +246,9 @@ app.post('/registration', async (req, res) => {
             };
             backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
         } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
+            
             console.log('Captain Registration Attempt:');
-            role="captain";
+            role = "captain";
             registrationData = {
                 name: req.body.captainUsername,
                 email: req.body.captainEmail,
@@ -254,33 +265,32 @@ app.post('/registration', async (req, res) => {
                 error: 'Incomplete registration data.'
             });
         }
-        
+
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
 
         // Check if the backend registration was successful (assuming it returns a 'success' field)
-        if (backendResponse.status === 200 && backendResponse.data.success) 
-        {
-        
-        // Send the backend's response directly back to the client
-        // Determine redirect URL based on user type
-        const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
+        if (backendResponse.status === 200 && backendResponse.data.success) {
 
-        // Send a success response back to the client, indicating where to redirect
-        
-        res.status(200).json({
-            success: true,
-            message: 'Registration successful!',
-            redirectUrl: redirectUrl
-        });
-    }
-    else{
-        res.status(400).json({
-            success: false,
-            message: backendResponse.data.message || 'Registration failed.',
-            error: backendResponse.data.error || 'Invalid input or user already exists.'
-        });        
-    }
+            // Send the backend's response directly back to the client
+            // Determine redirect URL based on user type
+            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
+            console.log("Registration Sucessfull")
+            // Send a success response back to the client, indicating where to redirect
+
+            res.status(200).json({
+                success: true,
+                message: 'Registration successful!',
+                redirectUrl: redirectUrl
+            });
+        }
+        else {
+            res.status(400).json({
+                success: false,
+                message: backendResponse.data.message || 'Registration failed.',
+                error: backendResponse.data.error || 'Invalid input or user already exists.'
+            });
+        }
     } catch (error) {
         // Handle errors from the axios request
         console.error('Error forwarding registration to backend:', error.response ? error.response.data : error.message);
@@ -308,6 +318,6 @@ app.post('/logout', (req, res) => {
 
 
 // Start the server and listen for requests
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+app.listen(process.env.port, () => {
+    console.log(`Server is running on http://localhost:${process.env.port}`);
 });
