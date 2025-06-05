@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar Elements ---
     const menuToggle = document.getElementById('menuToggle'); // Mobile hamburger menu
     const mainNavbar = document.getElementById('mainNavbar'); // The left navbar
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener for desktop navbar click (to expand/collapse)
     if (mainNavbar) {
-        mainNavbar.addEventListener('click', function(event) {
+        mainNavbar.addEventListener('click', function (event) {
             // Only apply desktop expand/collapse logic if wide enough AND not in mobile-active state
             if (window.innerWidth > 1024 && !mainNavbar.classList.contains('mobile-active')) {
                 // Check if the click is on the navbar itself or its main structural children
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Simulate a new ride request appearing after a short delay if online
             setTimeout(() => {
                 // Ensure still online and no active ride
-                if(onlineStatusToggle.checked && rideRequestSection.style.display === 'none' && onGoingRideSection.style.display === 'none') {
+                if (onlineStatusToggle.checked && rideRequestSection.style.display === 'none' && onGoingRideSection.style.display === 'none') {
                     rideRequestSection.style.display = 'block';
                     dashboardSectionGrid.classList.add('has-active-ride'); // Add class to dashboard grid
                 }
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let timeInMinutes = 15;
 
     if (acceptRideBtn) {
-        acceptRideBtn.addEventListener('click', function() {
+        acceptRideBtn.addEventListener('click', function () {
             alert('Ride Accepted! Navigating to pickup location.');
             rideRequestSection.style.display = 'none';
             onGoingRideSection.style.display = 'block';
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (rejectRideBtn) {
-        rejectRideBtn.addEventListener('click', function() {
+        rejectRideBtn.addEventListener('click', function () {
             alert('Ride Rejected. Looking for next request.');
             rideRequestSection.style.display = 'none';
             noAvailableBookings.style.display = 'block';
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
             activityMessage.textContent = 'Looking for new ride requests...';
             dashboardSectionGrid.classList.remove('has-active-ride');
             setTimeout(() => {
-                if(onlineStatusToggle.checked) {
+                if (onlineStatusToggle.checked) {
                     noAvailableBookings.style.display = 'none';
                 }
             }, 2000);
@@ -197,14 +197,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (pickedUpBtn) {
-        pickedUpBtn.addEventListener('click', function() {
+        pickedUpBtn.addEventListener('click', function () {
             alert('Passenger picked up! Drive safely to destination.');
             activityMessage.textContent = 'Driving passenger to destination.';
         });
     }
 
     if (endRideBtn) {
-        endRideBtn.addEventListener('click', function() {
+        endRideBtn.addEventListener('click', function () {
             alert('Ride Ended! Payment collected.');
             onGoingRideSection.style.display = 'none';
             clearInterval(currentRideTimer);
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dashboardSectionGrid.classList.remove('has-active-ride');
 
             setTimeout(() => {
-                if(onlineStatusToggle.checked) {
+                if (onlineStatusToggle.checked) {
                     rideRequestSection.style.display = 'block'; // Show a new request
                     noAvailableBookings.style.display = 'none';
                     availableRidesList.style.display = 'grid';
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for accepting "Available Rides" list items
     const availableRideAcceptBtns = document.querySelectorAll('.ride-item [data-action="accept-available"]');
     availableRideAcceptBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             alert('Accepted ride from Available Rides! Proceeding to pickup.');
             rideRequestSection.style.display = 'none';
             onGoingRideSection.style.display = 'block';
@@ -259,4 +259,23 @@ document.addEventListener('DOMContentLoaded', function() {
             activityMessage.textContent = 'On a ride to drop-off destination.';
         });
     });
+
+    //To get User data from local session storage
+    fetch('/session-user')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      document.querySelector('.h-name').textContent =`Hi, ${data.name}`;
+      document.querySelector('.name').textContent =data.name;
+      document.querySelector('.rating').textContent = data.rating;
+    })
+    .catch(error => {
+      console.error("Error fetching session data:", error);
+    });
+  
+
 });

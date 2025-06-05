@@ -1,14 +1,14 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const profilePictureInput = document.getElementById('profilePicture');
     const profilePicturePreview = document.getElementById('profilePicturePreview');
     const captainProfileForm = document.getElementById('captainProfileForm');
 
     // --- Profile Picture Handling ---
-    profilePictureInput.addEventListener('change', function(event) {
+    profilePictureInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 profilePicturePreview.src = e.target.result;
             };
             reader.readAsDataURL(file);
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Document Upload Handling ---
     // Make the custom file input display clickable
     document.querySelectorAll('.file-input-display').forEach(displayDiv => {
-        displayDiv.addEventListener('click', function() {
+        displayDiv.addEventListener('click', function () {
             const inputId = this.dataset.inputId;
             const actualInput = document.getElementById(inputId);
             if (actualInput) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const listElement = document.getElementById(listElementId);
         const fileInputDisplay = inputElement.nextElementSibling; // Get the custom display div
 
-        inputElement.addEventListener('change', function() {
+        inputElement.addEventListener('change', function () {
             listElement.innerHTML = ''; // Clear previous selections
             const files = this.files;
             if (files.length > 0) {
@@ -59,12 +59,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Add event listener for removing files (client-side visual only)
-        listElement.addEventListener('click', function(event) {
+        listElement.addEventListener('click', function (event) {
             if (event.target.classList.contains('remove-file')) {
                 const indexToRemove = parseInt(event.target.dataset.fileIndex);
                 const targetInputId = event.target.dataset.inputId;
                 const associatedInput = document.getElementById(targetInputId);
-                
+
                 if (associatedInput) {
                     const dataTransfer = new DataTransfer();
                     let filesArray = Array.from(associatedInput.files);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Form Submission (Validation and Direct Save) ---
-    captainProfileForm.addEventListener('submit', function(event) {
+    captainProfileForm.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
         // --- Client-side Validation ---
@@ -185,11 +185,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500); // Simulate 1.5 seconds delay for saving
     });
 
-    // --- Optional: Function to pre-fill form with existing data (for a real application) ---
-    /*
-    function loadCaptainData() {
-        // ... (existing loadCaptainData function)
-    }
-    // loadCaptainData();
-    */
+    //To get User data from local session storage
+    fetch('/session-user')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            document.getElementById('fullName').value = data.name || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('phoneNumber').value = data.phoneNumber || '';
+            document.getElementById('drivingLicense').value = data.licenseNumber || '';
+            document.getElementById('vehicleMake').value = data.vehicleMake || '';
+            document.getElementById('vehicleModel').value = data.vehicleModel || '';
+            document.getElementById('licenseNumber').value = data.licensePlate || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('profilePicturePreview').src = data.profilePictureUrl || 'https://via.placeholder.com/150/EEEEEE/888888?text=Add+Photo';
+
+        })
+        .catch(error => {
+            console.error("Error fetching session data:", error);
+        });
+
 });
