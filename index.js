@@ -299,6 +299,88 @@ app.post('/registration', async (req, res) => {
     }
 });
 
+app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
+    const riderId = req.params.id;
+    const field = req.params.field;
+    const requestBody = req.body; // This now holds {name: "...",} OR {email: "...",} OR {phone: "...",} OR {oldPassword: "...", newPassword: "..."}
+
+    if (!riderId || !field || !['name', 'email', 'phone', 'password'].includes(field)) {
+        return res.status(400).json({ success: false, message: 'Invalid request: Missing rider ID or unsupported field.' });
+    }
+
+    if (req.session.user.userType !== 'rider' || String(req.session.user.id) !== String(riderId)) {
+        return res.status(403).json({ success: false, message: 'Unauthorized to update this profile.' });
+    }
+
+    // Client-side validation is already done in RiderProfile.js before the fetch.
+    // However, you can add server-side re-validation here in Node.js if desired,
+    // though the primary validation will be done by the Spring Boot backend.
+    // For example, for 'password':
+    if (field === 'password') {
+        const { oldPassword, newPassword } = requestBody;
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ success: false, message: 'Old and new passwords are required.' });
+        }
+        if (newPassword.length < 8) { // Matches client-side validation
+            return res.status(400).json({ success: false, message: 'New password must be at least 8 characters long.' });
+        }
+    } else {
+        const newValue = requestBody[field];
+        if (!newValue || newValue.trim().isEmpty()) {
+            return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
+        }
+        // Add more specific validation for email/phone if desired, mirroring frontend
+    }
+
+
+    try {
+        const backendUpdateEndpoint = `${BACKEND_API_BASE_URL}/auth/user/${field}/${riderId}`;
+        console.log(`Forwarding PUT request to: ${backendUpdateEndpoint} with data: ${JSON.stringify(requestBody)}`);
+
+        // Important: Send the entire 'requestBody' directly to Spring Boot
+        const backendResponse = await axios.put(backendUpdateEndpoint, requestBody);
+
+        if (backendResponse.status === 200 && backendResponse.data.success) {
+            // Update session data based on the field updated, but NOT for password
+            if (field === 'name') {
+                req.session.user.name = requestBody.name;
+            } else if (field === 'email') {
+                req.session.user.email = requestBody.email;
+            } else if (field === 'phone') {
+                req.session.user.phoneNumber = requestBody.phone;
+            }
+            // No session update for password
+
+            req.session.save((err) => {
+                if (err) {
+                    console.error('Error saving session after update:', err);
+                    return res.status(500).json({ success: false, message: `Updated, but failed to update session for ${field}.` });
+                }
+                console.log('Session updated successfully for user:', req.session.user.email);
+                res.status(200).json({
+                    success: true,
+                    message: backendResponse.data.message || `Rider ${field} updated successfully!`,
+                    updatedUser: (field === 'password' ? null : req.session.user) // Don't send user DTO for password update
+                });
+            });
+
+        } else {
+            res.status(backendResponse.status || 400).json({
+                success: false,
+                message: backendResponse.data.message || `Failed to update rider ${field}.`,
+                error: backendResponse.data.error || 'Unknown backend error.'
+            });
+        }
+    } catch (error) {
+        console.error(`Error during rider ${field} update:`, error.response ? error.response.data : error.message);
+        res.status(error.response ? error.response.status : 500).json({
+            success: false,
+            message: `Failed to update rider ${field} due to server error.`,
+            error: error.response ? error.response.data : error.message
+        });
+    }
+});
+
 // --- POST route for Logout ---
 app.post('/logout', (req, res) => {
     // Destroy the session on the server side
