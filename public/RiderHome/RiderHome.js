@@ -319,7 +319,7 @@ document.getElementById("logoutButton").addEventListener("click", () => {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
+            //alert(data.message);
             window.location.href = '/home'; // Redirect after logout
         } else {
             alert("Logout failed. Please try again.");

@@ -264,7 +264,7 @@ app.post('/registration', async (req, res) => {
         });
     }
     
-           console.log(res);
+           
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
@@ -289,7 +289,7 @@ app.post('/registration', async (req, res) => {
         }
     } catch (error) {
         // Handle errors from the axios request
-        console.error('Error forwarding registration to backend:', error.response ? error.response.data : error.message);
+        console.error('Error forwarding registration to backend:', error);
         res.status(error.response ? error.response.status : 500).json({
             success: false,
             message: 'Registration failed due to backend error.',
