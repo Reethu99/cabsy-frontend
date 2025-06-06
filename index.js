@@ -228,44 +228,43 @@ app.get('/session-user',(req,res)=>{
 // --- POST route for Registration (No change needed here, it already differentiates) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
-    console.log(res);
-
-    try {
-        let backendResponse;
-        let registrationData;
-        let backendEndpoint;
-        let role = "";
-        // Differentiate between Rider and Captain registrations based on expected fields
-        if (req.body.username && req.body.email && req.body.phone && req.body.password) {
-            console.log('Rider Registration Attempt:');
-            role = "rider";
-            registrationData = {
-                name: req.body.username,
-                email: req.body.email,
-                phoneNumber: req.body.phone,
-                password: req.body.password
-            };
-            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
-        } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
-            
-            console.log('Captain Registration Attempt:');
-            role = "captain";
-            registrationData = {
-                name: req.body.captainUsername,
-                email: req.body.captainEmail,
-                phoneNumber: req.body.captainPhone,
-                licenseNumber: req.body.captainLicense,
-                password: req.body.captainPassword
-            };
-            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/driver/register`;
-        } else {
-            // If neither type of registration data is complete
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid registration request: Missing required fields.',
-                error: 'Incomplete registration data.'
-            });
-        }
+    try{
+    let backendResponse;
+    let registrationData;
+    let backendEndpoint;
+    let role="";
+    // Differentiate between Rider and Captain registrations based on expected fields
+    if (req.body.username && req.body.email && req.body.phone && req.body.password) {
+        console.log('Rider Registration Attempt:');
+        role="rider";
+        registrationData = {
+            name: req.body.username,
+            email: req.body.email,
+            phoneNumber: req.body.phone,
+            password: req.body.password
+        };
+        backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
+    } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
+        console.log('Captain Registration Attempt:');
+        role="captain";
+        registrationData = {
+            name: req.body.captainUsername,
+            email: req.body.captainEmail,
+            phoneNumber: req.body.captainPhone,
+            licenseNumber: req.body.captainLicense,
+            password: req.body.captainPassword
+        };
+        backendEndpoint = `${BACKEND_API_BASE_URL}/auth/driver/register`;
+    } else {
+        // If neither type of registration data is complete
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid registration request: Missing required fields.',
+            error: 'Incomplete registration data.'
+        });
+    }
+    
+           
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
@@ -290,7 +289,7 @@ app.post('/registration', async (req, res) => {
         }
     } catch (error) {
         // Handle errors from the axios request
-        console.error('Error forwarding registration to backend:', error.response ? error.response.data : error.message);
+        console.error('Error forwarding registration to backend:', error);
         res.status(error.response ? error.response.status : 500).json({
             success: false,
             message: 'Registration failed due to backend error.',
