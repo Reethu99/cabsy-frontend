@@ -8,6 +8,7 @@ document.getElementById('profilePictureInput').addEventListener('change', functi
         reader.readAsDataURL(file);
     }
 });
+
 document.addEventListener('DOMContentLoaded', () => {
     const profileSections = document.querySelectorAll('.profile-section');
 
@@ -136,4 +137,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+
+
+     //To get User data from local session storage
+     fetch('/session-user')
+     .then(response => {
+         if (!response.ok) {
+             throw new Error(`HTTP error! status: ${response.status}`);
+         }
+         return response.json();
+     })
+     .then(data => {
+         
+         document.getElementById('display-username').innerText = data.name || '';
+         document.getElementById('edit-username').value=data.name||'';
+         
+        
+         document.getElementById('display-email').innerHTML = data.email || '';
+         document.getElementById('edit-email').value=data.email||'';
+
+         document.getElementById('display-phone').innerHTML = data.phoneNumber || '';
+         document.getElementById('edit-phone').value=data.phoneNumber||'';
+
+     })
+     .catch(error => {
+         console.error("Error fetching session data:", error);
+     });
+
 });
+

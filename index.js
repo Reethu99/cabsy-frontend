@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-dotenv.config();
+
 
 // --- Backend API Base URL ---
 // Use process.env.BACKEND_API_URL, defaulting to localhost if not set
@@ -228,6 +228,7 @@ app.get('/session-user',(req,res)=>{
 // --- POST route for Registration (No change needed here, it already differentiates) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
+    console.log(res);
 
     try {
         let backendResponse;
@@ -268,21 +269,17 @@ app.post('/registration', async (req, res) => {
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
-
+        console.log(backendResponse);
         // Check if the backend registration was successful (assuming it returns a 'success' field)
-        if (backendResponse.status === 200 && backendResponse.data.success) {
+        if ((backendResponse.status === 200  || backendResponse.status === 201 )&& backendResponse.data.success) {
 
             // Send the backend's response directly back to the client
             // Determine redirect URL based on user type
             const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
             console.log("Registration Sucessfull")
             // Send a success response back to the client, indicating where to redirect
-
-            res.status(200).json({
-                success: true,
-                message: 'Registration successful!',
-                redirectUrl: redirectUrl
-            });
+            res.redirect(redirectUrl)
+           
         }
         else {
             res.status(400).json({
