@@ -299,13 +299,29 @@ app.post('/registration', async (req, res) => {
     }
 });
 
+
 app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
     const riderId = req.params.id;
     const field = req.params.field;
-    const requestBody = req.body; // This now holds {name: "...",} OR {email: "...",} OR {phone: "...",} OR {oldPassword: "...", newPassword: "..."}
+    const requestBody = req.body;
+
+    console.log('--- Rider Profile Update Request ---');
+    console.log('Received riderId:', riderId);
+    console.log('Received field:', field);
+    console.log('Received requestBody:', requestBody);
+    console.log('Is field supported?', ['name', 'email', 'phone', 'password'].includes(field));
 
     if (!riderId || !field || !['name', 'email', 'phone', 'password'].includes(field)) {
+        console.error('Validation failed for rider update:', { riderId, field, isFieldSupported: ['name', 'email', 'phone', 'password'].includes(field) });
         return res.status(400).json({ success: false, message: 'Invalid request: Missing rider ID or unsupported field.' });
+    }
+    // ... rest of the code (your existing validation for password/other fields)
+    // Remember the previous fix for newValue.trim().isEmpty() should already be applied here.
+    const newValue = requestBody[field]; // This line should be present
+
+    if (field !== 'password' && (!newValue || newValue.trim() === '')) { // <-- Ensure this is correctly fixed
+        console.error(`Validation failed: ${field} cannot be empty.`);
+        return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
     }
 
     if (req.session.user.userType !== 'rider' || String(req.session.user.id) !== String(riderId)) {
@@ -326,7 +342,7 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         }
     } else {
         const newValue = requestBody[field];
-        if (!newValue || newValue.trim().isEmpty()) {
+        if (!newValue || newValue.trim() === '') {
             return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
         }
         // Add more specific validation for email/phone if desired, mirroring frontend

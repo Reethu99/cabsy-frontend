@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Populate Username fields
                 document.getElementById('display-username').innerText = data.name || 'N/A';
-                document.getElementById('edit-username').value = data.name || '';
+                document.getElementById('edit-name').value = data.name || '';
 
                 // Populate Email fields
                 document.getElementById('display-email').innerText = data.email || 'N/A';
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } else if (fieldType === 'phone') {
                     // Simple phone number validation (e.g., optional '+' at start, then 7-15 digits)
-                    if (!/^\+?[0-9]{7,15}$/.test(newValue)) {
+                    if (!/^\+?[0-9]{10}$/.test(newValue)) {
                         errorMessageElement.textContent = 'Please enter a valid phone number (digits only, optional leading +).';
                         return;
                     }
