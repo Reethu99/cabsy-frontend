@@ -304,3 +304,57 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutomaticSlideshow(); // Start a new timer
     }
 });
+
+
+
+//logout
+document.getElementById("logoutButton").addEventListener("click", () => {
+    fetch("/logout", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            window.location.href = '/home'; // Redirect after logout
+        } else {
+            alert("Logout failed. Please try again.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            fetch('/logout', {
+                method: 'POST',
+                credentials: 'include', // Important for sending cookies
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/';
+                } else {
+                    alert('Logout failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                alert('An error occurred during logout.');
+            });
+        });
+    }
+});
+
+
