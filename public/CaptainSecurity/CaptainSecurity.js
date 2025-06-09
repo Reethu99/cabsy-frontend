@@ -8,74 +8,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let generatedOTP = ''; // To store the OTP generated on the frontend
 
-    changePasswordForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // changePasswordForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
 
-        const currentPassword = currentPasswordInput.value;
-        const newPassword = newPasswordInput.value;
-        const confirmNewPassword = confirmNewPasswordInput.value;
+    //     const currentPassword = currentPasswordInput.value;
+    //     const newPassword = newPasswordInput.value;
+    //     const confirmNewPassword = confirmNewPasswordInput.value;
 
-        passwordMessage.textContent = '';
-        passwordMessage.className = 'message'; // Reset message classes
+    //     passwordMessage.textContent = '';
+    //     passwordMessage.className = 'message'; // Reset message classes
 
-        if (newPassword !== confirmNewPassword) {
-            passwordMessage.classList.add('error');
-            passwordMessage.textContent = 'New password and confirmation do not match.';
-            return;
-        }
+    //     if (newPassword !== confirmNewPassword) {
+    //         passwordMessage.classList.add('error');
+    //         passwordMessage.textContent = 'New password and confirmation do not match.';
+    //         return;
+    //     }
 
-        if (newPassword.length < 8) {
-            passwordMessage.classList.add('error');
-            passwordMessage.textContent = 'New password must be at least 8 characters long.';
-            return;
-        }
+    //     if (newPassword.length < 8) {
+    //         passwordMessage.classList.add('error');
+    //         passwordMessage.textContent = 'New password must be at least 8 characters long.';
+    //         return;
+    //     }
 
-        // --- Frontend-only OTP Generation and "Sending" ---
-        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-        console.log(`[DEMO] OTP generated: ${generatedOTP}`); // Log OTP to console for demo
-        alert(`For demo purposes, your OTP is: ${generatedOTP}\n(Check console for demo OTP)`);
+    //     // --- Frontend-only OTP Generation and "Sending" ---
+    //     generatedOTP = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+    //     console.log(`[DEMO] OTP generated: ${generatedOTP}`); // Log OTP to console for demo
+    //     alert(`For demo purposes, your OTP is: ${generatedOTP}\n(Check console for demo OTP)`);
 
-        const userEnteredOTP = prompt("Please enter the OTP sent to your registered mobile/email (check console for demo OTP):");
+    //     const userEnteredOTP = prompt("Please enter the OTP sent to your registered mobile/email (check console for demo OTP):");
 
-        if (userEnteredOTP === null || userEnteredOTP.trim() === '') {
-            passwordMessage.classList.add('error');
-            passwordMessage.textContent = 'OTP verification cancelled or empty.';
-            return;
-        }
+    //     if (userEnteredOTP === null || userEnteredOTP.trim() === '') {
+    //         passwordMessage.classList.add('error');
+    //         passwordMessage.textContent = 'OTP verification cancelled or empty.';
+    //         return;
+    //     }
 
-        if (userEnteredOTP !== generatedOTP) {
-            passwordMessage.classList.add('error');
-            passwordMessage.textContent = 'Invalid OTP. Password update failed.';
-            return;
-        }
+    //     if (userEnteredOTP !== generatedOTP) {
+    //         passwordMessage.classList.add('error');
+    //         passwordMessage.textContent = 'Invalid OTP. Password update failed.';
+    //         return;
+    //     }
 
-        // If OTP is correct (frontend-verified for this demo), proceed to "update password"
-        console.log('OTP verified successfully (frontend-only verification). Attempting to change password...');
-        console.log('Current:', currentPassword);
-        console.log('New:', newPassword);
+    //     // If OTP is correct (frontend-verified for this demo), proceed to "update password"
+    //     console.log('OTP verified successfully (frontend-only verification). Attempting to change password...');
+    //     console.log('Current:', currentPassword);
+    //     console.log('New:', newPassword);
 
-        // --- Simulate Password Update API Call ---
-        // For DEMO purposes, we'll now make this always succeed if OTP is correct.
-        // In a real application, you would make an actual fetch() call to your backend here.
-        try {
-            // Simulate a slight delay for the "API call"
-            await new Promise(resolve => setTimeout(resolve, 500));
+    //     // --- Simulate Password Update API Call ---
+    //     // For DEMO purposes, we'll now make this always succeed if OTP is correct.
+    //     // In a real application, you would make an actual fetch() call to your backend here.
+    //     try {
+    //         // Simulate a slight delay for the "API call"
+    //         await new Promise(resolve => setTimeout(resolve, 500));
 
-            // Simulate success for the password update if OTP was correct
-            passwordMessage.classList.add('success');
-            passwordMessage.textContent = 'Password changed successfully!';
-            changePasswordForm.reset(); // Clear form fields
-            currentPasswordInput.focus(); // Set focus back to first input
+    //         // Simulate success for the password update if OTP was correct
+    //         passwordMessage.classList.add('success');
+    //         passwordMessage.textContent = 'Password changed successfully!';
+    //         changePasswordForm.reset(); // Clear form fields
+    //         currentPasswordInput.focus(); // Set focus back to first input
             
-            // In a real app, you might also clear the OTP related states/variables here
-            generatedOTP = ''; // Clear generated OTP after successful update
-        } catch (error) {
-            // This catch block would typically handle network errors or unexpected server issues
-            console.error('Error during simulated password change:', error);
-            passwordMessage.classList.add('error');
-            passwordMessage.textContent = 'An unexpected error occurred. Please try again.';
-        }
-    });
+    //         // In a real app, you might also clear the OTP related states/variables here
+    //         generatedOTP = ''; // Clear generated OTP after successful update
+    //     } catch (error) {
+    //         // This catch block would typically handle network errors or unexpected server issues
+    //         console.error('Error during simulated password change:', error);
+    //         passwordMessage.classList.add('error');
+    //         passwordMessage.textContent = 'An unexpected error occurred. Please try again.';
+    //     }
+    // });
 
     // --- Two-Factor Authentication (2FA) Handling ---
     const toggle2faBtn = document.getElementById('toggle2faBtn');

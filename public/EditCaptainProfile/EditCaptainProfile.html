@@ -35,95 +35,97 @@
             <p>Update your personal, vehicle, and document details.</p>
         </header>
 
-        <form id="captainProfileForm">
-            <section class="profile-section">
-                <div class="profile-picture-upload">
-                    <label for="profilePicture" class="profile-picture-label">
-                        <img id="profilePicturePreview" src="https://via.placeholder.com/150/EEEEEE/888888?text=Add+Photo" alt="Profile Picture Preview">
-                        <span class="upload-overlay"><i class="fas fa-camera"></i> Change Photo</span>
-                        <input type="file" id="profilePicture" accept="image/*" class="visually-hidden">
-                    </label>
-                </div>
+  <form id="captainProfileForm" action="/edit-profile" method="POST">
+  <section class="profile-section">
+    <div class="profile-picture-upload">
+      <label for="profilePicture" class="profile-picture-label">
+        <img id="profilePicturePreview" src="https://via.placeholder.com/150/EEEEEE/888888?text=Add+Photo" alt="Profile Picture Preview">
+        <span class="upload-overlay"><i class="fas fa-camera"></i> Change Photo</span>
+        <input type="file" id="profilePicture" accept="image/*" class="visually-hidden">
+      </label>
+    </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="fullName">Full Name <span class="required">*</span></label>
-                        <input type="text" id="fullName" name="fullName" placeholder="John Doe" required>
-                    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="fullName">Full Name <span class="required">*</span></label>
+        <input type="text" id="fullName" name="name" placeholder="John Doe" required>
+      </div>
 
-                    <div class="form-group">
-                        <label for="email">Email Address <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" placeholder="john.doe@example.com" required>
-                    </div>
+      <div class="form-group">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="john.doe@example.com" required>
+      </div>
 
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number <span class="required">*</span></label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" placeholder="9876543210" required>
-                    </div>
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" placeholder="9876543210" required>
+      </div>
 
-                    <div class="form-group">
-                        <label for="drivingLicense">Driving License Number <span class="required">*</span></label>
-                        <input type="text" id="drivingLicense" name="drivingLicense" placeholder="ABC1234567" required>
-                    </div>
+      <div class="form-group">
+        <label for="drivingLicense">Driving License Number <span class="required">*</span></label>
+        <input type="text" id="drivingLicense" name="licenseNumber" placeholder="ABC1234567" required>
+      </div>
 
-                    <div class="form-group">
-                        <label for="vehicleMake">Vehicle Make <span class="required">*</span></label>
-                        <input type="text" id="vehicleMake" name="vehicleMake" placeholder="Toyota" required>
-                    </div>
+      <!-- <div class="form-group">
+        <label for="licenseNumber">License Plate Number <span class="required">*</span></label>
+        <input type="text" id="licenseNumber" name="licenseNumber" placeholder="TN01AB1234" required>
+      </div> -->
 
-                    <div class="form-group">
-                        <label for="vehicleModel">Vehicle Model <span class="required">*</span></label>
-                        <input type="text" id="vehicleModel" name="vehicleModel" placeholder="Innova" required>
-                    </div>
+      <!-- These fields are not in the model, so not marked required -->
+      <div class="form-group">
+        <label for="vehicleMake">Vehicle Make</label>
+        <input type="text" id="vehicleMake" name="vehicleMake" placeholder="Toyota">
+      </div>
 
-                    <div class="form-group">
-                        <label for="licenseNumber">License Plate Number <span class="required">*</span></label>
-                        <input type="text" id="licenseNumber" name="licenseNumber" placeholder="TN01AB1234" required>
-                    </div>
+      <div class="form-group">
+        <label for="vehicleModel">Vehicle Model</label>
+        <input type="text" id="vehicleModel" name="vehicleModel" placeholder="Innova">
+      </div>
 
-                    <div class="form-group full-width">
-                        <label for="address">Address</label>
-                        <textarea id="address" name="address" rows="3" placeholder="123 Main St, Anytown"></textarea>
-                    </div>
-                </div>
-            </section>
+      <div class="form-group full-width">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="3" placeholder="123 Main St, Anytown"></textarea>
+      </div>
+    </div>
+  </section>
 
-            <section class="document-section">
-                <h2>Upload Documents</h2>
-                <p class="section-description">Please upload clear scanned copies of the following documents. (Accepted formats: PDF, JPG, PNG)</p>
+  <!-- <section class="document-section">
+    <h2>Upload Documents</h2>
+    <p class="section-description">Please upload clear scanned copies of the following documents. (Accepted formats: PDF, JPG, PNG)</p>
 
-                <div class="form-group document-upload-group">
-                    <label for="driverLicenseDoc">Driver's License <span class="required">*</span></label>
-                    <input type="file" id="driverLicenseDoc" name="driverLicenseDoc" accept=".pdf, .jpg, .jpeg, .png" multiple required class="file-input">
-                    <div class="file-input-display" data-input-id="driverLicenseDoc">
-                        <i class="fas fa-upload"></i> Choose Files
-                    </div>
-                    <ul id="driverLicenseDocList" class="uploaded-files-list"></ul>
-                </div>
+    <div class="form-group document-upload-group">
+      <label for="driverLicenseDoc">Driver's License <span class="required">*</span></label>
+      <input type="file" id="driverLicenseDoc" name="driverLicenseDoc" accept=".pdf, .jpg, .jpeg, .png" required class="file-input">
+      <div class="file-input-display" data-input-id="driverLicenseDoc">
+        <i class="fas fa-upload"></i> Choose File
+      </div>
+      <ul id="driverLicenseDocList" class="uploaded-files-list"></ul>
+    </div>
 
-                <div class="form-group document-upload-group">
-                    <label for="vehicleRegistrationDoc">Vehicle Registration <span class="required">*</span></label>
-                    <input type="file" id="vehicleRegistrationDoc" name="vehicleRegistrationDoc" accept=".pdf, .jpg, .jpeg, .png" multiple required class="file-input">
-                    <div class="file-input-display" data-input-id="vehicleRegistrationDoc">
-                        <i class="fas fa-upload"></i> Choose Files
-                    </div>
-                    <ul id="vehicleRegistrationDocList" class="uploaded-files-list"></ul>
-                </div>
+    <div class="form-group document-upload-group">
+      <label for="vehicleRegistrationDoc">Vehicle Registration <span class="required">*</span></label>
+      <input type="file" id="vehicleRegistrationDoc" name="vehicleRegistrationDoc" accept=".pdf, .jpg, .jpeg, .png" required class="file-input">
+      <div class="file-input-display" data-input-id="vehicleRegistrationDoc">
+        <i class="fas fa-upload"></i> Choose File
+      </div>
+      <ul id="vehicleRegistrationDocList" class="uploaded-files-list"></ul>
+    </div>
 
-                <div class="form-group document-upload-group">
-                    <label for="insuranceDoc">Vehicle Insurance</label>
-                    <input type="file" id="insuranceDoc" name="insuranceDoc" accept=".pdf, .jpg, .jpeg, .png" multiple class="file-input">
-                    <div class="file-input-display" data-input-id="insuranceDoc">
-                        <i class="fas fa-upload"></i> Choose Files
-                    </div>
-                    <ul id="insuranceDocList" class="uploaded-files-list"></ul>
-                </div>
-            </section>
+    <div class="form-group document-upload-group">
+      <label for="insuranceDoc">Vehicle Insurance</label>
+      <input type="file" id="insuranceDoc" name="insuranceDoc" accept=".pdf, .jpg, .jpeg, .png" class="file-input">
+      <div class="file-input-display" data-input-id="insuranceDoc">
+        <i class="fas fa-upload"></i> Choose File
+      </div>
+      <ul id="insuranceDocList" class="uploaded-files-list"></ul>
+    </div>
+  </section> -->
 
-            <div class="form-actions">
-                <button type="submit" class="save-button">Save Changes</button>
-            </div>
-        </form>
+  <div class="form-actions">
+    <button type="submit" class="save-button">Save Changes</button>
+  </div>
+</form>
+
     </div>
     <footer class="footer">
         <p>&copy; 2025 Cabsy. All rights reserved.</p>

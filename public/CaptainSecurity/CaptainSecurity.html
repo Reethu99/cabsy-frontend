@@ -32,18 +32,18 @@
 
         <section class="security-section">
             <h2>Change Password</h2>
-            <form id="changePasswordForm">
+            <form action="/change-password" method="post" id="changePasswordForm">
                 <div class="form-group">
                     <label for="currentPassword">Current Password:</label>
-                    <input type="password" id="currentPassword" required>
+                    <input type="password" name="currentPassword" id="currentPassword" required>
                 </div>
                 <div class="form-group">
                     <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" required>
+                    <input type="password" name="newPassword" id="newPassword" required>
                 </div>
                 <div class="form-group">
                     <label for="confirmNewPassword">Confirm New Password:</label>
-                    <input type="password" id="confirmNewPassword" required>
+                    <input type="password" name="confirmNewPassword" id="confirmNewPassword" required>
                 </div>
                 <button type="submit" class="btn">Change Password</button>
                 <p id="passwordMessage" class="message"></p>

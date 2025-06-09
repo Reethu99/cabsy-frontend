@@ -1,3 +1,4 @@
+const id = "";
 document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar Elements ---
     const menuToggle = document.getElementById('menuToggle'); // Mobile hamburger menu
@@ -262,20 +263,55 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //To get User data from local session storage
     fetch('/session-user')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      document.querySelector('.h-name').textContent =`Hi, ${data.name}`;
-      document.querySelector('.name').textContent =data.name;
-      document.querySelector('.rating').textContent = data.rating;
-    })
-    .catch(error => {
-      console.error("Error fetching session data:", error);
-    });
-  
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.querySelector('.h-name').textContent = `Hi, ${data.name}`;
+            document.querySelector('.name').textContent = data.name;
+            document.querySelector('.rating').textContent = data.rating;
+        })
+        .catch(error => {
+            console.error("Error fetching session data:", error);
+        });
+
+    fetch('/available-rides')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) throw new Error(`HTTP ${response.status}`);
+            let result = data.data.data
+            // Update HTML
+            document.getElementById('available-rides-section').innerHTML = result.map(ride => `
+              <div>
+                <strong>Ride ID:</strong> ${ride.id} <br>
+                <strong>Status:</strong> ${ride.status}
+              </div>
+            `).join('');
+        })
+        .catch(err => {
+            document.getElementById('available-rides-section').innerHTML = `<p>Error: ${err.message}</p>`;
+        });
+
+
+    fetch('/previous-rides')
+        .then(response => response.json())
+        .then(data => {
+            
+            let result = data.data.data;
+            if (!data.success) throw new Error(result.error);
+
+            // Update HTML
+            document.getElementById('previous-rides-section').innerHTML = result.map(ride => `
+              <div>
+                <strong>Ride ID:</strong> ${ride.id} <br>
+                <strong>Status:</strong> ${ride.status}
+              </div>
+            `).join('');
+        }).catch(err => {
+            document.getElementById('previous-rides-section').innerHTML = `<p>Error: ${err.message}</p>`;
+        });
 
 });
