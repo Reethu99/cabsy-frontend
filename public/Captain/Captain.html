@@ -117,73 +117,35 @@
 
         <section id="available-rides-section" class="content-section">
             <div class="section-header">
-                <h2>Available Rides</h2>
+              <h2>Available Rides</h2>
             </div>
             <div class="section-cards-grid">
-                <div class="card">
-                    <div class="no-bookings" id="no-available-bookings" style="display: none;">
-                        <i class="fas fa-info-circle"></i> No new ride requests at the moment.
-                    </div>
-                    <div class="ride-list" id="available-rides-list">
-                        <div class="ride-item" data-id="1">
-                            <div class="ride-item-header">
-                                <h3>Pickup: Chennai Central</h3>
-                                <span>ETA: 8 min</span>
-                            </div>
-                            <p><i class="fas fa-flag-checkered"></i> Drop-off: Chennai Airport</p>
-                            <p><i class="fas fa-rupee-sign"></i> Est. Fare: ₹ 700</p>
-                            <button class="btn btn-accept-small" data-action="accept-available"><i class="fas fa-check"></i> Accept</button>
-                        </div>
-                        <div class="ride-item" data-id="2">
-                            <div class="ride-item-header">
-                                <h3>Pickup: T. Nagar</h3>
-                                <span>ETA: 12 min</span>
-                            </div>
-                            <p><i class="fas fa-flag-checkered"></i> Drop-off: Guindy</p>
-                            <p><i class="fas fa-rupee-sign"></i> Est. Fare: ₹ 250</p>
-                            <button class="btn btn-accept-small" data-action="accept-available"><i class="fas fa-check"></i> Accept</button>
-                        </div>
-                    </div>
+              <div class="card">
+                <div class="no-bookings" id="no-available-bookings" style="display: none;">
+                  <i class="fas fa-info-circle"></i> No new ride requests at the moment.
                 </div>
+                <div class="ride-list" id="available-rides-list">
+                  <!-- Ride items will be dynamically inserted here by JavaScript -->
+                </div>
+              </div>
             </div>
-        </section>
+          </section>
+          
 
-        <section id="previous-rides-section" class="content-section">
+          <section id="previous-rides-section" class="content-section">
             <div class="section-header">
-                <h2>Previous Rides</h2>
+              <h2>Previous Rides</h2>
             </div>
             <div class="section-cards-grid">
-                <div class="card">
-                    <div class="ride-list">
-                        <div class="ride-item">
-                            <div class="ride-item-header">
-                                <h3>To Anna Nagar West</h3>
-                                <span class="status-completed">Completed</span>
-                            </div>
-                            <p><i class="fas fa-calendar-alt"></i> Date: May 27, 2025 | <i class="fas fa-rupee-sign"></i> Fare: ₹ 380</p>
-                            <p><i class="fas fa-user-circle"></i> Customer: Priya R.</p>
-                            <div class="ride-item-actions">
-                                <button class="btn btn-secondary-small"><i class="fas fa-redo-alt"></i> Re-ride</button>
-                                <button class="btn btn-primary-small"><i class="fas fa-info-circle"></i> Details</button>
-                            </div>
-                        </div>
-                        <div class="ride-item">
-                            <div class="ride-item-header">
-                                <h3>To Velachery Phoenix</h3>
-                                <span class="status-completed">Completed</span>
-                            </div>
-                            <p><i class="fas fa-calendar-alt"></i> Date: May 26, 2025 | <i class="fas fa-rupee-sign"></i> Fare: ₹ 210</p>
-                            <p><i class="fas fa-user-circle"></i> Customer: Karthik S.</p>
-                            <div class="ride-item-actions">
-                                <button class="btn btn-secondary-small"><i class="fas fa-redo-alt"></i> Re-ride</button>
-                                <button class="btn btn-primary-small"><i class="fas fa-info-circle"></i> Details</button>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-load-more"><i class="fas fa-ellipsis-h"></i> Load More History</button>
+              <div class="card">
+                <div class="ride-list" id="previous-rides-list">
+                  <!-- Ride items will be dynamically inserted here -->
                 </div>
+                <button class="btn btn-load-more"><i class="fas fa-ellipsis-h"></i> Load More History</button>
+              </div>
             </div>
-        </section>
+          </section>
+          
 
         <section id="wallet-earnings-section" class="content-section">
             <div class="section-header">

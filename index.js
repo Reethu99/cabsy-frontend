@@ -235,42 +235,6 @@ app.get('/session-user', (req, res) => {
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
 
-    try {
-        let backendResponse;
-        let registrationData;
-        let backendEndpoint;
-        let role = "";
-        // Differentiate between Rider and Captain registrations based on expected fields
-        if (req.body.username && req.body.email && req.body.phone && req.body.password) {
-            console.log('Rider Registration Attempt:');
-            role = "rider";
-            registrationData = {
-                name: req.body.username,
-                email: req.body.email,
-                phoneNumber: req.body.phone,
-                password: req.body.password
-            };
-            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
-        } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
-
-            console.log('Captain Registration Attempt:');
-            role = "captain";
-            registrationData = {
-                name: req.body.captainUsername,
-                email: req.body.captainEmail,
-                phoneNumber: req.body.captainPhone,
-                licenseNumber: req.body.captainLicense,
-                password: req.body.captainPassword
-            };
-            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/driver/register`;
-        } else {
-            // If neither type of registration data is complete
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid registration request: Missing required fields.',
-                error: 'Incomplete registration data.'
-            });
-        }
     try{
     let backendResponse;
     let registrationData;
@@ -545,14 +509,13 @@ app.get('/available-rides', async (req, res) => {
       console.log("Available rides:",response.data)
       res.json({ success: true, data: response.data });
     } catch (error) {
-      console.error('Backend Error:', error.message);
+      console.error('Available rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
     }
   });
   
 
-app.get('/previous-rides', async (req, res) => {
-    
+app.get('/previous-rides', async (req, res) => {    
     let driverId = req.session.user.id;
     console.log('Requested to get previous rides of driver:',driverId)
     try {
@@ -561,10 +524,36 @@ app.get('/previous-rides', async (req, res) => {
       console.log("Previous rides:",response.data)
       res.json({ success: true, data: response.data });
     } catch (error) {
-      console.error('Backend Error:', error.message);
+      console.error('Previous rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
     }
   });
+
+
+  app.put(`/accept-ride/:rideId`, async (req, res) => {
+    try {
+      let  {rideId} = req.params;
+      let driverId = req.session.user.id; // assuming session middleware is used
+      console.log(rideId,driverId)
+      let response = await axios.put(
+        `${BACKEND_API_BASE_URL}/rides/${rideId}/assign`,
+        {}, // no body
+        {
+          params: { driverId },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Ride accept Status:",response.data)
+      res.status(response.status).json(response.data);
+    } catch (error) {
+      res.status(error.response?.status || 500).json({
+        message: 'Failed to assign driver/cab',
+        error: error.message,
+      });
+    }
+  });
+  
 
 app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint name to /bookride
     // Ensure the user booking the ride is a rider and has an ID in session
