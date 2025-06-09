@@ -232,7 +232,7 @@ app.get('/session-user', (req, res) => {
 });
 
 // --- POST route for Registration (No change needed here, it already differentiates) ---
-app.post('/registration', async (req, res) => {
+app.post('/registration', async (req, res) =>{
     console.log('Received registration data:', req.body);
 
     try {
@@ -305,9 +305,7 @@ app.post('/registration', async (req, res) => {
             message: 'Invalid registration request: Missing required fields.',
             error: 'Incomplete registration data.'
         });
-    }
-    
-           
+    }       
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
