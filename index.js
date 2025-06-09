@@ -412,6 +412,52 @@ app.post('/logout', (req, res) => {
 });
 
 
+app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint name to /bookride
+    // Ensure the user booking the ride is a rider and has an ID in session
+    if (req.session.user.userType !== 'rider' || !req.session.user.id) {
+        return res.status(403).json({ success: false, message: 'Unauthorized: Only logged-in riders can book rides.' });
+    }
+
+    const rideRequestData = req.body; // This already contains pickupLat, pickupLon, etc. from frontend
+    const riderId = req.session.user.id; // Get the ID of the logged-in rider from the session
+
+    console.log(`Forwarding ride booking request for Rider ID: ${riderId}`);
+    console.log('Ride Request Payload:', rideRequestData);
+
+    try {
+        // Forward the request to your Spring Boot backend's ride booking endpoint
+        // Appending userId to the URL as per your backend's @PathVariable
+        const backendResponse = await axios.post(`${BACKEND_API_BASE_URL}/rides/request/${riderId}`, rideRequestData, {
+            headers: {
+                'Content-Type': 'application/json',
+                // If your Spring Boot backend uses JWTs, pass the JWT token from `req.session.user.jwtToken` here:
+                // 'Authorization': `Bearer ${req.session.user.jwtToken}`,
+            },
+            // If the backend needs session cookies, ensure axios sends them with credentials
+            // withCredentials: true
+        });
+
+        // Forward the backend's response (success/failure, estimated fare, etc.) back to the frontend
+        res.status(backendResponse.status).json(backendResponse.data);
+
+    } catch (error) {
+        console.error('Error forwarding ride booking to backend:', error.response ? error.response.data : error.message);
+
+        // Customize error response based on backend's response structure (ApiResponse)
+        const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : 'An unexpected error occurred while booking the ride.';
+        const errorStatus = error.response ? error.response.status : 500;
+
+        res.status(errorStatus).json({
+            success: false,
+            message: errorMessage,
+            error: error.response ? error.response.data : error.message // Include backend error details for debugging
+        });
+    }
+});
+
+
 // Start the server and listen for requests
 app.listen(process.env.port, () => {
     console.log(`Server is running on http://localhost:${process.env.port}`);
