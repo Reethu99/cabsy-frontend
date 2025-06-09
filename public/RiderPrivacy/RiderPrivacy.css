@@ -74,24 +74,13 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
-  .login-btn {
-    color: #4c6d87;
-    border: 1px solid #547793;
-    background-color: transparent;
-  }
-  
-  .login-btn:hover {
-    background-color: #547793;
-    color: #fff;
-  }
-  
-  .signup-btn {
+  .logout-btn {
     background-color: #4c6d87;
     color: #fff;
     border: 1px solid #547793;
   }
   
-  .signup-btn:hover {
+  .logout-btn:hover {
     background-color: #547793;
     border-color: #547793;
   }

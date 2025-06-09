@@ -92,4 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
             // window.history.back(); or navigate to a specific route.
         });
     }
+
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                    credentials: 'include', // Important for sending cookies
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    alert(data.message || 'Logged out successfully!');
+                    window.location.href = '/'; // Redirect to home/login page
+                } else {
+                    alert(`Logout failed: ${data.message || 'An unknown error occurred.'}`);
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('An error occurred during logout. Please check your connection.');
+            }
+        });
+    }
 });

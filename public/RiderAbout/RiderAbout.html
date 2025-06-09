@@ -23,8 +23,7 @@
                     <a href="/riderprofile" class="profile-link">
                         <i class="fas fa-user-circle profile-icon"></i> </a>
                 </div>
-                <a href="/login" class="nav-button login-btn">Login</a>
-                <a href="/registration" class="nav-button signup-btn">Sign Up</a>
+                <button id="logoutButton" class="nav-button logout-btn">Logout</button>
             </div>
         </nav>
     </header>
@@ -91,6 +90,34 @@
     <footer>
         <p>&copy; 2025 Cabsy. All rights reserved.</p>
     </footer>
- 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', async () => {
+                    try {
+                        const response = await fetch('/logout', {
+                            method: 'POST',
+                            credentials: 'include', // Important for sending cookies
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        const data = await response.json();
+        
+                        if (response.ok && data.success) {
+                            alert(data.message || 'Logged out successfully!');
+                            window.location.href = '/'; // Redirect to home/login page
+                        } else {
+                            alert(`Logout failed: ${data.message || 'An unknown error occurred.'}`);
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        alert('An error occurred during logout. Please check your connection.');
+                    }
+                });
+            }
+        });
+         </script>
 </body>
 </html>

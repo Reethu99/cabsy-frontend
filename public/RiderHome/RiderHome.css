@@ -72,17 +72,9 @@ header {
   font-weight: 500;
   margin-left: 10px;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.logout-btn {
   background-color: #4c6d87;
   color: #fff;
   border: 1px solid #547793;
-}
-
-.logout-btn:hover {
-  background-color: #547793;
-  border-color: #547793;
 }
 
 .container {
@@ -152,7 +144,7 @@ h1 {
 
 .start-circle-icon {
   position: absolute; /* Add position absolute */
-  left: 10px; /* Position relative to wrapper */
+  left: 13px; /* Position relative to wrapper */
   top: 50%; /* Center vertically */
   transform: translateY(-50%); /* Adjust for vertical centering */
   height: 12px;
