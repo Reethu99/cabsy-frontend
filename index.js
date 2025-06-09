@@ -95,18 +95,6 @@ app.get('/riderabout', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderAbout', 'RiderAbout.html'));
 });
 
-app.get('/editphone', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditPhone.html'));
-});
-app.get('/editemail', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditEmail.html'));
-});
-app.get('/editname', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditName.html'));
-});
-app.get('/editpwd', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'RiderProfile', 'EditPwd.html'));
-});
 
 app.get('/riderprivacy', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'RiderPrivacy', 'RiderPrivacy.html'));
@@ -141,7 +129,6 @@ app.get('/captainhome', isAuthenticated, (req, res) => {
 });
 
 app.get('/captainsecurity', isAuthenticated, (req, res) => {
-
     res.sendFile(path.join(__dirname, 'public', 'CaptainSecurity', 'CaptainSecurity.html'));
 });
 
@@ -179,28 +166,26 @@ app.post('/login', async (req, res) => {
         if (backendResponse.status === 200 && backendResponse.data.success) {
             // Login successful: Store relevant user data in the session
             // IMPORTANT: Only store non-sensitive data, or data needed for subsequent requests.
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('user', JSON.stringify(backendResponse.data.data));
-                console.log('Backend Response:', JSON.parse(localStorage.getItem('user')));
-            }
+            // Removed localStorage.setItem as it's for browser, not Node.js server.
+            console.log('Backend Response Data:', backendResponse.data.data);
 
             req.session.user = {
                 id: backendResponse.data.data.id,
                 email: backendResponse.data.data.email,
                 name: backendResponse.data.data.name,
                 phoneNumber: backendResponse.data.data.phoneNumber,
-                licenseNumber: backendResponse.data.data.licenseNumber,
-                status: backendResponse.data.data.status,
-                rating: backendResponse.data.data.rating,
-                userType: role,
-                // Store the role directly from the request
+                // These fields might only exist for drivers, conditionally add them
+                licenseNumber: backendResponse.data.data.licenseNumber || null,
+                status: backendResponse.data.data.status || null,
+                rating: backendResponse.data.data.rating || null,
+                userType: role, // Store the role directly from the request
                 // You might store a JWT token here if your backend issues one:
                 // jwtToken: backendResponse.data.data.token
             };
 
-            console.log(req.session.id, 'Backend Response:', req.session.user)
+            console.log('Session User Data:', req.session.user)
             // Determine redirect URL based on user type
-            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
+            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome'; // Changed to captainhome based on usage above
 
             res.status(200).json({
                 success: true,
@@ -231,10 +216,11 @@ app.get('/session-user', (req, res) => {
     res.send(req.session.user);
 });
 
-// --- POST route for Registration (No change needed here, it already differentiates) ---
+// --- POST route for Registration (Fixed duplicate try block) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
 
+<<<<<<< HEAD
     try{
     let backendResponse;
     let registrationData;
@@ -272,31 +258,69 @@ app.post('/registration', async (req, res) => {
     }
     
            
+=======
+    try {
+        let backendResponse;
+        let registrationData;
+        let backendEndpoint;
+        let role = "";
+        // Differentiate between Rider and Captain registrations based on expected fields
+        if (req.body.username && req.body.email && req.body.phone && req.body.password) {
+            console.log('Rider Registration Attempt:');
+            role = "rider";
+            registrationData = {
+                name: req.body.username,
+                email: req.body.email,
+                phoneNumber: req.body.phone,
+                password: req.body.password
+            };
+            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/user/register`;
+        } else if (req.body.captainUsername && req.body.captainEmail && req.body.captainPhone && req.body.captainLicense && req.body.captainPassword) {
+            console.log('Captain Registration Attempt:');
+            role = "captain";
+            registrationData = {
+                name: req.body.captainUsername,
+                email: req.body.captainEmail,
+                phoneNumber: req.body.captainPhone,
+                licenseNumber: req.body.captainLicense,
+                password: req.body.captainPassword
+            };
+            backendEndpoint = `${BACKEND_API_BASE_URL}/auth/driver/register`;
+        } else {
+            // If neither type of registration data is complete
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid registration request: Missing required fields.',
+                error: 'Incomplete registration data.'
+            });
+        }
+>>>>>>> d16ac9ff52e7b792cf29d9e2b74fd6398b139145
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
         console.log(backendResponse);
+
         // Check if the backend registration was successful (assuming it returns a 'success' field)
         if ((backendResponse.status === 200 || backendResponse.status === 201) && backendResponse.data.success) {
-
-            // Send the backend's response directly back to the client
+             // Send the backend's response directly back to the client
             // Determine redirect URL based on user type
             const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
             console.log("Registration Sucessfull")
             // Send a success response back to the client, indicating where to redirect
-            res.redirect(redirectUrl)
-           
-        }
-        else {
-            res.status(400).json({
+
+            res.redirect(redirectUrl);
+        } else {
+            // Backend indicated registration failure
+            res.status(backendResponse.status || 400).json({ // Use backend's status if available
                 success: false,
                 message: backendResponse.data.message || 'Registration failed.',
                 error: backendResponse.data.error || 'Invalid input or user already exists.'
             });
         }
-    } catch (error) {
+    }
+    catch (error) {
         // Handle errors from the axios request
-        console.error('Error forwarding registration to backend:', error);
+        console.error('Error forwarding registration to backend:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
             success: false,
             message: 'Registration failed due to backend error.',
@@ -322,7 +346,6 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         return res.status(400).json({ success: false, message: 'Invalid request: Missing rider ID or unsupported field.' });
     }
     // ... rest of the code (your existing validation for password/other fields)
-    // Remember the previous fix for newValue.trim().isEmpty() should already be applied here.
     const newValue = requestBody[field]; // This line should be present
 
     if (field !== 'password' && (!newValue || newValue.trim() === '')) { // <-- Ensure this is correctly fixed
@@ -442,22 +465,21 @@ app.post('/change-password', async (req, res) => {
             newPassword
         });
         console.log('Password updated successfully.')
-        if (response.data.success === 200) {
+        if (response.data.success) { // Check for backend's success flag explicitly
             res.status(200).json({
                 success: true,
                 message: 'Password updated successfully.',
-                redirectUrl: '/captain'
+                redirectUrl: '/captainhome' // Corrected redirect to captainhome
             });
         } else {
             return res.status(400).json({ error: response.data.message || 'Password update failed.' });
         }
     } catch (error) {
-        console.error('Error updating password:', error.message);
-        return res.status(500).json({ error: 'Internal server error. Please try again later.' });
+        console.error('Error updating password:', error.response ? error.response.data : error.message); // Log full error response
+        return res.status(error.response ? error.response.status : 500).json({ error: error.response ? error.response.data : 'Internal server error. Please try again later.' });
     }
 
 })
-
 
 // PUT endpoint to update a driver
 app.post('/edit-profile', async (req, res) => {
@@ -504,30 +526,45 @@ app.post('/edit-profile', async (req, res) => {
 app.get('/available-rides', async (req, res) => {
     console.log('Requested to get available rides for driver:')
     try {
-      const response = await axios.get(`${BACKEND_API_BASE_URL}/rides`);
-      req.session.availableRides = response.data;
-      console.log("Available rides:",response.data)
-      res.json({ success: true, data: response.data });
+        const response = await axios.get(`${BACKEND_API_BASE_URL}/rides`);
+        req.session.availableRides = response.data;
+        console.log("Available rides:", response.data)
+        res.json({ success: true, data: response.data });
     } catch (error) {
+<<<<<<< HEAD
       console.error('Available rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
+=======
+        console.error('Backend Error:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
+>>>>>>> d16ac9ff52e7b792cf29d9e2b74fd6398b139145
     }
-  });
-  
+});
 
+
+<<<<<<< HEAD
 app.get('/previous-rides', async (req, res) => {    
+=======
+app.get('/previous-rides', async (req, res) => {
+
+>>>>>>> d16ac9ff52e7b792cf29d9e2b74fd6398b139145
     let driverId = req.session.user.id;
-    console.log('Requested to get previous rides of driver:',driverId)
+    console.log('Requested to get previous rides of driver:', driverId)
     try {
-      const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/driver/${driverId}`);
-      req.session.previousRides = response.data;
-      console.log("Previous rides:",response.data)
-      res.json({ success: true, data: response.data });
+        const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/driver/${driverId}`);
+        req.session.previousRides = response.data;
+        console.log("Previous rides:", response.data)
+        res.json({ success: true, data: response.data });
     } catch (error) {
+<<<<<<< HEAD
       console.error('Previous rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
+=======
+        console.error('Backend Error:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
+>>>>>>> d16ac9ff52e7b792cf29d9e2b74fd6398b139145
     }
-  });
+});
 
 
   app.put(`/accept-ride/:rideId`, async (req, res) => {
