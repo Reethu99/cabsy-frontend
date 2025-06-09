@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json(); // Parse the JSON response from Express
 
             if (response.ok && data.success) { // Check both HTTP status and custom 'success' field from Express
-                alert(data.message); // "Login successful!"
+                // alert(data.message);
 
                 // Express server should send redirectUrl
                 if (data.redirectUrl) {

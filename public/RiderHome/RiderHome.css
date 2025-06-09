@@ -1,3 +1,4 @@
+/* src/main/java/com/cabsy/backend/RiderHome/RiderHome.css */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -29,8 +30,8 @@ header {
 }
 
 .logo-img {
-  height: 5%;
-  width: 5%;
+  height: 5%; /* Consider using a fixed pixel value or max-height for better control */
+  width: 5%; /* Consider using a fixed pixel value or max-width for better control */
   margin-right: 6px;
   border-radius: 500px;
 }
@@ -61,7 +62,7 @@ header {
 
 .profile-icon {
   font-size: 40px;
-  color: #555;
+  color: #555; /* Note: This will make the icon grey on a dark header. You might want white or light grey. */
 }
 
 .nav-button {
@@ -73,24 +74,13 @@ header {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.login-btn {
-  color: #4c6d87;
-  border: 1px solid #547793;
-  background-color: transparent;
-}
-
-.login-btn:hover {
-  background-color: #547793;
-  color: #fff;
-}
-
-.signup-btn {
+.logout-btn {
   background-color: #4c6d87;
   color: #fff;
   border: 1px solid #547793;
 }
 
-.signup-btn:hover {
+.logout-btn:hover {
   background-color: #547793;
   border-color: #547793;
 }
@@ -108,46 +98,15 @@ h1 {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.service-selector button {
-  padding: 10px 20px;
-  margin: 0 5px;
-  border: none;
-  background: #e0e0e0;
-  cursor: pointer;
-  border-radius: 4px;
+.form { /* No specific class for the form tag, assuming this targets the div containing the form elements */
+  /* Remove input width styles from here as they are specific to input[type="text"] not select */
+  /* Removed: .form input */
 }
 
-.service-selector .active {
-  background: black;
-  color: white;
-}
-
-.form input {
-  width: 56.5%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.datetime {
-  display: flex;
-  gap: 10px;
-}
-
-.datetime input {
-  flex: 1;
-}
-
-#seePrices {
+.input-with-icon {
+  position: relative;
   width: 100%;
-  padding: 12px;
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  margin-top: 10px;
-  cursor: pointer;
+  max-width: 400px;
 }
 
 .input-wrapper {
@@ -157,153 +116,23 @@ h1 {
   align-items: center;
 }
 
-.input-with-icon {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-}
-
-.input-with-icon input {
-  width: 100%;
-  padding: 10px 35px 10px 35px;
-  box-sizing: border-box;
-}
-
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-variation-settings:
-      'FILL' 1,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 24;
-  position: absolute;
-  top: 10%;
-  transform: translateY(-20%);
-  color: #555;
-  pointer-events: none;
-}
-
-.start-circle-icon {
-  margin-left: 2px;
-  margin-top: -6px;
-  height: 12px;
-  width: 12px;
-  left: 10px;
-}
-
-.line-connector {
-  position: absolute;
-  left: 17px;
-  top: 40px;
-  height: 40px;
-  width: 1.5px;
-  background-color: transparent;
-  border-left: 3px dotted black;
-  z-index: 1;
-}
-
-.start-box-icon {
-  margin-top: -10px;
-  height: 19px;
-  width: 19px;
-  left: 9px;
-}
-
-.end-icon {
-  margin-top: -9px;
-  height: 20px;
-  width: 18px;
-  right: 9px;
-}
-
-.map-placeholder {
-  margin: 5% 3%;
-  height: 400px;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.left-side {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10%;
-  margin-left: 30px;
-}
-
-#hero-img {
-  height: 100%;
-  width: 100%;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  margin-top: 50px;
-  background-color: #333;
-  color: #fff;
-  font-size: 0.9em;
-}
-
-@media (max-width: 767px) {
-  .form input#pickup,
-  .form input#dropoff {
-      width: 100%;
-      box-sizing: border-box;
-  }
-
-  .input-with-icon {
-      width: 100%;
-      position: relative;
-  }
-
-  .input-with-icon input {
-      width: 100%;
-      padding-right: 35px;
-  }
-
-  .input-with-icon .material-symbols-outlined {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: #555;
-  }
-}
-
-.input-wrapper svg {
-  position: absolute;
-  top: 50%;
-  fill: #1f1f1f;
-  pointer-events: none;
-}
-
-.input-wrapper input {
-  padding-left: 40px;
-  font-size: 16px;
-}
-
-/* RiderHome.css additions for the modal */
-/* Styling for the dropdowns */
+/* Styling for the dropdowns (select elements) */
 .input-wrapper select {
   width: 100%;
-  padding: 10px 35px 10px 35px;
+  padding: 10px 35px 10px 35px; /* Adjust padding for icon */
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  -webkit-appearance: none; /* Remove default dropdown arrow */
+  -moz-appearance: none; /* Remove default dropdown arrow */
+  appearance: none; /* Remove default dropdown arrow */
   background-color: white;
   cursor: pointer;
   font-size: 16px;
   box-sizing: border-box;
 }
 
-/* Add a custom arrow if desired for select (optional, but good for consistency) */
+/* Custom arrow for select elements */
 .input-wrapper::after {
   content: '▼';
   position: absolute;
@@ -317,221 +146,94 @@ footer {
 
 /* Adjust end-icon for select elements if they clash with custom arrow */
 .input-wrapper select + .end-icon {
-  display: none;
+  display: none; /* Hide the existing end-icon SVG for select elements */
 }
 
-/* Modal specific styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: 1001;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.3s ease, opacity 0.3s ease;
+
+.start-circle-icon {
+  position: absolute; /* Add position absolute */
+  left: 10px; /* Position relative to wrapper */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  height: 12px;
+  width: 12px;
+  fill: #1f1f1f; /* Ensure fill is set if it was previously in .input-wrapper svg */
+  pointer-events: none; /* Ensure it's not clickable */
+  z-index: 2; /* Ensure it's above the select */
 }
 
-.modal-overlay.show {
-  visibility: visible;
-  opacity: 1;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 25px;
-  border-radius: 8px 8px 0 0;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
-  transform: translateY(100%);
-  animation: none;
-  transition: transform 0.3s ease-out;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.modal-overlay.show .modal-content {
-  transform: translateY(0);
-}
-
-.close-button {
+.line-connector {
   position: absolute;
-  top: 15px;
-  right: 25px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #888;
-  cursor: pointer;
+  left: 17px;
+  top: 40px; /* Adjusted to be between the two select elements */
+  height: 40px; /* Increased height to connect better */
+  width: 1.5px;
+  background-color: transparent;
+  border-left: 3px dotted black;
+  z-index: 1;
 }
 
-.close-button:hover {
-  color: #333;
+.start-box-icon {
+  position: absolute; /* Add position absolute */
+  left: 9px; /* Position relative to wrapper */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  height: 19px;
+  width: 19px;
+  fill: #1f1f1f; /* Ensure fill is set */
+  pointer-events: none;
+  z-index: 2; /* Ensure it's above the select */
 }
 
-.modal-content h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+.end-icon {
+  /* This rule is now effectively hidden by '.input-wrapper select + .end-icon' for select elements */
+  /* Keeping it here in case it applies to other input types later */
+  position: absolute;
+  height: 20px;
+  width: 18px;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  fill: #1f1f1f;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.modal-content p {
-  text-align: center;
-  margin-bottom: 10px;
-  color: #555;
-  text-align: left;
-}
-
-.cab-options-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.cab-option {
-  display: flex;
-  align-items: center;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-  cursor: pointer;
-}
-
-.cab-option.selected {
-  border-color: #000;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  background-color: #e0e0e0;
-}
-
-.cab-option:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.cab-icon {
-  font-size: 2.2em;
-  margin-right: 15px;
-  color: #333;
-  min-width: 40px;
-  text-align: center;
-}
-
-.cab-details {
-  flex-grow: 1;
-}
-
-.cab-details h3 {
-  margin: 0;
-  font-size: 1.2em;
-  color: #333;
-}
-
-.cab-details p {
-  margin: 5px 0 0;
-  font-size: 0.9em;
-  color: #777;
-  text-align: left;
-}
-
-.cab-price {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: #000;
-  margin-left: 15px;
-  white-space: nowrap;
-}
-
-.book-ride-container {
-  text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-  margin-top: 20px;
-}
-
-.book-ride-button {
-  background-color: #000;
-  color: #fff;
+#bookRideButton {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
+  border-radius: 4px;
+  margin-top: 10px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 1.1em;
-  transition: background-color 0.2s ease;
-  width: 100%;
-  max-width: 300px;
 }
 
-.book-ride-button:hover {
-  background-color: #333;
+#bookRideButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-/* Basic responsiveness for the modal */
-@media (max-width: 768px) {
-  .modal-content {
-      width: 95%;
-      padding: 15px;
-  }
-
-  .cab-option {
-      flex-wrap: wrap;
-      justify-content: space-between;
-  }
-
-  .cab-icon {
-      margin-right: 10px;
-  }
-
-  .cab-details {
-      flex-basis: 70%;
-      margin-bottom: 5px;
-  }
-
-  .cab-price {
-      margin-left: 0;
-      font-size: 1.2em;
-      text-align: right;
-  }
-
-  .book-ride-button {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 10px;
-  }
+.left-side {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: flex-start; /* Align to the top */
+  margin-top: 10%;
+  margin-left: 30px;
+  flex-grow: 1; /* Allow it to take available space */
+  max-width: 450px; /* Limit width */
 }
 
-.navbar-left ul {
-  display: none;
-  position: absolute;
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  list-style: none;
-}
-
-.navbar-left ul.show {
-  display: block;
-}
-
-/* Slideshow container */
 .slideshow-container {
   position: relative;
   width: 40%;
   height: 400px;
   overflow: hidden;
   margin: 5% 3%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
-/* Individual slides */
 .mySlides {
   display: none;
   position: absolute;
@@ -541,13 +243,12 @@ footer {
   left: 0;
 }
 
-/* Image within slide to cover the container */
 .mySlides img {
   width: 100%;
   height: 100%;
+  object-fit: cover; /* Ensures image covers the area without distortion */
 }
 
-/* Fade animation */
 .fade {
   animation-name: fade;
   animation-duration: 1.5s;
@@ -557,84 +258,108 @@ footer {
   from {
       opacity: .4
   }
-
   to {
       opacity: 1
   }
 }
 
-/* When the slide is active, make it block (visible) */
 .mySlides.active {
   display: block;
   opacity: 1;
 }
 
-/* Optional: Navigation buttons (prev/next) */
-.prev,
-.next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  padding: 16px;
-  margin-top: -22px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-}
-
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
-
-.prev:hover,
-.next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Optional: Dots indicators */
-.dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-  z-index: 2;
-}
-
-.active,
-.dot:hover {
-  background-color: #717171;
-}
-
-/* Caption text (if used) */
-.text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
+footer {
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 2;
+  padding: 20px;
+  margin-top: 50px;
+  background-color: #333;
+  color: #fff;
+  font-size: 0.9em;
 }
 
-/* Number text (if used) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-  z-index: 2;
+/* --- Media Queries --- */
+@media (max-width: 992px) {
+  .container {
+      flex-direction: column; /* Stack layout on smaller screens */
+      height: auto; /* Adjust height for stacked content */
+      align-items: center; /* Center items when stacked */
+      padding-bottom: 50px; /* Add some space at the bottom */
+  }
+
+  .left-side {
+      margin: 5% auto 20px; /* Adjust margin for centering */
+      padding: 0 20px; /* Add some padding */
+      width: 100%;
+      max-width: 450px; /* Keep max-width */
+  }
+
+  .slideshow-container {
+      width: 90%; /* Make slideshow wider on smaller screens */
+      margin: 20px auto; /* Center slideshow */
+      height: 300px; /* Adjust height */
+  }
 }
+
+@media (max-width: 767px) {
+  .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .navbar-right {
+      margin-top: 10px;
+      width: 100%;
+      justify-content: flex-end; /* Align buttons to the right */
+  }
+
+  .cabsy-title {
+      margin-right: 10px;
+  }
+
+  .nav {
+      margin: 0 10px 0 0; /* Adjust spacing for stacked nav items */
+  }
+
+  .left-side {
+      margin-top: 20px;
+  }
+
+  h1 {
+      font-size: 1.5em;
+      text-align: center;
+      margin-left: 0;
+  }
+
+  .form {
+      padding: 0 15px;
+  }
+
+  .input-with-icon {
+      max-width: 100%; /* Allow full width */
+  }
+
+  .input-wrapper select {
+      padding-left: 40px; /* Adjust padding for icon */
+      padding-right: 40px; /* Adjust padding for custom arrow */
+  }
+
+  .start-circle-icon,
+  .start-box-icon {
+      left: 10px; /* Consistent left positioning */
+  }
+
+  .input-wrapper::after {
+      right: 15px; /* Consistent right positioning for custom arrow */
+  }
+
+  #bookRideButton {
+      font-size: 1em;
+      padding: 10px;
+  }
+
+  footer {
+      margin-top: 20px;
+      padding: 15px;
+  }
+}
+

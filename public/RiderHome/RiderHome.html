@@ -17,16 +17,15 @@
             <div class="navbar-left">
                 <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
                 <a href="/" class="cabsy-title">Cabsy</a>
-                    <a href="/riderabout" class="nav">About</a>
-                    <a href="/riderhelp" class="nav">Help</a>
+                <a href="/riderabout" class="nav">About</a>
+                <a href="/riderhelp" class="nav">Help</a>
             </div>
             <div class="navbar-right">
                 <div class="profile-container">
                     <a href="/riderprofile" class="profile-link">
                         <i class="fas fa-user-circle profile-icon"></i> </a>
                 </div>
-                <a href="/login" class="nav-button login-btn">Login</a>
-                <a href="/registration" class="nav-button signup-btn">Sign Up</a>
+                <button id="logoutButton" class="nav-button logout-btn">Logout</button>
             </div>
         </nav>
     </header>
@@ -43,7 +42,7 @@
                         </svg>
                         <select id="pickup">
                             <option value="">Select pickup location</option>
-                            </select>
+                        </select>
                         <svg xmlns="http://www.w3.org/2000/svg" class="end-icon" height="20px"
                             viewBox="0 -960 960 960" width="20px" fill="#1f1f1f">
                             <path d="M517-144 416-416 144-517v-35l672-264-264 672h-35Z" />
@@ -59,7 +58,7 @@
                         </svg>
                         <select id="dropoff">
                             <option value="">Select dropoff location</option>
-                            </select>
+                        </select>
                         <svg xmlns="http://www.w3.org/2000/svg" class="end-icon" height="20px"
                             viewBox="0 -960 960 960" width="20px" fill="#1f1f1f">
                             <path d="M517-144 416-416 144-517v-35l672-264-264 672h-35Z" />
@@ -67,51 +66,34 @@
                     </div>
                 </div>
 
-               
-                <button id="seePrices">See Prices</button>
+                <button id="bookRideButton" disabled>Select locations to book</button>
                 <p><a href="/login">Log in to see your recent activity</a></p>
             </div>
         </div>
 
-        <!-- <div class="map-placeholder">
-            <img src="../Assets/RiderHero.jfif" alt="Map of Bengaluru" id="hero-img" />
-        </div> -->
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <img src="../Assets/hero1.jpg" style="width:100%" alt="Image One">
+            </div>
 
-            <div class="slideshow-container">
-      <div class="mySlides fade">
-          <img src="../Assets/hero1.jpg" style="width:100%" alt="Image One">
-          </div>
-  
-      <div class="mySlides fade">
-          <img src="../Assets/hero2.jpg" style="width:100%" alt="Image Two">
-      </div>
-  
-      <div class="mySlides fade">
-          <img src="../Assets/hero3.jpg" style="width:100%" alt="Image Three">
-      </div>
-  
-      <div class="mySlides fade">
-          <img src="../Assets/hero4.jpg" style="width:100%" alt="Image Four">
-      </div>
-  
-     
-  </div>
-  <br>
+            <div class="mySlides fade">
+                <img src="../Assets/hero2.jpg" style="width:100%" alt="Image Two">
+            </div>
+
+            <div class="mySlides fade">
+                <img src="../Assets/hero3.jpg" style="width:100%" alt="Image Three">
+            </div>
+
+            <div class="mySlides fade">
+                <img src="../Assets/hero4.jpg" style="width:100%" alt="Image Four">
+            </div>
+        </div>
+        <br>
 
     </div>
     <footer>
         <p>&copy; 2025 Cabsy. All rights reserved.</p>
     </footer>
-
-    <div id="cabSelectionModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-button" id="closeModalButton">&times;</span>
-            <h2>Select Your Cab</h2>
-            <p id="routeSummary"></p>
-            <div class="cab-options-list" id="cabOptionsList">
-                </div>
-        </div>
-    </div>
 
     <script src="../RiderHome/RiderHome.js"></script>
 </body>
