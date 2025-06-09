@@ -185,7 +185,7 @@ app.post('/login', async (req, res) => {
 
             console.log('Session User Data:', req.session.user)
             // Determine redirect URL based on user type
-            const redirectUrl = role === 'captain' ? '/captainhome' : '/riderhome'; // Changed to captainhome based on usage above
+            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome'; // Changed to captainhome based on usage above
 
             res.status(200).json({
                 success: true,
@@ -262,16 +262,13 @@ app.post('/registration', async (req, res) => {
 
         // Check if the backend registration was successful (assuming it returns a 'success' field)
         if ((backendResponse.status === 200 || backendResponse.status === 201) && backendResponse.data.success) {
-            console.log("Registration Successful");
+             // Send the backend's response directly back to the client
+            // Determine redirect URL based on user type
+            const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
+            console.log("Registration Sucessfull")
             // Send a success response back to the client, indicating where to redirect
-            // Note: If you want to redirect directly, send a redirect status.
-            // If you want the frontend JS to handle redirect, send JSON with redirectUrl.
-            // Assuming frontend handles redirect for consistency with login.
-            res.status(200).json({
-                success: true,
-                message: backendResponse.data.message || 'Registration successful!',
-                redirectUrl: role === 'captain' ? '/captainhome' : '/riderhome' // Consistent redirect URLs
-            });
+
+            res.redirect(redirectUrl);
         } else {
             // Backend indicated registration failure
             res.status(backendResponse.status || 400).json({ // Use backend's status if available
@@ -444,14 +441,9 @@ app.post('/change-password', async (req, res) => {
 
 })
 
-
 // PUT endpoint to update a driver
-app.post('/edit-profile', isAuthenticated, async (req, res) => { // Added isAuthenticated middleware
+app.post('/edit-profile', async (req, res) => {
     try {
-        // Ensure the logged-in user is a captain/driver
-        if (req.session.user.userType !== 'captain' || !req.session.user.id) {
-            return res.status(403).json({ success: false, message: 'Unauthorized: Only logged-in captains can edit their profile.' });
-        }
 
         let updateData = {
             name: req.body.name,
@@ -459,40 +451,35 @@ app.post('/edit-profile', isAuthenticated, async (req, res) => { // Added isAuth
             phoneNumber: req.body.phoneNumber,
             licenseNumber: req.body.licenseNumber
         }
-        console.log("Requested to update profile:", updateData);
-        let id = req.session.user.id; // Use ID from session
-        let backendResponse = await axios.put(`${BACKEND_API_BASE_URL}/auth/driver/${id}`, updateData); // Changed to PUT
-
+        console.log("Rquested to update profile:", updateData);
+        let id = req.session.user.id;
+        let backendResponse = await axios.post(`${BACKEND_API_BASE_URL}/auth/driver/${id}`, updateData);
         console.log('Profile updated successfully:', backendResponse.data)
-        if (backendResponse.status === 200 && backendResponse.data.success) { // Check for backend's success flag
-            // Update session with new data
+        if (backendResponse.status === 200) {
+            // res.status(200).json({
+            //     success: true,
+            //     message: 'Profile updated successfully.',
+            //     redirectUrl: '/captain'
+            // });
             req.session.user = {
-                id: backendResponse.data.data.id, // Access data.data as per typical API responses
-                email: backendResponse.data.data.email,
-                name: backendResponse.data.data.name,
-                phoneNumber: backendResponse.data.data.phoneNumber,
-                licenseNumber: backendResponse.data.data.licenseNumber,
-                status: backendResponse.data.data.status,
-                rating: backendResponse.data.data.rating, // Assuming rating might be returned
-                userType: 'captain', // Ensure userType is maintained
+                id: backendResponse.data.id,
+                email: backendResponse.data.email,
+                name: backendResponse.data.name,
+                phoneNumber: backendResponse.data.phoneNumber,
+                licenseNumber: backendResponse.data.licenseNumber,
+                status: backendResponse.data.status,
+
+                // Store the role directly from the request
+                // You might store a JWT token here if your backend issues one:
+                // jwtToken: backendResponse.data.data.token
             };
-            req.session.save((err) => {
-                if (err) {
-                    console.error('Error saving session after profile update:', err);
-                    return res.status(500).json({ success: false, message: 'Profile updated, but failed to update session.' });
-                }
-                res.redirect('/captainhome'); // Redirect after session update
-            });
+            res.redirect('/captain');
         } else {
-            return res.status(backendResponse.status || 400).json({
-                success: false,
-                message: backendResponse.data.message || 'Profile update failed.',
-                error: backendResponse.data.error || 'Unknown backend error.'
-            });
+            return res.status(400).json({ error: response.data.message || 'Profile update failed.' });
         }
     } catch (err) {
-        console.error('Update error:', err.response ? err.response.data : err.message);
-        res.status(err.response ? err.response.status : 500).json({ error: err.response ? err.response.data : 'Internal server error' });
+        console.error('Update error:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
