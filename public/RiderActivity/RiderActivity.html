@@ -1,11 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ride Activity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        
+        header {
+  background-color: #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 5%; /* Consider using a fixed pixel value or max-height for better control */
+  width: 5%; /* Consider using a fixed pixel value or max-width for better control */
+  margin-right: 6px;
+  border-radius: 500px;
+}
+
+.cabsy-title {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.nav {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  margin: 5px;
+}
+
+.nav:hover {
+  color: #547793;
+}
+
+.profile-container {
+  margin-right: 5px;
+}
+
+.profile-icon {
+  font-size: 40px;
+  color: #555; /* Note: This will make the icon grey on a dark header. You might want white or light grey. */
+}
+
+.nav-button {
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #4c6d87;
+  color: #fff;
+  border: 1px solid #547793;
+}
+
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: black;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 5px solid #007bff;
+        }
+
+        .accepted-ride {
+            border-left-color: #28a745;
+            /* Green for accepted */
+        }
+
+        .rejected-ride {
+            border-left-color: #dc3545;
+            /* Red for rejected */
+        }
+
+        .message {
+            padding: 10px;
+            background-color: #ffeeba;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            color: #664d03;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+            color: #842029;
+        }
+
+        .ride-detail strong {
+            display: inline-block;
+            width: 100px;
+            /* Adjust as needed for alignment */
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            background-color: #333;
+            color: #fff;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>No rides are booked!!</h1>
+
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
+                <a href="#" class="cabsy-title">Cabsy</a>
+                    <a href="/riderabout" class="nav">About</a>
+                    <a href="/riderhelp" class="nav">Help</a>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-container">
+                    <a href="/riderprofile" class="profile-link">
+                        <i class="fas fa-user-circle profile-icon"></i> </a>
+                </div>
+                <button id="logoutButton" class="nav-button logout-btn">Logout</button>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Ride Activity</h1>
+
+        <div id="loadingMessage" class="message">Loading ride activity...</div>
+        <div id="errorMessage" class="message error-message" style="display: none;"></div>
+
+        <h2>Accepted Rides</h2>
+        <ul id="acceptedRidesList">
+            <li class="ride-template accepted-ride" style="display: none;">
+                <div class="ride-detail"><strong>Status:</strong> <span data-ride-status style="color: green;"></span>
+                </div>
+                <div class="ride-detail"><strong>From:</strong> <span data-pickup-location></span></div>
+                <div class="ride-detail"><strong>To:</strong> <span data-dropoff-location></span></div>
+                <!-- <div class="ride-detail"><strong>Driver:</strong> <span data-driver-name></span></div> -->
+            </li>
+        </ul>
+        <p id="noAcceptedRides" class="message" style="display: none;">No accepted rides found.</p>
+
+        <h2>Rejected Rides</h2>
+        <ul id="rejectedRidesList">
+            <li class="ride-template rejected-ride" style="display: none;">
+                <div class="ride-detail"><strong>Ride ID:</strong> <span data-ride-id></span></div>
+                <div class="ride-detail"><strong>Status:</strong> <span data-ride-status style="color: red;"></span>
+                </div>
+                <div class="ride-detail"><strong>Reason:</strong> <span data-rejection-reason></span></div>
+            </li>
+        </ul>
+        <p id="noRejectedRides" class="message" style="display: none;">No rejected rides found.</p>
+    </div>
+    <footer>
+        <p>&copy; 2025 Cabsy. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // This assumes your backend is running on the same origin, or you have CORS configured.
+        // If your backend is on a different domain/port, replace '/ride-activity' with the full URL, e.g., 'http://localhost:5000/ride-activity'
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingMessage = document.getElementById('loadingMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const acceptedRidesList = document.getElementById('acceptedRidesList');
+            const rejectedRidesList = document.getElementById('rejectedRidesList');
+            const noAcceptedRides = document.getElementById('noAcceptedRides');
+            const noRejectedRides = document.getElementById('noRejectedRides');
+
+            // Get the templates from the HTML
+            const acceptedRideTemplate = document.querySelector('.ride-template.accepted-ride');
+            const rejectedRideTemplate = document.querySelector('.ride-template.rejected-ride');
+
+            const fetchRides = async () => {
+                loadingMessage.style.display = 'block'; // Show loading message
+                errorMessage.style.display = 'none'; // Hide any previous error
+
+                // Clear previous lists
+                acceptedRidesList.innerHTML = acceptedRideTemplate.outerHTML; // Keep the template
+                rejectedRidesList.innerHTML = rejectedRideTemplate.outerHTML; // Keep the template
+                noAcceptedRides.style.display = 'none';
+                noRejectedRides.style.display = 'none';
+
+
+                try {
+                    const response = await fetch('/ride-activity');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const allRides = data.data;
+
+                        const acceptedRides = allRides.filter(ride => ride.status === 'ACCEPTED');
+                        populateRides(acceptedRides, acceptedRidesList, noAcceptedRides, acceptedRideTemplate, 'accepted');
+
+                        const rejectedRides = allRides.filter(ride => ride.status === 'REJECTED');
+                        populateRides(rejectedRides, rejectedRidesList, noRejectedRides, rejectedRideTemplate, 'rejected');
+
+                    } else {
+                        errorMessage.textContent = data.error || 'Unknown error fetching rides.';
+                        errorMessage.style.display = 'block';
+                        console.error('Backend Error:', data.error);
+                    }
+                } catch (error) {
+                    errorMessage.textContent = `Failed to connect to the backend: ${error.message}`;
+                    errorMessage.style.display = 'block';
+                    console.error('Frontend Fetch Error:', error);
+                } finally {
+                    loadingMessage.style.display = 'none'; // Hide loading message
+                }
+            };
+
+            // Function to populate ride details using a template
+            function populateRides(rides, ulElement, noRidesMessageElement, templateElement, rideType) {
+                if (rides.length > 0) {
+                    noRidesMessageElement.style.display = 'none'; // Hide "No rides" message
+                    rides.forEach(ride => {
+                        // Clone the template
+                        const newRideItem = templateElement.cloneNode(true);
+                        newRideItem.style.display = 'block'; // Make it visible
+                        newRideItem.classList.remove('ride-template'); // Remove template class
+
+                        // Find the spans using data attributes and update their content
+
+                        newRideItem.querySelector('[data-ride-status]').textContent = ride.status || 'N/A';
+
+                        if (rideType === 'accepted') {
+                            newRideItem.querySelector('[data-pickup-location]').textContent = ride.pickupAddress || 'N/A';
+                            newRideItem.querySelector('[data-dropoff-location]').textContent = ride.destinationAddress || 'N/A';
+                        } else if (rideType === 'rejected') {
+                            newRideItem.querySelector('[data-rejection-reason]').textContent = ride.rejectionReason || 'No specific reason provided.';
+                        }
+
+                        ulElement.appendChild(newRideItem);
+                    });
+                } else {
+                    noRidesMessageElement.style.display = 'block'; // Show "No rides" message
+                }
+            }
+
+            // Helper function to format date and time (handles ISO strings)
+            function formatDateTime(dateTimeString) {
+                if (!dateTimeString) return 'N/A';
+                try {
+                    const date = new Date(dateTimeString);
+                    // Use toLocaleString() for a user-friendly format based on local settings
+                    return date.toLocaleString();
+                } catch (e) {
+                    console.warn("Invalid date time string:", dateTimeString, e);
+                    return dateTimeString; // Return as is if invalid
+                }
+            }
+
+            fetchRides(); // Call the fetch function when the page loads
+            const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                    credentials: 'include', // Important for sending cookies
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    alert(data.message || 'Logged out successfully!');
+                    window.location.href = '/'; // Redirect to home/login page
+                } else {
+                    alert(`Logout failed: ${data.message || 'An unknown error occurred.'}`);
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('An error occurred during logout. Please check your connection.');
+            }
+        });
+    }
+        });
+    </script>
 </body>
+
 </html>

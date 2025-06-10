@@ -1,4 +1,3 @@
-const id = "";
 document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar Elements ---
     const menuToggle = document.getElementById('menuToggle'); // Mobile hamburger menu
@@ -278,40 +277,157 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Error fetching session data:", error);
         });
 
-    fetch('/available-rides')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) throw new Error(`HTTP ${response.status}`);
-            let result = data.data.data
-            // Update HTML
-            document.getElementById('available-rides-section').innerHTML = result.map(ride => `
-              <div>
-                <strong>Ride ID:</strong> ${ride.id} <br>
-                <strong>Status:</strong> ${ride.status}
-              </div>
-            `).join('');
-        })
-        .catch(err => {
-            document.getElementById('available-rides-section').innerHTML = `<p>Error: ${err.message}</p>`;
-        });
-
+        let selectedRideId = null;
+        
+        function fetchRides() {
+          fetch('/available-rides')
+            .then(response => response.json())
+            .then(data => {
+              if (!data.success) throw new Error('Failed to fetch rides');
+        
+              const rides = data.data.data;
+              const rideList = document.getElementById('available-rides-list');
+              const noBookings = document.getElementById('no-available-bookings');
+              const rideRequestSection = document.getElementById('ride-request-section');
+        
+              rideList.innerHTML = '';
+        
+              if (rides.length === 0) {
+                noBookings.style.display = 'block';
+                rideRequestSection.style.display = 'none';
+                return;
+              }
+        
+              noBookings.style.display = 'none';
+        
+              // Default to most recent ride if none selected
+              const rideToShow = selectedRideId
+                ? rides.find(r => r.id === selectedRideId)
+                : rides[0];
+        
+              if (!rideToShow) {
+                rideRequestSection.style.display = 'none';
+                return;
+              }
+        
+              rideRequestSection.innerHTML = `
+                <h2>Ride Details</h2>
+                <div class="ride-details">
+                  <p><strong>Pickup:</strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
+                  <p><strong>Drop-off:</strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
+                  <p><strong>Est. Fare:</strong> ₹ ${rideToShow.estimatedFare || '135'}</p>
+                  <p><strong>Distance:</strong> ${rideToShow.distance || '12km'} km</p>
+                  <p><strong>Passenger:</strong> ${rideToShow.userName || 'N/A'}</p>
+                  <p><strong>PhoneNumber:</strong> ${rideToShow.userPhone || '-'}</p>
+                  <p><strong>Time to Pickup:</strong> ${rideToShow.eta || '12:20pm'} min</p>
+                </div>
+                <div class="ride-actions">
+                  <button class="btn btn-accept" id="acceptRideBtn">Accept Ride</button>
+                  <button class="btn btn-reject" id="rejectRideBtn">Reject</button>
+                </div>
+              `;
+              rideRequestSection.style.display = 'block';
+        
+              document.getElementById('acceptRideBtn').addEventListener('click', () => acceptRide(rideToShow.id));
+              document.getElementById('rejectRideBtn').addEventListener('click', () => {
+                selectedRideId = null;
+                rideRequestSection.style.display = 'none';
+              });
+        
+              // List all rides
+              rides.forEach(ride => {
+                const rideItem = document.createElement('div');
+                rideItem.className = 'ride-item';
+                rideItem.setAttribute('data-id', ride.id);
+        
+                rideItem.innerHTML = `
+                  <div class="ride-item-header">
+                    <h3>Pickup: ${ride.pickupAddress || 'Unknown'}</h3>
+                    <span>ETA: ${ride.eta || 'N/A'} min</span>
+                  </div>
+                  <p>Drop-off: ${ride.destinationAddress || 'Unknown'}</p>
+                  <p>Est. Fare: ₹ ${ride.estimatedFare || 'N/A'}</p>
+                  <button class="btn btn-accept-small" data-id="${ride.id}">Select</button>
+                `;
+        
+                rideItem.querySelector('button').addEventListener('click', () => {
+                  selectedRideId = ride.id;
+                  fetchRides(); // Refresh UI with selected ride
+                });
+        
+                rideList.appendChild(rideItem);
+              });
+            })
+            .catch(err => {
+              document.getElementById('available-rides-list').innerHTML = `<p>Error: ${err.message}</p>`;
+            });
+        }
+        
+        
+        function acceptRide(rideId) {
+            console.log("Ride Accepted",rideId)
+          fetch(`/accept-ride/${rideId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          })
+            .then(response => {
+              if (!response.ok) throw new Error('Failed to accept ride');
+              return response.json();
+            })
+            .then(() => {
+              alert('Ride accepted successfully!');
+              fetchRides(); // Refresh list
+            })
+            .catch(err => {
+              alert(`Error: ${err.message}`);
+            });
+        }
+        
+        // Initial fetch
+        fetchRides();
+        
+        // Optional: Refresh every 30 seconds
+        setInterval(fetchRides, 30000);
+        
 
     fetch('/previous-rides')
         .then(response => response.json())
         .then(data => {
-            
-            let result = data.data.data;
-            if (!data.success) throw new Error(result.error);
+            if (!data.success) throw new Error(data.error || 'Failed to fetch previous rides');
 
-            // Update HTML
-            document.getElementById('previous-rides-section').innerHTML = result.map(ride => `
-              <div>
-                <strong>Ride ID:</strong> ${ride.id} <br>
-                <strong>Status:</strong> ${ride.status}
-              </div>
-            `).join('');
-        }).catch(err => {
-            document.getElementById('previous-rides-section').innerHTML = `<p>Error: ${err.message}</p>`;
+            const rides = data.data.data;
+            const rideList = document.getElementById('previous-rides-list');
+            rideList.innerHTML = '';
+
+            if (rides.length === 0) {
+                rideList.innerHTML = `<p><i class="fas fa-info-circle"></i> No previous rides found.</p>`;
+            } else {
+                rides.forEach(ride => {
+                    const rideItem = document.createElement('div');
+                    rideItem.className = 'ride-item';
+
+                    rideItem.innerHTML = `
+            <div class="ride-item-header">
+              <h3>To ${ride.destinationAddress || 'Unknown'}</h3>
+              <span class="status-completed">${ride.status}</span>
+            </div>
+            <p><i class="fas fa-calendar-alt"></i> Date: ${new Date(ride.endTime).toLocaleDateString()} | 
+               <i class="fas fa-rupee-sign"></i> Fare: ₹ ${ride.estimatedFare || 'N/A'}</p>
+            <p><i class="fas fa-user-circle"></i> Customer: ${ride.userName || 'N/A'}</p>
+            <div class="ride-item-actions">
+              <button class="btn btn-secondary-small"><i class="fas fa-redo-alt"></i> Re-ride</button>
+              <button class="btn btn-primary-small"><i class="fas fa-info-circle"></i> Details</button>
+            </div>
+          `;
+
+                    rideList.appendChild(rideItem);
+                });
+            }
+        })
+        .catch(err => {
+            document.getElementById('previous-rides-list').innerHTML = `<p>Error: ${err.message}</p>`;
         });
 
 });

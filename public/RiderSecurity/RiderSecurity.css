@@ -84,6 +84,14 @@ body {
     background-color: #547793;
     border-color: #547793;
   }
+  footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9em;
+  }
   
 /* Ensure the main content pushes down for fixed header */
 .security-content {
