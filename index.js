@@ -5,11 +5,7 @@ import { fileURLToPath } from 'url';
 import session from 'express-session'; // Import express-session
 import axios from 'axios'; // Import axios for making HTTP requests
 import dotenv from 'dotenv'; // Import dotenv for environment variables
-<<<<<<< HEAD
 import { error } from "console";
-=======
-import { console } from "inspector";
->>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
 
 dotenv.config(); // Load environment variables from .env file
 
