@@ -5,7 +5,11 @@ import { fileURLToPath } from 'url';
 import session from 'express-session'; // Import express-session
 import axios from 'axios'; // Import axios for making HTTP requests
 import dotenv from 'dotenv'; // Import dotenv for environment variables
+<<<<<<< HEAD
 import { error } from "console";
+=======
+import { console } from "inspector";
+>>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -137,7 +141,6 @@ app.get('/editcaptainprofile', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'EditCaptainProfile', 'editcaptainprofile.html'));
 });
 
-
 // --- POST route for Login (MODIFIED) ---
 app.post('/login', async (req, res) => {
     const { email, password, role } = req.body; // Receive 'role' from frontend
@@ -257,13 +260,15 @@ app.post('/registration', async (req, res) => {
             });
         }
 
+
+
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
         console.log(backendResponse);
 
         // Check if the backend registration was successful (assuming it returns a 'success' field)
         if ((backendResponse.status === 200 || backendResponse.status === 201) && backendResponse.data.success) {
-             // Send the backend's response directly back to the client
+            // Send the backend's response directly back to the client
             // Determine redirect URL based on user type
             const redirectUrl = role === 'captain' ? '/captain' : '/riderhome';
             console.log("Registration Sucessfull")
@@ -492,8 +497,13 @@ app.get('/available-rides', async (req, res) => {
         console.log("Available rides:", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
+<<<<<<< HEAD
       console.error('Available rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
+=======
+        console.error('Available rides-Backend Error:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
+>>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
     }
 });
 
@@ -508,6 +518,7 @@ app.get('/previous-rides', async (req, res) => {
         console.log("Previous rides:", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
+<<<<<<< HEAD
       console.error('Previous rides-Backend Error:', error.message);
       res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
     }
@@ -570,6 +581,36 @@ app.get('/ride-activity', async (req, res) => {
             console.error('Backend Error Response Data:', error.response.data);
         }
         res.status(500).json({ success: false, error: 'Failed to fetch user ride activity' });
+=======
+        console.error('Previous rides-Backend Error:', error.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
+    }
+});
+
+
+app.put(`/accept-ride/:rideId`, async (req, res) => {
+    try {
+        console.log("Attempted to assign ride:")
+        let { rideId } = req.params;
+        let driverId = req.session.user.id; // assuming session middleware is used
+        console.log(rideId, driverId)
+        let response = await axios.put(
+            `${BACKEND_API_BASE_URL}/rides/${rideId}/assign`,
+            {}, // no body
+            {
+                params: { driverId },
+                withCredentials: true,
+            }
+        );
+
+        console.log("Ride accept Status:", response.data)
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        res.status(error.response?.status || 500).json({
+            message: 'Failed to assign driver/cab',
+            error: error.message,
+        });
+>>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
     }
 });
 
@@ -615,6 +656,66 @@ app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint
             success: false,
             message: errorMessage,
             error: error.response ? error.response.data : error.message // Include backend error details for debugging
+        });
+    }
+});
+
+//GET endpoint to fetch a specific ride's details by ID (for restoring active ride or current status)
+app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
+    const { rideId } = req.params;
+    const userId = req.session.user.id; // Get logged-in user's ID from session
+    console.log('ride in progress:', rideId)
+    try {
+        const backendResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
+
+        // IMPORTANT SECURITY CHECK: Ensure the ride belongs to the logged-in user
+        // Assuming backendResponse.data.data will contain the ride details and a userId field
+        if (backendResponse.data.success && backendResponse.data.data.userId !== userId) {
+            console.warn(`Security alert: User ${userId} attempted to access ride ${rideId} belonging to another user.`);
+            return res.status(403).json({ success: false, message: 'Unauthorized access to ride details.' });
+        }
+
+        res.status(backendResponse.status).json(backendResponse.data);
+    } catch (error) {
+        console.error('Error fetching ride details from backend:', error.response ? error.response.data : error.message);
+        res.status(error.response?.status || 500).json({
+            success: false,
+            message: error.response?.data?.message || 'Failed to fetch ride details.',
+            error: error.response?.data?.error || error.message
+        });
+    }
+});
+
+// NEW: PUT endpoint to update a ride's status (used by rider to signal completion or cancellation)
+app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
+    const { rideId } = req.params;
+    const { status } = req.body; // Expecting status to be sent in the request body, e.g., { status: "COMPLETED" }
+    const userId = req.session.user.id; // Get logged-in user's ID from session
+
+    if (!status) {
+        return res.status(400).json({ success: false, message: 'Missing ride status in request body.' });
+    }
+
+    try {
+        // First, optionally fetch the ride to ensure it belongs to the user
+        // This is a crucial security step to prevent one user from updating another's ride
+        const rideCheckResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
+        if (!rideCheckResponse.data.success || rideCheckResponse.data.data.userId !== userId) {
+            console.warn(`Security alert: User ${userId} attempted to update status of ride ${rideId} belonging to another user.`);
+            return res.status(403).json({ success: false, message: 'Unauthorized to update this ride status.' });
+        }
+
+        // Forward the request to the Spring Boot backend
+        // Note: Spring Boot's @RequestParam for status means it expects it in query params
+        const backendResponse = await axios.put(`${BACKEND_API_BASE_URL}/rides/${rideId}/status?status=${status}`);
+
+        res.status(backendResponse.status).json(backendResponse.data);
+    } catch (error) {
+        console.error('Error updating ride status on backend:', error.response ? error.response.data : error.message);
+        res.status(error.response?.status || 500).json({
+            success: false,
+            message: error.response?.data?.message || 'Failed to update ride status.',
+            error: error.response?.data?.error || error.message
         });
     }
 });
