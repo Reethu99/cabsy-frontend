@@ -497,13 +497,8 @@ app.get('/available-rides', async (req, res) => {
         console.log("Available rides:", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
-<<<<<<< HEAD
-      console.error('Available rides-Backend Error:', error.message);
-      res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
-=======
         console.error('Available rides-Backend Error:', error.message);
         res.status(500).json({ success: false, error: 'Failed to fetch available rides' });
->>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
     }
 });
 
@@ -518,70 +513,6 @@ app.get('/previous-rides', async (req, res) => {
         console.log("Previous rides:", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
-<<<<<<< HEAD
-      console.error('Previous rides-Backend Error:', error.message);
-      res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
-    }
-});
-
-app.put(`/accept-ride/:rideId`, async (req, res) => {
-    try {
-      let  {rideId} = req.params;
-      let driverId = req.session.user.id; // assuming session middleware is used
-      console.log(rideId,driverId)
-      let response = await axios.put(
-        `${BACKEND_API_BASE_URL}/rides/${rideId}/assign`,
-        {}, // no body
-        {
-          params: { driverId },
-          withCredentials: true,
-        }
-      );
-
-      console.log("Ride accept Status:",response.data)
-      res.status(response.status).json(response.data);
-    } catch (error) {
-      res.status(error.response?.status || 500).json({
-        message: 'Failed to assign driver/cab',
-        error: error.message,
-      });
-    }
-  });
-
-
-
-
-app.get('/ride-activity', async (req, res) => {
-    console.log("Rides Activity - Request received.");
-    
-    const userId = req.session.user ? req.session.user.id : null;
-
-    if (!userId) {
-        console.error('Ride Activity: User ID not found in session.');
-        return res.status(401).json({ success: false, error: 'User not authenticated or ID not found.' });
-    }
-
-    try {
-        console.log(`Attempting to fetch user rides from: ${BACKEND_API_BASE_URL}/rides/user/${userId}`);
-        const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/user/${userId}`);
-
-        // Your Java backend's ApiResponse structure: { message: "...", data: [...] }
-        // So, the actual list of rides is in response.data.data
-        const rawRidesData = response.data.data; // Access the nested 'data' property
-
-        // Ensure rawRidesData is always an array
-        const allRidesFromCoreAPI = Array.isArray(rawRidesData) ? rawRidesData : [];
-
-        console.log("Rides data from Core API for /ride-activity:", allRidesFromCoreAPI);
-        res.json({ success: true, data: allRidesFromCoreAPI }); // Send the guaranteed array
-    } catch (error) {
-        console.error('Backend Error (ride-activity): ', error.message);
-        if (error.response) {
-            console.error('Backend Error Response Status:', error.response.status);
-            console.error('Backend Error Response Data:', error.response.data);
-        }
-        res.status(500).json({ success: false, error: 'Failed to fetch user ride activity' });
-=======
         console.error('Previous rides-Backend Error:', error.message);
         res.status(500).json({ success: false, error: 'Failed to fetch previous rides' });
     }
@@ -610,7 +541,6 @@ app.put(`/accept-ride/:rideId`, async (req, res) => {
             message: 'Failed to assign driver/cab',
             error: error.message,
         });
->>>>>>> 19f96e17ae7580cc56e4b8522c6c1c8bcfe25a86
     }
 });
 
