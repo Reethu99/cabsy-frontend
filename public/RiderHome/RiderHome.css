@@ -1,4 +1,56 @@
 /* src/main/java/com/cabsy/backend/RiderHome/RiderHome.css */
+
+/* --- Ride Status & Popup Enhancements --- */
+
+#currentRideContainer {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 400px; /* Keep this consistent with the booking form's max-width */
+}
+
+#currentRideContainer h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.2em;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+#currentRideContainer p {
+  margin: 8px 0;
+  font-size: 0.95em;
+  color: #444;
+}
+
+#rideCompletedPopup {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-size: 0.95em;
+  z-index: 1000;
+  animation: fadeInOut 5s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* --- General Body and Header Styles --- */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -62,7 +114,7 @@ header {
 
 .profile-icon {
   font-size: 40px;
-  color: #555; /* Note: This will make the icon grey on a dark header. You might want white or light grey. */
+  color: #ffffff; /* Changed to white for better visibility on dark header */
 }
 
 .nav-button {
@@ -77,42 +129,67 @@ header {
   border: 1px solid #547793;
 }
 
+/* --- Main Container and Form Styles --- */
 .container {
-  height: 100vh;
+  min-height: calc(100vh - 80px); /* Adjust based on header/footer height */
   display: flex;
   justify-content: space-around;
   background: white;
+  padding: 20px; /* Add some padding to the container */
+  box-sizing: border-box;
 }
 
 h1 {
   margin-left: 10px;
   font-weight: bold;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center; /* Center the heading for better presentation */
+  margin-bottom: 20px;
 }
 
-.form { /* No specific class for the form tag, assuming this targets the div containing the form elements */
-  /* Remove input width styles from here as they are specific to input[type="text"] not select */
-  /* Removed: .form input */
+.left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 10%; /* Adjust as needed */
+  margin-left: 30px;
+  flex-grow: 1;
+  max-width: 450px;
+  padding-bottom: 20px; /* Add padding to the bottom of left-side */
+}
+
+.form {
+  /* Styles for the div containing the booking elements */
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  background-color: #fff;
 }
 
 .input-with-icon {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  /* max-width is already handled by .left-side */
 }
 
 .input-wrapper {
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column; /* Stack label and select */
+  margin-bottom: 15px;
+}
+
+.input-wrapper label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
 }
 
 /* Styling for the dropdowns (select elements) */
 .input-wrapper select {
   width: 100%;
-  padding: 10px 35px 10px 35px; /* Adjust padding for icon */
-  margin: 10px 0;
+  padding: 10px 15px; /* Adjust padding as no icons are present */
   border: 1px solid #ccc;
   border-radius: 4px;
   -webkit-appearance: none; /* Remove default dropdown arrow */
@@ -129,67 +206,14 @@ h1 {
   content: '▼';
   position: absolute;
   right: 15px;
-  top: 50%;
+  top: calc(50% + 5px); /* Adjust to be below the label, centered with select */
   transform: translateY(-50%);
   pointer-events: none;
   color: #555;
   font-size: 0.8em;
 }
 
-/* Adjust end-icon for select elements if they clash with custom arrow */
-.input-wrapper select + .end-icon {
-  display: none; /* Hide the existing end-icon SVG for select elements */
-}
-
-
-.start-circle-icon {
-  position: absolute; /* Add position absolute */
-  left: 13px; /* Position relative to wrapper */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for vertical centering */
-  height: 12px;
-  width: 12px;
-  fill: #1f1f1f; /* Ensure fill is set if it was previously in .input-wrapper svg */
-  pointer-events: none; /* Ensure it's not clickable */
-  z-index: 2; /* Ensure it's above the select */
-}
-
-.line-connector {
-  position: absolute;
-  left: 17px;
-  top: 40px; /* Adjusted to be between the two select elements */
-  height: 40px; /* Increased height to connect better */
-  width: 1.5px;
-  background-color: transparent;
-  border-left: 3px dotted black;
-  z-index: 1;
-}
-
-.start-box-icon {
-  position: absolute; /* Add position absolute */
-  left: 9px; /* Position relative to wrapper */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for vertical centering */
-  height: 19px;
-  width: 19px;
-  fill: #1f1f1f; /* Ensure fill is set */
-  pointer-events: none;
-  z-index: 2; /* Ensure it's above the select */
-}
-
-.end-icon {
-  /* This rule is now effectively hidden by '.input-wrapper select + .end-icon' for select elements */
-  /* Keeping it here in case it applies to other input types later */
-  position: absolute;
-  height: 20px;
-  width: 18px;
-  right: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  fill: #1f1f1f;
-  pointer-events: none;
-  z-index: 2;
-}
+/* REMOVED: .start-circle-icon, .line-connector, .start-box-icon, .end-icon styles */
 
 #bookRideButton {
   width: 100%;
@@ -200,6 +224,13 @@ h1 {
   border-radius: 4px;
   margin-top: 10px;
   cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#bookRideButton:hover:enabled {
+  background-color: #333;
 }
 
 #bookRideButton:disabled {
@@ -207,16 +238,7 @@ h1 {
   cursor: not-allowed;
 }
 
-.left-side {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: flex-start; /* Align to the top */
-  margin-top: 10%;
-  margin-left: 30px;
-  flex-grow: 1; /* Allow it to take available space */
-  max-width: 450px; /* Limit width */
-}
-
+/* --- Slideshow Styles --- */
 .slideshow-container {
   position: relative;
   width: 40%;
@@ -247,12 +269,8 @@ h1 {
 }
 
 @keyframes fade {
-  from {
-      opacity: .4
-  }
-  to {
-      opacity: 1
-  }
+  from { opacity: .4 }
+  to { opacity: 1 }
 }
 
 .mySlides.active {
@@ -260,6 +278,7 @@ h1 {
   opacity: 1;
 }
 
+/* --- Footer Styles --- */
 footer {
   text-align: center;
   padding: 20px;
@@ -273,7 +292,7 @@ footer {
 @media (max-width: 992px) {
   .container {
       flex-direction: column; /* Stack layout on smaller screens */
-      height: auto; /* Adjust height for stacked content */
+      min-height: auto; /* Adjust height for stacked content */
       align-items: center; /* Center items when stacked */
       padding-bottom: 50px; /* Add some space at the bottom */
   }
@@ -331,14 +350,11 @@ footer {
   }
 
   .input-wrapper select {
-      padding-left: 40px; /* Adjust padding for icon */
-      padding-right: 40px; /* Adjust padding for custom arrow */
+      padding-left: 15px; /* Revert padding, no left icon anymore */
+      padding-right: 40px; /* Keep padding for custom arrow */
   }
 
-  .start-circle-icon,
-  .start-box-icon {
-      left: 10px; /* Consistent left positioning */
-  }
+  /* REMOVED: .start-circle-icon, .start-box-icon positioning */
 
   .input-wrapper::after {
       right: 15px; /* Consistent right positioning for custom arrow */

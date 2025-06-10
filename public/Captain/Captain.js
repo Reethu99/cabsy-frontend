@@ -1,3 +1,4 @@
+const id = "";
 document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar Elements ---
     const menuToggle = document.getElementById('menuToggle'); // Mobile hamburger menu
@@ -277,6 +278,11 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Error fetching session data:", error);
         });
 
+
+       
+
+        const driverID = 'driver_123'; // Replace with actual driver ID
+
         let selectedRideId = null;
         
         function fetchRides() {
@@ -316,10 +322,10 @@ document.addEventListener('DOMContentLoaded', function () {
                   <p><strong>Pickup:</strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
                   <p><strong>Drop-off:</strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
                   <p><strong>Est. Fare:</strong> ₹ ${rideToShow.estimatedFare || '135'}</p>
-                  <p><strong>Distance:</strong> ${rideToShow.distance || '12km'} km</p>
+                  <p><strong>Distance:</strong> ${rideToShow.distance || '12'} km</p>
                   <p><strong>Passenger:</strong> ${rideToShow.userName || 'N/A'}</p>
                   <p><strong>PhoneNumber:</strong> ${rideToShow.userPhone || '-'}</p>
-                  <p><strong>Time to Pickup:</strong> ${rideToShow.eta || '12:20pm'} min</p>
+                  <p><strong>Time to Pickup:</strong> ${rideToShow.eta || '12:20pm'}</p>
                 </div>
                 <div class="ride-actions">
                   <button class="btn btn-accept" id="acceptRideBtn">Accept Ride</button>
@@ -343,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 rideItem.innerHTML = `
                   <div class="ride-item-header">
                     <h3>Pickup: ${ride.pickupAddress || 'Unknown'}</h3>
-                    <span>ETA: ${ride.eta || 'N/A'} min</span>
+                    <span>ETA: ${ride.eta || 'N/A'}</span>
                   </div>
                   <p>Drop-off: ${ride.destinationAddress || 'Unknown'}</p>
                   <p>Est. Fare: ₹ ${ride.estimatedFare || 'N/A'}</p>
@@ -371,8 +377,10 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: {
               'Content-Type': 'application/json'
             },
+            body: JSON.stringify({ driverID })
           })
             .then(response => {
+              console.log(response.ok)
               if (!response.ok) throw new Error('Failed to accept ride');
               return response.json();
             })
