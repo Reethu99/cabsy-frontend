@@ -175,7 +175,7 @@ function displayCurrentRide(ride) {
     currentPickupSpan.textContent = ride.pickupAddress;
     currentDropoffSpan.textContent = ride.destinationAddress;
     currentStatusSpan.textContent = ride.status || "REQUESTED"; // Default to REQUESTED if not set
-    currentFareSpan.textContent = ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
+    currentFareSpan.textContent = ride.estimatedFare ? `${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
 
     // Disable location selection and hide book button while a ride is active
     pickupSelect.disabled = true;
