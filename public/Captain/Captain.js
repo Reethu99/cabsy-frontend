@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
+
+// document.addEventListener('DOMContentLoaded', function () {
     // --- Navbar Elements ---
     const menuToggle = document.getElementById('menuToggle'); // Mobile hamburger menu
     const mainNavbar = document.getElementById('mainNavbar'); // The left navbar
@@ -272,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.h-name').textContent = `Hi, ${data.name}`;
             document.querySelector('.name').textContent = data.name;
             document.querySelector('.rating').textContent = data.rating;
+
         })
         .catch(error => {
             console.error("Error fetching session data:", error);
@@ -437,4 +439,4 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('previous-rides-list').innerHTML = `<p>Error: ${err.message}</p>`;
         });
 
-});
+// });
