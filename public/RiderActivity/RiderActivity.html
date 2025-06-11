@@ -8,7 +8,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
             background-color: #f4f4f4;
             color: #333;
         }
@@ -55,7 +54,6 @@
   color: #ffffff;
   font-weight: 500;
   transition: color 0.3s ease;
-  margin: 5px;
 }
 
 .nav:hover {
@@ -185,6 +183,7 @@
                 </div>
                 <div class="ride-detail"><strong>From:</strong> <span data-pickup-location></span></div>
                 <div class="ride-detail"><strong>To:</strong> <span data-dropoff-location></span></div>
+                <div class="ride-detail"><strong>Rs.</strong> <span data-cost></span></div>
                 <!-- <div class="ride-detail"><strong>Driver:</strong> <span data-driver-name></span></div> -->
             </li>
         </ul>
@@ -240,11 +239,11 @@
                     if (data.success) {
                         const allRides = data.data;
 
-                        const acceptedRides = allRides.filter(ride => ride.status === 'ACCEPTED');
-                        populateRides(acceptedRides, acceptedRidesList, noAcceptedRides, acceptedRideTemplate, 'accepted');
+                        const acceptedRides = allRides.filter(ride => ride.status === 'COMPLETED');
+                        populateRides(acceptedRides, acceptedRidesList, noAcceptedRides, acceptedRideTemplate, 'completed');
 
-                        const rejectedRides = allRides.filter(ride => ride.status === 'REJECTED');
-                        populateRides(rejectedRides, rejectedRidesList, noRejectedRides, rejectedRideTemplate, 'rejected');
+                        const rejectedRides = allRides.filter(ride => ride.status === 'CANCELLED');
+                        populateRides(rejectedRides, rejectedRidesList, noRejectedRides, rejectedRideTemplate, 'cancelled');
 
                     } else {
                         errorMessage.textContent = data.error || 'Unknown error fetching rides.';
@@ -272,12 +271,13 @@
 
                         // Find the spans using data attributes and update their content
 
-                        newRideItem.querySelector('[data-ride-status]').textContent = ride.status || 'N/A';
+                        newRideItem.querySelector('[data-ride-status]').textContent = (ride.status === 'COMPLETED' ? 'COMPLETED' : 'CANCELLED') || 'N/A';
 
-                        if (rideType === 'accepted') {
+                        if (rideType === 'completed') {
                             newRideItem.querySelector('[data-pickup-location]').textContent = ride.pickupAddress || 'N/A';
                             newRideItem.querySelector('[data-dropoff-location]').textContent = ride.destinationAddress || 'N/A';
-                        } else if (rideType === 'rejected') {
+                            newRideItem.querySelector('[data-cost]').textContent=Math.round(ride.actualFare*100)/100 || '';
+                        } else if (rideType === 'cancelled') {
                             newRideItem.querySelector('[data-rejection-reason]').textContent = ride.rejectionReason || 'No specific reason provided.';
                         }
 
