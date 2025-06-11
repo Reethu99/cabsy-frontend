@@ -11,8 +11,7 @@
 <body>
     <header class="header">
         <div class="header-left">
-            <div class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
+            <div class="menu-toggle" id="menuToggle"> <i class="fas fa-bars"></i>
             </div>
             <a href="#" class="logo">
                 <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
@@ -23,9 +22,9 @@
         </div>
         <div class="header-right">
             <div class="driver-info">
-                <span id="driver-name" class="h-name">Hi, John Doe</span>
+                <span id="driver-name" class="h-name">Hi, John Doe</p></span>
                 <a href="/editcaptainprofile" class="profile-link">
-                    <img src="https://via.placeholder.com/40" alt="Driver Avatar" class="driver-avatar" id="driver-avatar-header">
+                <img src="https://via.placeholder.com/40" alt="Driver Avatar" class="driver-avatar">
                 </a>
             </div>
             <button class="logout-btn" title="Logout" onclick="window.location.href='../Login/Login.html'"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -33,12 +32,10 @@
     </header>
 
     <nav class="left-navbar" id="mainNavbar">
-        <button class="close-navbar-btn" id="closeNavbarBtn"><i class="fas fa-times"></i></button>
-        <div class="profile-summary">
-            <img src="https://via.placeholder.com/80" alt="Driver Avatar" class="avatar" id="driver-avatar-navbar">
+        <button class="close-navbar-btn" id="closeNavbarBtn"><i class="fas fa-times"></i></button> <div class="profile-summary">
+            <img src="https://via.placeholder.com/80" alt="Driver Avatar" class="avatar">
             <div class="text-content">
-                <h3 class="name" id="driver-name-navbar">John Doe</h3>
-                <p>Rating: <span class="rating" id="rating">4.8 <i class="fas fa-star"></i></span></p>
+                <h3 class="name">John Doe</h3>
                 <div class="status-toggle">
                     <label for="online-status">Online</label>
                     <input type="checkbox" id="online-status" checked>
@@ -52,6 +49,8 @@
             <li class="active"><a href="#dashboard-section" data-target="dashboard-section"><i class="fas fa-tachometer-alt"></i> <span class="nav-text">Dashboard</span></a></li>
             <li><a href="#available-rides-section" data-target="available-rides-section"><i class="fas fa-car-alt"></i> <span class="nav-text">Available Rides</span></a></li>
             <li><a href="#previous-rides-section" data-target="previous-rides-section"><i class="fas fa-history"></i> <span class="nav-text">Previous Rides</span></a></li>
+            <!-- <li><a href="#wallet-earnings-section" data-target="wallet-earnings-section"><i class="fas fa-wallet"></i> <span class="nav-text">My Wallet & Earnings</span></a></li>
+            <li><a href="#ride-stats-section" data-target="ride-stats-section"><i class="fas fa-chart-line"></i> <span class="nav-text">Ride Statistics</span></a></li> -->
             <li><a href="#support-contact-section" data-target="support-contact-section"><i class="fas fa-headset"></i> <span class="nav-text">Support</span></a></li>
             <li><a href="#settings-section" data-target="settings-section"><i class="fas fa-cog"></i> <span class="nav-text">Settings</span></a></li>
         </ul>
@@ -61,9 +60,8 @@
         </div>
     </nav>
 
-    <div class="overlay" id="navbarOverlay"></div>
-    <main class="content">
-        <section id="dashboard-section" class="content-section active-section">
+    <div class="overlay" id="navbarOverlay"></div> <main class="content">
+        <section id="dashboard-section" class="content-section">
             <div class="section-header">
                 <h2>Dashboard Overview</h2>
             </div>
@@ -86,12 +84,12 @@
                 <div class="card ride-request-card" id="ride-request-section" style="display: none;">
                     <h2>New Ride Alert!</h2>
                     <div class="ride-details">
-                        <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> <span id="ride-pickup">123, Gandhi Road, Chennai</span></p>
-                        <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off:</strong> <span id="ride-dropoff">SP Road, Velachery, Chennai</span></p>
-                        <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> <span id="ride-fare">₹ 420</span></p>
-                        <p><i class="fas fa-road"></i> <strong>Distance:</strong> <span id="ride-distance">9.2 km</span></p>
-                        <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> <span id="ride-passenger">Alice Smith</span></p>
-                        <p><i class="fas fa-clock"></i> <strong>Time to Pickup:</strong> <span id="ride-time-to-pickup">5 min</span></p>
+                        <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> 123, Gandhi Road, Chennai</p>
+                        <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off:</strong> SP Road, Velachery, Chennai</p>
+                        <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ 420</p>
+                        <p><i class="fas fa-road"></i> <strong>Distance:</strong> 9.2 km</p>
+                        <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> Alice Smith</p>
+                        <p><i class="fas fa-clock"></i> <strong>Time to Pickup:</strong> 5 min</p>
                     </div>
                     <div class="ride-actions">
                         <button class="btn btn-accept" id="acceptRideBtn"><i class="fas fa-check-circle"></i> Accept Ride</button>
@@ -102,9 +100,9 @@
                 <div class="card on-going-ride-card" id="on-going-ride-section" style="display: none;">
                     <h2>On-Going Ride</h2>
                     <div class="ride-details">
-                        <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> <span id="ongoing-passenger">Alice Smith</span></p>
-                        <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> <span id="ongoing-pickup">123, Gandhi Road, Chennai</span></p>
-                        <p><i class="fas fa-flag-checkered"></i> <strong>Destination:</strong> <span id="ongoing-destination">SP Road, Velachery, Chennai</span></p>
+                        <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> Alice Smith</p>
+                        <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> 123, Gandhi Road, Chennai</p>
+                        <p><i class="fas fa-flag-checkered"></i> <strong>Destination:</strong> SP Road, Velachery, Chennai</p>
                         <p><i class="fas fa-clock"></i> <strong>Approx. Time Left:</strong> <span id="time-left">15 min</span></p>
                     </div>
                     <div class="ride-actions">
@@ -116,41 +114,94 @@
             </div>
         </section>
 
-        <section id="available-rides-section" class="content-section" style="display: none;">
+        <section id="available-rides-section" class="content-section">
             <div class="section-header">
-                <h2>Available Rides</h2>
+              <h2>Available Rides</h2>
             </div>
             <div class="section-cards-grid">
-                <div class="card">
-                    <div class="no-bookings" id="no-available-bookings">
-                        <i class="fas fa-info-circle"></i> No new ride requests at the moment.
+              <div class="card">
+                <div class="no-bookings" id="no-available-bookings" style="display: none;">
+                  <i class="fas fa-info-circle"></i> No new ride requests at the moment.
+                </div>
+                <div class="ride-list" id="available-rides-list">
+                  <!-- Ride items will be dynamically inserted here by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <section id="previous-rides-section" class="content-section">
+            <div class="section-header">
+              <h2>Previous Rides</h2>
+            </div>
+            <div class="section-cards-grid">
+              <div class="card">
+                <div class="ride-list" id="previous-rides-list">
+                  <!-- Ride items will be dynamically inserted here -->
+                </div>
+                <button class="btn btn-load-more"><i class="fas fa-ellipsis-h"></i> Load More History</button>
+              </div>
+            </div>
+          </section>
+          
+
+        <!-- <section id="wallet-earnings-section" class="content-section">
+            <div class="section-header">
+                <h2>My Wallet & Earnings</h2>
+            </div>
+            <div class="section-cards-grid">
+                <div class="card driver-stats-card">
+                    <div class="stats-overview-grid">
+                        <div class="stat-overview-item wallet-balance">
+                            <span class="stat-label">Wallet Balance</span>
+                            <span class="stat-value primary-value">₹ 5,200</span>
+                        </div>
+                        <div class="stat-overview-item">
+                            <span class="stat-label">This Week Earnings</span>
+                            <span class="stat-value">₹ 5,800</span>
+                        </div>
+                        <div class="stat-overview-item">
+                            <span class="stat-label">Last Payout</span>
+                            <span class="stat-value">₹ 4,500</span>
+                        </div>
                     </div>
-                    <div class="ride-list" id="available-rides-list">
-                        </div>
+                    <button class="btn btn-primary-full"><i class="fas fa-money-check-alt"></i> View Payout History</button>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section id="previous-rides-section" class="content-section" style="display: none;">
+        <!-- <section id="ride-stats-section" class="content-section">
             <div class="section-header">
-                <h2>Previous Rides</h2>
+                <h2>Ride Performance</h2>
             </div>
             <div class="section-cards-grid">
-                <div class="card">
-                    <div class="ride-list" id="previous-rides-list">
+                <div class="card driver-stats-card">
+                    <div class="stats-overview-grid">
+                        <div class="stat-overview-item">
+                            <span class="stat-label">Total Rides</span>
+                            <span class="stat-value">120</span>
                         </div>
-                    <button class="btn btn-load-more" id="load-more-previous-rides"><i class="fas fa-ellipsis-h"></i> Load More History</button>
+                        <div class="stat-overview-item">
+                            <span class="stat-label">Average Rating</span>
+                            <span class="stat-value rating-value">4.8 <i class="fas fa-star"></i></span>
+                        </div>
+                        <div class="stat-overview-item">
+                            <span class="stat-label">Acceptance Rate</span>
+                            <span class="stat-value">95%</span>
+                        </div>
+                    </div>
+                    <p class="insight-text">Keep up the great work to maintain your high rating!</p>
                 </div>
             </div>
-        </section>
+        </section> -->
 
-        <section id="support-contact-section" class="content-section" style="display: none;">
+        <section id="support-contact-section" class="content-section">
             <div class="section-header">
                 <h2>Notifications & Support</h2>
             </div>
             <div class="section-cards-grid">
                 <div class="card notifications-card">
-                    <ul class="notification-list" id="notification-list">
+                    <ul class="notification-list">
                         <li><i class="fas fa-info-circle"></i> New policy update on peak hour pricing.</li>
                         <li><i class="fas fa-bell"></i> Your document verification is complete.</li>
                         <li><i class="fas fa-exclamation-triangle"></i> Important: Service alert in specific areas.</li>
@@ -160,19 +211,19 @@
             </div>
         </section>
 
-        <section id="settings-section" class="content-section" style="display: none;">
+        <section id="settings-section" class="content-section">
             <div class="section-header">
                 <h2>Settings</h2>
             </div>
             <div class="section-cards-grid">
                 <div class="card">
                     <p>Manage your account settings here.</p>
-                    <button id="editProfileBtn" class="btn btn-primary-full">
+                    <button id="editProfile" class="btn btn-primary-full" onclick="window.location.href='/editcaptainprofile'">
                         Edit Profile</button>
                 </div>
                 <div class="card">
                     <p>Change your password or security preferences.</p>
-                    <button id="securitySettingsBtn" class="btn btn-primary-full">Security Settings</button>
+                    <button onclick="window.location.href='/captainsecurity'" class="btn btn-primary-full">Security Settings</button>
                 </div>
             </div>
         </section>

@@ -19,5 +19,15 @@
     "express-session": "^1.18.1",
     "path": "^0.12.7",
     "url": "^0.11.4"
-  }
+  },
+  "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Server",
+            "program": "${workspaceFolder}/index.js", 
+            "console": "integratedTerminal", 
+            "internalConsoleOptions": "openOnSessionStart" 
+        }
+    ]
 }
