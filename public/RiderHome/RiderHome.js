@@ -324,7 +324,7 @@ function showRideCompletedPopup(fare = 'N/A') {
     rideCompletedPopup.style.display = 'block';
     setTimeout(() => {
         rideCompletedPopup.style.display = 'none';
-    }, 5000); // Hide popup after 5 seconds
+    }, 8000); // Hide popup after 5 seconds
 }
 
 // --- Initialize on Page Load ---
@@ -368,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Ensure the ride is still active (not completed or cancelled) before restoring
                 if (result.success && result.data && (result.data.status !== 'COMPLETED' && result.data.status !== 'CANCELLED')) {
                     displayCurrentRide(result.data);
+                    console.log("Ride Details:",result.data)
                     startRideStatusPolling();
                     console.log('Restored active ride:', result.data.id);
                 } else {
