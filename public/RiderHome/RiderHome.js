@@ -11,6 +11,7 @@ const currentDropoffSpan = document.getElementById('currentDropoff');
 const currentStatusSpan = document.getElementById('currentStatus');
 const currentFareSpan = document.getElementById('currentFare');
 const rideCompletedPopup = document.getElementById('rideCompletedPopup');
+const finalFareSpan = document.getElementById('finalFare'); // Get the span for final fare
 
 let currentRideId = null;
 let rideStatusInterval = null;
@@ -233,7 +234,7 @@ function startRideStatusPolling() {
 
                 // Update fare if actual fare is available, or use estimated if only that's present
                 currentFareSpan.textContent = ride.actualFare ? `₹${ride.actualFare.toFixed(2)}` :
-                                              ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
+                                                 ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
 
                 // Logic for ride status progression simulation (frontend only)
                 if (ride.status === 'REQUESTED') {
@@ -293,11 +294,6 @@ async function updateRideStatusOnBackend(status) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            // The backend expects status as a query parameter (as per your Node.js proxy)
-            // So, send an empty body if your Node.js proxy doesn't actually use it.
-            // If the Node.js proxy extracts it from the body, then this is fine.
-            // Based on your Node.js code: `const { status } = req.body;` then `?status=${status}`
-            // this JSON.stringify is technically correct, but the Node.js proxy rewrites it.
             body: JSON.stringify({ status: status }) // Still send it in body as per Node.js expects
         });
 
@@ -317,14 +313,54 @@ async function updateRideStatusOnBackend(status) {
 }
 
 function showRideCompletedPopup(fare = 'N/A') {
-    const finalFareSpan = document.getElementById('finalFare');
     if (finalFareSpan) {
-        finalFareSpan.textContent = `₹${fare}`;
+        finalFareSpan.textContent = `${fare.toFixed(2)}`; // Display formatted fare
     }
-    rideCompletedPopup.style.display = 'block';
+    rideCompletedPopup.classList.add('show'); // Add class for fade-in effect
+    rideCompletedPopup.style.display = 'block'; // Make it visible
+
+    // Immediately initiate payment after showing the popup
+    // Assume "Cash" as the payment method for simplicity
+    initiatePayment(currentRideId, fare, "Cash");
+
     setTimeout(() => {
-        rideCompletedPopup.style.display = 'none';
+        rideCompletedPopup.classList.remove('show'); // Start fade-out
+        // Give time for transition before hiding completely
+        setTimeout(() => {
+            rideCompletedPopup.style.display = 'none';
+        }, 300); // Should match CSS transition duration
     }, 5000); // Hide popup after 5 seconds
+}
+
+// NEW: Function to initiate payment
+async function initiatePayment(rideId, amount, paymentMethod) {
+    console.log(`Initiating payment for Ride ID: ${rideId}, Amount: ${amount}, Method: ${paymentMethod}`);
+    try {
+        const response = await fetch('/process-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                rideId: rideId,
+                amount: amount,
+                paymentMethod: paymentMethod // e.g., "Cash", "Card", "Wallet"
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('Payment recorded successfully:', result.data);
+            // alert('Payment successful!'); // Removed direct alert as popup handles completion message
+        } else {
+            console.error('Payment failed:', result.message);
+            alert('Payment processing failed: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error initiating payment:', error);
+        alert('An error occurred while processing payment. Please try again later.');
+    }
 }
 
 // --- Initialize on Page Load ---

@@ -646,8 +646,50 @@ app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
     }
 });
 
+// NEW: POST endpoint to process payments
+app.post('/process-payment', isAuthenticated, async (req, res) => {
+    // Ensure the user initiating the payment is a rider
+    if (req.session.user.userType !== 'rider') {
+        return res.status(403).json({ success: false, message: 'Unauthorized: Only riders can process payments.' });
+    }
 
+    const { rideId, amount, paymentMethod } = req.body;
 
+    if (!rideId || typeof amount !== 'number' || !paymentMethod) {
+        return res.status(400).json({ success: false, message: 'Invalid payment data: rideId, amount, and paymentMethod are required.' });
+    }
+
+    console.log(`Processing payment for Ride ID: ${rideId}, Amount: ${amount}, Method: ${paymentMethod}`);
+
+    try {
+        // Forward the payment details to the Spring Boot backend's payment endpoint
+        const backendResponse = await axios.post(`${BACKEND_API_BASE_URL}/payments`, {
+            rideId,
+            amount,
+            paymentMethod
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        // Forward the backend's response back to the frontend
+        res.status(backendResponse.status).json(backendResponse.data);
+
+    } catch (error) {
+        console.error('Error forwarding payment to backend:', error.response ? error.response.data : error.message);
+        const errorMessage = error.response && error.response.data && error.response.data.message
+            ? error.response.data.message
+            : 'An unexpected error occurred while processing payment.';
+        const errorStatus = error.response ? error.response.status : 500;
+
+        res.status(errorStatus).json({
+            success: false,
+            message: errorMessage,
+            error: error.response ? error.response.data : error.message
+        });
+    }
+});
 
 
 app.get('/ride-activity', async (req, res) => {
