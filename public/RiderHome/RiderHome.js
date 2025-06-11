@@ -12,10 +12,13 @@ const currentStatusSpan = document.getElementById('currentStatus');
 const currentFareSpan = document.getElementById('currentFare');
 const rideCompletedPopup = document.getElementById('rideCompletedPopup');
 const finalFareSpan = document.getElementById('finalFare'); // Get the span for final fare
+const paymentProcessingOverlay = document.getElementById('paymentProcessingOverlay'); // NEW: Processing overlay
+const transactionIdValueSpan = document.getElementById('transactionIdValue'); // NEW: Transaction ID span
 
 let currentRideId = null;
 let rideStatusInterval = null;
 let simulateRideProgressionTimeout = null;
+let paymentInitiatedForCurrentRide = false; // Flag to prevent duplicate payment requests for the same ride
 
 // Fixed set of locations for simplicity
 // These don't need real coordinates if not using a map, but we'll keep them for consistency
@@ -176,7 +179,7 @@ function displayCurrentRide(ride) {
     currentPickupSpan.textContent = ride.pickupAddress;
     currentDropoffSpan.textContent = ride.destinationAddress;
     currentStatusSpan.textContent = ride.status || "REQUESTED"; // Default to REQUESTED if not set
-    currentFareSpan.textContent = ride.estimatedFare ? `${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
+    currentFareSpan.textContent = ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
 
     // Disable location selection and hide book button while a ride is active
     pickupSelect.disabled = true;
@@ -202,6 +205,11 @@ function clearCurrentRide() {
         currentStatusSpan.textContent = '';
         currentFareSpan.textContent = '';
         rideStatusDiv.textContent = ''; // Clear any status messages
+        transactionIdValueSpan.textContent = 'N/A'; // Reset transaction ID display
+
+        // Explicitly ensure payment processing overlay is hidden
+        paymentProcessingOverlay.style.display = 'none';
+        paymentInitiatedForCurrentRide = false; // Reset the payment flag for a new ride
 
         pickupSelect.disabled = false;
         dropoffSelect.disabled = false;
@@ -264,9 +272,21 @@ function startRideStatusPolling() {
                         }, 2000); // 10 seconds for the "ride" to complete
                     }
                 } else if (ride.status === 'COMPLETED') {
-                    showRideCompletedPopup(ride.actualFare); // Pass actual fare to popup
-                    clearCurrentRide();
-                    alert('Ride completed!'); // You can make this a nicer notification
+                    // Only initiate payment if it hasn't been initiated for this ride yet
+                    if (!paymentInitiatedForCurrentRide) {
+                        paymentInitiatedForCurrentRide = true; // Set the flag to true
+                        // No alert here, it will be in showRideCompletedPopup after payment processing
+
+                        paymentProcessingOverlay.style.display = 'flex'; // Show processing overlay
+                        transactionIdValueSpan.textContent = "Processing..."; // Set initial text
+                        
+                        await initiatePayment(currentRideId, ride.actualFare, "Cash");
+                        // The rest of the cleanup and popup display is handled within initiatePayment's finally block
+                    }
+                    // Stop polling immediately if payment was handled or if the ride is already completed
+                    if (paymentInitiatedForCurrentRide && rideStatusInterval) {
+                         clearInterval(rideStatusInterval);
+                    }
                 } else if (ride.status === 'CANCELLED') {
                     alert('Your ride was cancelled.');
                     clearCurrentRide();
@@ -312,29 +332,38 @@ async function updateRideStatusOnBackend(status) {
     }
 }
 
-function showRideCompletedPopup(fare = 'N/A') {
+// showRideCompletedPopup now accepts the transactionId
+function showRideCompletedPopup(fare = 'N/A', transactionId = 'N/A') {
+    // Moved the "Ride completed!" alert here, so it only fires once after payment.
+    alert('Ride completed!'); // Now it fires after payment processing
+
     if (finalFareSpan) {
         finalFareSpan.textContent = `${fare.toFixed(2)}`; // Display formatted fare
     }
+    transactionIdValueSpan.textContent = transactionId; // Display actual transaction ID
+
     rideCompletedPopup.classList.add('show'); // Add class for fade-in effect
     rideCompletedPopup.style.display = 'block'; // Make it visible
 
-    // Immediately initiate payment after showing the popup
-    // Assume "Cash" as the payment method for simplicity
-    initiatePayment(currentRideId, fare, "Cash");
-
+    // Hide the ride completed popup after a short delay
     setTimeout(() => {
         rideCompletedPopup.classList.remove('show'); // Start fade-out
-        // Give time for transition before hiding completely
         setTimeout(() => {
             rideCompletedPopup.style.display = 'none';
+            clearCurrentRide(); // Clear ride details and reset UI after all is done
         }, 300); // Should match CSS transition duration
-    }, 5000); // Hide popup after 5 seconds
+    }, 3000); // Popup stays visible for 3 seconds after details are set
 }
 
-// NEW: Function to initiate payment
+// Function to initiate payment
 async function initiatePayment(rideId, amount, paymentMethod) {
     console.log(`Initiating payment for Ride ID: ${rideId}, Amount: ${amount}, Method: ${paymentMethod}`);
+    let actualTransactionId = 'N/A'; // Default in case of failure
+
+    // Add a small delay BEFORE the fetch to ensure the spinner is visible for a moment
+    // even on very fast local network requests.
+    await new Promise(resolve => setTimeout(resolve, 500)); // Show spinner for at least 0.5 seconds
+
     try {
         const response = await fetch('/process-payment', {
             method: 'POST',
@@ -350,22 +379,37 @@ async function initiatePayment(rideId, amount, paymentMethod) {
 
         const result = await response.json();
 
-        if (result.success) {
+        if (result.success && result.data && result.data.transactionId) {
             console.log('Payment recorded successfully:', result.data);
-            // alert('Payment successful!'); // Removed direct alert as popup handles completion message
+            actualTransactionId = result.data.transactionId; // Get actual transaction ID
         } else {
-            console.error('Payment failed:', result.message);
-            alert('Payment processing failed: ' + result.message);
+            console.error('Payment failed:', result.message || 'No transaction ID received.');
+            actualTransactionId = "Failed"; // Indicate failure
+            // No alert here, it will be handled by showRideCompletedPopup (if general error)
         }
     } catch (error) {
         console.error('Error initiating payment:', error);
-        alert('An error occurred while processing payment. Please try again later.');
+        actualTransactionId = "Error"; // Indicate error
+        // No alert here, it will be handled by showRideCompletedPopup (if general error)
+    } finally {
+        // Hide processing overlay after payment attempt (success or failure)
+        paymentProcessingOverlay.style.display = 'none';
+        
+        // Now show the ride completed popup with the final fare and transaction ID
+        // The showRideCompletedPopup function now handles hiding itself and calling clearCurrentRide()
+        showRideCompletedPopup(amount, actualTransactionId);
     }
 }
 
 // --- Initialize on Page Load ---
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Explicitly hide the payment processing overlay on initial load
+    // This addresses potential rendering issues where it might briefly appear before JS takes over.
+    if (paymentProcessingOverlay) {
+        paymentProcessingOverlay.style.display = 'none';
+    }
+
     // Initialize slideshow
     let slideIndex = 0;
     const slides = document.getElementsByClassName("mySlides");
@@ -401,13 +445,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(result => {
-                // Ensure the ride is still active (not completed or cancelled) before restoring
-                if (result.success && result.data && (result.data.status !== 'COMPLETED' && result.data.status !== 'CANCELLED')) {
-                    displayCurrentRide(result.data);
-                    startRideStatusPolling();
-                    console.log('Restored active ride:', result.data.id);
+                if (result.success && result.data) {
+                    const ride = result.data;
+                    if (ride.status === 'COMPLETED' || ride.status === 'CANCELLED') {
+                        // If ride is already completed or cancelled on load, just show the final popup briefly
+                        // and clear the ride. No need to re-process payment or poll for active status.
+                        console.log('Restored inactive ride. Displaying final status.');
+                        // Check if actualFare exists, if not, fallback to estimatedFare
+                        const fareToShow = ride.actualFare || ride.estimatedFare || 'N/A';
+                        // Also, initialize paymentInitiatedForCurrentRide to true if the ride was already completed.
+                        paymentInitiatedForCurrentRide = true; 
+                        // If the backend `ride` object includes `payment` nested within it, extract transactionId
+                        // Otherwise, it might need to be retrieved differently or is simply 'N/A' for old rides.
+                        const transactionIdToShow = (ride.payment && ride.payment.transactionId) ? ride.payment.transactionId : 'N/A';
+                        showRideCompletedPopup(fareToShow, transactionIdToShow); // Show immediately
+                        // The showRideCompletedPopup already handles hiding itself and clearing the ride
+                    } else {
+                        // If ride is still active (REQUESTED, ACCEPTED, IN_PROGRESS)
+                        displayCurrentRide(ride);
+                        startRideStatusPolling();
+                        console.log('Restored active ride:', ride.id);
+                        paymentInitiatedForCurrentRide = false; // Ensure it's false for an ongoing ride
+                    }
                 } else {
-                    console.log('No active ride to restore or ride already completed/cancelled.');
+                    console.log('No active ride to restore or ride already completed/cancelled per backend.');
                     clearCurrentRide(); // Clear if stored ride is actually completed/cancelled
                 }
             })

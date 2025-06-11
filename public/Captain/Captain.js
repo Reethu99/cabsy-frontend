@@ -409,7 +409,7 @@
             const rides = data.data.data;
             const rideList = document.getElementById('previous-rides-list');
             rideList.innerHTML = '';
-           console.log(data.data)
+
             if (rides.length === 0) {
                 rideList.innerHTML = `<p><i class="fas fa-info-circle"></i> No previous rides found.</p>`;
             } else {
