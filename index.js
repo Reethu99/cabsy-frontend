@@ -163,7 +163,7 @@ app.post('/login', async (req, res) => {
         });
 
         // Check if the backend login was successful (assuming it returns a 'success' field)
-        if (backendResponse.status === 200 && backendResponse.data.success) {
+        if ((backendResponse.status === 200 || backendResponse.status === 201) && backendResponse.data.success) {
             // Login successful: Store relevant user data in the session
             // IMPORTANT: Only store non-sensitive data, or data needed for subsequent requests.
             // Removed localStorage.setItem as it's for browser, not Node.js server.
@@ -643,6 +643,43 @@ app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
             message: error.response?.data?.message || 'Failed to update ride status.',
             error: error.response?.data?.error || error.message
         });
+    }
+});
+
+
+
+
+
+app.get('/ride-activity', async (req, res) => {
+    console.log("Rides Activity - Request received.");
+    
+    const userId = req.session.user ? req.session.user.id : null;
+
+    if (!userId) {
+        console.error('Ride Activity: User ID not found in session.');
+        return res.status(401).json({ success: false, error: 'User not authenticated or ID not found.' });
+    }
+
+    try {
+        console.log(`Attempting to fetch user rides from: ${BACKEND_API_BASE_URL}/rides/user/${userId}`);
+        const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/user/${userId}`);
+
+        // Your Java backend's ApiResponse structure: { message: "...", data: [...] }
+        // So, the actual list of rides is in response.data.data
+        const rawRidesData = response.data.data; // Access the nested 'data' property
+
+        // Ensure rawRidesData is always an array
+        const allRidesFromCoreAPI = Array.isArray(rawRidesData) ? rawRidesData : [];
+
+        console.log("Rides data from Core API for /ride-activity:", allRidesFromCoreAPI);
+        res.json({ success: true, data: allRidesFromCoreAPI }); // Send the guaranteed array
+    } catch (error) {
+        console.error('Backend Error (ride-activity): ', error.message);
+        if (error.response) {
+            console.error('Backend Error Response Status:', error.response.status);
+            console.error('Backend Error Response Data:', error.response.data);
+        }
+        res.status(500).json({ success: false, error: 'Failed to fetch user ride activity' });
     }
 });
 
