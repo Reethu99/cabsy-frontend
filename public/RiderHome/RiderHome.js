@@ -248,11 +248,12 @@ function startRideStatusPolling() {
                 if (ride.status === 'REQUESTED') {
                     rideStatusDiv.textContent = 'Searching for a captain...';
                 } else if (ride.status === 'ACCEPTED') {
-                    rideStatusDiv.textContent = 'Captain accepted your ride! Getting ready...';
+                    rideStatusDiv.textContent = 'Captain accepted your ride! On the way';
                 } else if (ride.status === 'IN_PROGRESS') {
-                    rideStatusDiv.textContent = 'Your ride is in progress!';
+                    rideStatusDiv.textContent = 'Picked up, Your ride is started!';
                 } else if (ride.status === 'COMPLETED') {
                     // Only initiate payment if it hasn't been initiated for this ride yet
+                    rideStatusDiv.textContent = 'Destination reached, ride completed';
                     if (!paymentInitiatedForCurrentRide) {
                         paymentInitiatedForCurrentRide = true; // Set the flag to true
                         // No alert here, it will be in showRideCompletedPopup after payment processing
@@ -268,7 +269,6 @@ function startRideStatusPolling() {
                          clearInterval(rideStatusInterval);
                     }
                     clearCurrentRide();
-                    alert('Ride completed!'); // You can make this a nicer notification
                 } else if (ride.status === 'CANCELLED') {
                     alert('Your ride was cancelled.');
                     clearCurrentRide();

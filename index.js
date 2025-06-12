@@ -306,10 +306,9 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         console.error('Validation failed for rider update:', { riderId, field, isFieldSupported: ['name', 'email', 'phone', 'password'].includes(field) });
         return res.status(400).json({ success: false, message: 'Invalid request: Missing rider ID or unsupported field.' });
     }
-    // ... rest of the code (your existing validation for password/other fields)
-    const newValue = requestBody[field]; // This line should be present
+    const newValue = requestBody[field]; 
 
-    if (field !== 'password' && (!newValue || newValue.trim() === '')) { // <-- Ensure this is correctly fixed
+    if (field !== 'password' && (!newValue || newValue.trim() === '')) { 
         console.error(`Validation failed: ${field} cannot be empty.`);
         return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
     }
@@ -335,7 +334,6 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         if (!newValue || newValue.trim() === '') {
             return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
         }
-        // Add more specific validation for email/phone if desired, mirroring frontend
     }
 
 
@@ -409,8 +407,6 @@ app.put('/forgotPassword', async (req, res) => {
     const userType = req.body.userType;
     console.log("Requested to update password:", req.body);
 
-
-
     try {
         
         console.log("Attempted to reset password of user:" + email)
@@ -447,7 +443,7 @@ app.post('/edit-profile', async (req, res) => {
             phoneNumber: req.body.phoneNumber,
             licenseNumber: req.body.licenseNumber
         }
-        console.log("Rquested to update profile:", updateData);
+        console.log("Requested to update profile:", updateData);
         let id = req.session.user.id;
         let backendResponse = await axios.post(`${BACKEND_API_BASE_URL}/auth/driver/${id}`, updateData);
         console.log('Profile updated successfully:', backendResponse.data)
@@ -484,7 +480,7 @@ app.get('/available-rides', async (req, res) => {
     try {
         const response = await axios.get(`${BACKEND_API_BASE_URL}/rides`);
         req.session.availableRides = response.data;
-        console.log("Available rides:", response.data)
+        console.log("Fetching Available rides...")
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error('Available rides-Backend Error:', error.message);
@@ -500,7 +496,7 @@ app.get('/previous-rides', async (req, res) => {
     try {
         const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/driver/${driverId}`);
         req.session.previousRides = response.data;
-        console.log("Previous rides:", response.data)
+        console.log("Fetching Previous rides...", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error('Previous rides-Backend Error:', error.message);
