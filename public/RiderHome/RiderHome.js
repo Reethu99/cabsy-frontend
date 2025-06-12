@@ -83,7 +83,7 @@ function validateLocationsAndToggleBookButton() {
             dropoffLocation.lat, dropoffLocation.lon
         );
         const estimatedFare = distanceKm * FARE_PER_KM;
-        bookRideButton.textContent = `Book Ride (Est. ₹${estimatedFare.toFixed(2)})`;
+        bookRideButton.textContent = "Book Ride";
     } else {
         bookRideButton.textContent = 'Select locations to book';
     }
@@ -178,6 +178,7 @@ function displayCurrentRide(ride) {
     currentPickupSpan.textContent = ride.pickupAddress;
     currentDropoffSpan.textContent = ride.destinationAddress;
     currentStatusSpan.textContent = ride.status || "REQUESTED"; // Default to REQUESTED if not set
+    currentStatusSpan.style.color='green';
     currentFareSpan.textContent = ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
 
     // Disable location selection and hide book button while a ride is active
@@ -248,28 +249,8 @@ function startRideStatusPolling() {
                     rideStatusDiv.textContent = 'Searching for a captain...';
                 } else if (ride.status === 'ACCEPTED') {
                     rideStatusDiv.textContent = 'Captain accepted your ride! Getting ready...';
-                    // Simulate ride starting after a short delay (e.g., captain arriving at pickup)
-                    // If we want to move to IN_PROGRESS, captain or backend must trigger this.
-                    // For demo, we'll simulate it for now.
-                    if (!simulateRideProgressionTimeout) {
-                        simulateRideProgressionTimeout = setTimeout(() => {
-                            updateRideStatusOnBackend('IN_PROGRESS'); // Captain starts the ride
-                        }, 1000);
-                    }
                 } else if (ride.status === 'IN_PROGRESS') {
                     rideStatusDiv.textContent = 'Your ride is in progress!';
-                    // Clear any previous 'ACCEPTED' timeout if still active
-                    if (simulateRideProgressionTimeout) {
-                        clearTimeout(simulateRideProgressionTimeout);
-                        simulateRideProgressionTimeout = null;
-                    }
-                    console.log(simulateRideProgressionTimeout)
-                    // Simulate ride completion after some time if not already
-                    if (!simulateRideProgressionTimeout) {
-                        simulateRideProgressionTimeout = setTimeout(() => {
-                            updateRideStatusOnBackend('COMPLETED'); // Ride completed by driver
-                        }, 2000); // 10 seconds for the "ride" to complete
-                    }
                 } else if (ride.status === 'COMPLETED') {
                     // Only initiate payment if it hasn't been initiated for this ride yet
                     if (!paymentInitiatedForCurrentRide) {
@@ -286,6 +267,8 @@ function startRideStatusPolling() {
                     if (paymentInitiatedForCurrentRide && rideStatusInterval) {
                          clearInterval(rideStatusInterval);
                     }
+                    clearCurrentRide();
+                    alert('Ride completed!'); // You can make this a nicer notification
                 } else if (ride.status === 'CANCELLED') {
                     alert('Your ride was cancelled.');
                     clearCurrentRide();

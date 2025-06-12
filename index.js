@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 import session from 'express-session'; // Import express-session
 import axios from 'axios'; // Import axios for making HTTP requests
 import dotenv from 'dotenv'; // Import dotenv for environment variables
-import { error } from "console";
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -727,7 +726,10 @@ app.get('/ride-activity', async (req, res) => {
 });
 
 
-// Start the server and listen for requests
-app.listen(process.env.port, () => {
+app.listen(process.env.port, (err) => {
+    if (err) {
+        console.error('Server failed to start due to an app.listen error:', err);
+        return;
+    }
     console.log(`Server is running on http://localhost:${process.env.port}`);
 });
