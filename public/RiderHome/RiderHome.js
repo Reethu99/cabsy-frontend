@@ -14,7 +14,7 @@ const rideCompletedPopup = document.getElementById('rideCompletedPopup');
 const finalFareSpan = document.getElementById('finalFare'); // Get the span for final fare
 const paymentProcessingOverlay = document.getElementById('paymentProcessingOverlay'); // NEW: Processing overlay
 const transactionIdValueSpan = document.getElementById('transactionIdValue'); // NEW: Transaction ID span
-
+const RideCancel=document.getElementById('ride-cancel');
 let currentRideId = null;
 let rideStatusInterval = null;
 let simulateRideProgressionTimeout = null;
@@ -179,7 +179,6 @@ function displayCurrentRide(ride) {
     currentDropoffSpan.textContent = ride.destinationAddress;
     currentStatusSpan.textContent = ride.status || "REQUESTED"; // Default to REQUESTED if not set
     currentFareSpan.textContent = ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
-
     // Disable location selection and hide book button while a ride is active
     pickupSelect.disabled = true;
     dropoffSelect.disabled = true;
@@ -214,8 +213,31 @@ function clearCurrentRide() {
         dropoffSelect.disabled = false;
         bookRideButton.style.display = 'block'; // Show the book button
         validateLocationsAndToggleBookButton(); // Re-enable validation for book button text
-    }, 500); // Match this timeout to your CSS transition duration
+    }, 2000); // Match this timeout to your CSS transition duration
 }
+
+function rideCancel(){
+    let status='CANCELLED'
+    fetch(`/update-ride-status/${currentRideId}`,{
+        method:'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: status})
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errData => {
+                throw new Error(errData.error || `Failed to update ride status to ${status}. Status: ${response.status}`);
+            });
+        }
+    })
+    .catch(err => {
+        console.error("Error while cancellation of ride:", err);
+        alert(`Error while cancellation of ride: ${err.message}`);
+    });
+
+
+}
+
 
 // --- Ride Status Polling and Simulation ---
 
@@ -258,6 +280,7 @@ function startRideStatusPolling() {
                     }
                 } else if (ride.status === 'IN_PROGRESS') {
                     rideStatusDiv.textContent = 'Your ride is in progress!';
+                    RideCancel.style.display='none';
                     // Clear any previous 'ACCEPTED' timeout if still active
                     if (simulateRideProgressionTimeout) {
                         clearTimeout(simulateRideProgressionTimeout);
@@ -287,8 +310,8 @@ function startRideStatusPolling() {
                          clearInterval(rideStatusInterval);
                     }
                 } else if (ride.status === 'CANCELLED') {
-                    alert('Your ride was cancelled.');
-                    clearCurrentRide();
+                    alert('Your ride is cancelled.');
+                   clearCurrentRide();
                 }
 
             } else {

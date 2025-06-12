@@ -205,7 +205,7 @@ app.post('/login', async (req, res) => {
         console.error('Error during login request to backend:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
             success: false,
-            message: 'Login failed due to server error.',
+            message: error.response ? error.response.data : error.message,
             error: error.response ? error.response.data : error.message
         });
     }
