@@ -486,9 +486,14 @@ function updateRideTimer() {
     }
 }
 
+// NEW: A Set to keep track of currently expanded ride IDs (must be global or in the scope of event listener)
+const expandedRideIds = new Set();
+
 
 // --- Function to Fetch and Process Previous Rides and Stats ---
 function fetchPreviousRides() {
+    console.log('Fetching previous rides...');
+
     fetch('/previous-rides')
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -500,14 +505,15 @@ function fetchPreviousRides() {
             }
 
             const rides = data.data.data;
-            if (previousRidesList) { // Check if element exists
+
+            if (previousRidesList) {
                 previousRidesList.innerHTML = ''; // Clear previous list items
             }
 
             let totalRidesCount = 0;
             let totalFare = 0;
-            let acceptedRides = 0; // Assuming all fetched previous rides were accepted
-            let totalRequests = 0; // This would need actual 'request' data from backend to be accurate
+            let acceptedRides = 0;
+            let totalRequests = 0;
 
             if (rides.length === 0) {
                 if (previousRidesList) {
@@ -527,11 +533,23 @@ function fetchPreviousRides() {
                             <span class="status-completed">${ride.status || 'Completed'}</span>
                         </div>
                         <p><i class="fas fa-calendar-alt"></i> Date: ${new Date(ride.endTime).toLocaleDateString('en-IN')} |
-                           <i class="fas fa-rupee-sign"></i> Fare: ₹ ${parseFloat(ride.estimatedFare).toLocaleString('en-IN') || 'N/A'}</p>
+                           <i class="fas fa-rupee-sign"></i> Fare: ₹ ${Math.round(ride.actualFare*100)/100 || 'N/A'}</p>
                         <p><i class="fas fa-user-circle"></i> Customer: ${ride.userName || 'N/A'}</p>
                         <div class="ride-item-actions">
-                            <button class="btn btn-secondary-small"><i class="fas fa-redo-alt"></i> Re-ride</button>
-                            <button class="btn btn-primary-small"><i class="fas fa-info-circle"></i> Details</button>
+                            <button class="btn btn-primary-small details-button" id="details-btn-${ride.id}">
+                                <i class="fas fa-info-circle"></i> ${isExpanded ? 'Hide Details' : 'Details'}
+                            </button>
+                        </div>
+                        <div class="ride-details-expanded" style="display: ${isExpanded ? 'block' : 'none'};">
+                            ${isExpanded ? `
+                                <p><strong>Customer Name:</strong> ${ride.userName || 'N/A'}</p>
+                                <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
+                                <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
+                                <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
+                                <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
+                                <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
+                                <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
+                            ` : ''}
                         </div>
                     `;
                     if (previousRidesList) {
@@ -543,8 +561,8 @@ function fetchPreviousRides() {
                     if (!isNaN(fare)) {
                         totalFare += fare;
                     }
-                    acceptedRides++; // Assuming previous rides imply accepted
-                    totalRequests++; // Simplistic: counting each previous ride as a request
+                    acceptedRides++;
+                    totalRequests++;
                 });
             }
 
@@ -552,14 +570,14 @@ function fetchPreviousRides() {
             if (ridesTodayElement) ridesTodayElement.textContent = totalRidesCount;
             if (earningsTodayElement) earningsTodayElement.textContent = `₹ ${totalFare.toLocaleString('en-IN')}`;
 
-            // Update Ride Performance section (assuming elements exist in HTML based on commented out section)
+            // Update Ride Performance section
             const totalRidesStat = document.getElementById('total-rides-stat');
             const avgRatingStat = document.getElementById('avg-rating-stat');
             const acceptanceRateStat = document.getElementById('acceptance-rate-stat');
             const insightTextElement = document.getElementById('insight-text');
 
             if (totalRidesStat) totalRidesStat.textContent = totalRidesCount;
-            if (avgRatingStat) avgRatingStat.innerHTML = `4.8 <i class="fas fa-star"></i>`; // Placeholder for now, integrate actual rating later
+            if (avgRatingStat) avgRatingStat.innerHTML = `4.8 <i class="fas fa-star"></i>`;
             let acceptanceRate = totalRequests > 0 ? ((acceptedRides / totalRequests) * 100).toFixed(0) : '0';
             if (acceptanceRateStat) acceptanceRateStat.textContent = `${acceptanceRate}%`;
 
@@ -577,7 +595,6 @@ function fetchPreviousRides() {
             }
             if (ridesTodayElement) ridesTodayElement.textContent = 'N/A';
             if (earningsTodayElement) earningsTodayElement.textContent = '₹ N/A';
-            // Update performance stats to N/A on error
             const statsElements = ['total-rides-stat', 'avg-rating-stat', 'acceptance-rate-stat'];
             statsElements.forEach(id => {
                 const el = document.getElementById(id);
@@ -589,6 +606,51 @@ function fetchPreviousRides() {
             }
         });
 }
+
+// --- Initial Setup and setInterval Call ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initial fetch when the page loads
+    fetchPreviousRides();
+
+    // 2. Set up the event listener for details button ONCE on the parent container
+    if (previousRidesList) {
+        previousRidesList.addEventListener('click', function(event) {
+            const clickedButton = event.target.closest('.details-button');
+
+            if (clickedButton) {
+                const rideItem = clickedButton.closest('.ride-item');
+                const ride = JSON.parse(rideItem.dataset.ride);
+                const expandedDetailsDiv = rideItem.querySelector('.ride-details-expanded');
+
+                if (expandedDetailsDiv.style.display === 'none') {
+                    // Populate and show details
+                    expandedDetailsDiv.innerHTML = `
+                        <p><strong>Customer Name:</strong> ${ride.userName || 'N/A'}</p>
+                        <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
+                        <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
+                        <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
+                        <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
+                        <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
+                    `;
+                    expandedDetailsDiv.style.display = 'block';
+                    clickedButton.textContent = 'Hide Details';
+                    expandedRideIds.add(ride.id); // Add ride ID to the set
+                } else {
+                    // If currently visible, hide it
+                    expandedDetailsDiv.style.display = 'none';
+                    clickedButton.textContent = 'Details';
+                    expandedRideIds.delete(ride.id); // Remove ride ID from the set
+                }
+            }
+        });
+    } else {
+        console.error("Error: The HTML element with ID 'previous-rides-list' was not found. Details button functionality will not work.");
+    }
+
+    // 3. Start the interval for fetching data every 5 minutes (placed here ONCE)
+    setInterval(fetchPreviousRides, 300000); // 300000 ms = 5 minutes
+});
 
 // --- Initial Page Load / Setup ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -637,5 +699,7 @@ setInterval(() => {
     }
 }, 30000); // Every 30 seconds
 
+document.addEventListener('DOMContentLoaded', fetchPreviousRides);
+
 // Refresh previous rides and stats less frequently
-setInterval(fetchPreviousRides, 300000); // Every 5 minutes
+// setInterval(fetchPreviousRides, 300000); // Every 3 minutes
