@@ -403,35 +403,30 @@ app.post('/logout', (req, res) => {
 });
 
 //Change Password
-app.post('/change-password', async (req, res) => {
+app.put('/forgotPassword', async (req, res) => {
 
-    const { currentPassword, newPassword, confirmNewPassword } = req.body;
-
+    const password = req.body.password;
+    const email = req.body.email;
+    const userType = req.body.userType;
     console.log("Requested to update password:", req.body);
 
-    // Basic validation
-    if (!currentPassword || !newPassword || !confirmNewPassword) {
-        return res.status(400).json({ error: 'All fields are required.' });
-    }
 
-    if (newPassword !== confirmNewPassword) {
-        return res.status(400).json({ error: 'New passwords do not match.' });
-    }
 
     try {
-        let email = req.session.user.email;
-        console.log("Attempted to update password of user:" + email)
+        
+        console.log("Attempted to reset password of user:" + email)
         const response = await axios.post(`${BACKEND_API_BASE_URL}/auth/change-password`, {
             email,
-            oldPassword: currentPassword,
-            newPassword
+            password,
+            userType
         });
-        console.log('Password updated successfully.')
+    
         if (response.data.success) { // Check for backend's success flag explicitly
+            console.log('Password updated successfully.')
             res.status(200).json({
                 success: true,
                 message: 'Password updated successfully.',
-                redirectUrl: '/captainhome' // Corrected redirect to captainhome
+                redirectUrl: "/login", 
             });
         } else {
             return res.status(400).json({ error: response.data.message || 'Password update failed.' });
@@ -539,7 +534,13 @@ app.put(`/accept-ride/:rideId`, async (req, res) => {
         });
     }
 });
-
+app.get("/checkEmail",(res,req)=>{
+    email = req.body.email;
+    userType = req.body.userType;
+    if(axios.get(`${backendEndpoint}/auth/user/checkEmail`,{email,userType}))
+        return 1;
+    return 0;
+})
 
 app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint name to /bookride
     // Ensure the user booking the ride is a rider and has an ID in session
