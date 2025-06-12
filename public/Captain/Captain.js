@@ -639,4 +639,3 @@ setInterval(() => {
 
 // Refresh previous rides and stats less frequently
 setInterval(fetchPreviousRides, 300000); // Every 5 minutes
-}
