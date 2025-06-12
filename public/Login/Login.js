@@ -98,13 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
+let  userType = "rider";
     // --- Toggle Rider/Captain Logic (Existing) ---
     option1.addEventListener('click', () => {
         option1.classList.add('selected');
         option2.classList.remove('selected');
         highlightLine.style.left = '0';
         selectedOptionId = 'option1'; // Update selected option
+        userType = "rider"
     });
 
     option2.addEventListener('click', () => {
@@ -112,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         option1.classList.remove('selected');
         highlightLine.style.left = '120px';
         selectedOptionId = 'option2'; // Update selected option
+        userType = "captain"
     });
 
     // Set initial selected state for Rider
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email, password, role: selectedOptionId === 'option1' ? 'rider' : 'captain' }),
+                body: JSON.stringify({ email, password, role: userType }),
             });
 
             const data = await response.json(); // Parse the JSON response from Express
@@ -331,11 +333,26 @@ document.addEventListener('DOMContentLoaded', () => {
     resetPasswordBtn.addEventListener('click', async () => {
         const newPass = newPasswordInput.value;
         const confirmNewPass = confirmNewPasswordInput.value;
-
+        const email = document.getElementById("forgot-email").value;
         if (newPass && newPass.length >= 6 && newPass === confirmNewPass) { // Basic validation
-            alert('Password has been reset successfully!');
-            // In a real application, you would send this to your server
-            await showLoginForm(); // Go back to login form
+            const response = await fetch("/forgotPassword", { // Relative path to Express server
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ password: newPass ,email,userType}),
+            });
+
+            
+const data = await response.json();
+if (response.ok && data.success) { // Check both HTTP status (2xx) AND backend's success flag
+    alert(data.message || 'Password updated successfully!'); // Display success message
+    await showLoginForm(); // Only go back to login on success
+} else {
+    // Display error message from backend if available, otherwise a generic one
+    alert(data.error || data.message || 'Failed to update password. Please try again.');
+    // Do not showLoginForm on error, so user can see the message or retry
+}
         } else if (!newPass || newPass.length < 6) {
             alert('New password must be at least 6 characters long.');
         } else {
