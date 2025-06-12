@@ -1,14 +1,3 @@
-document.getElementById('profilePictureInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('profilePicture').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to all profile sections by their IDs
     const usernameSection = document.getElementById('username-section');
@@ -241,4 +230,26 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEditFunctionality(emailSection);
     setupEditFunctionality(phoneSection);
     setupEditFunctionality(passwordSection); // Initialize for the password section
+
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('Logged out successfully!');
+                    window.location.href = data.redirectUrl; // Redirect to homepage
+                } else {
+                    alert('Logout failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                alert('An error occurred during logout.');
+            }
+        });
+    }
 });

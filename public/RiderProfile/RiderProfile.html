@@ -5,13 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CABsy</title>
     <link rel="stylesheet" href="../RiderProfile/RiderProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
 </head>
 <body>
 
-<header class="navbar">
-    <h1>Cabsy Account</h1>
-    
-</header>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
+                <a href="/riderhome" class="cabsy-title">Cabsy</a>
+                <a href="/riderabout" class="nav">About</a>
+                <a href="/riderhelp" class="nav">Help</a>
+            </div>
+            <div class="navbar-right">
+                <div class="profile-container">
+                    <a href="/riderprofile" class="profile-link">
+                        <!-- <i class="fas fa-user-circle profile-icon"></i> --></a> 
+                </div>
+                <button id="logoutButton" class="nav-button logout-btn">Logout</button>
+            </div>
+        </nav>
+    </header>
+
 
 <div class="container">
     <aside class="sidebar">
@@ -30,9 +47,10 @@
 
 
     <div class="profile-picture-container">
-        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profilePicture">
-        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
-        <button onclick="document.getElementById('profilePictureInput').click()" class="edit-picture-button">Change Picture</button>
+        <i class="fas fa-user-circle profile-icon"></i>
+        <!-- <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profilePicture"> -->
+        <!-- <input type="file" id="profilePictureInput" accept="image/*" style="display: none;"> -->
+        <!-- <button onclick="document.getElementById('profilePictureInput').click()" class="edit-picture-button">Change Picture</button> -->
     </div>
     
     <div class="profile-container">

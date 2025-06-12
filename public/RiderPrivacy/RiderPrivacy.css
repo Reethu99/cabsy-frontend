@@ -62,7 +62,7 @@ body {
   
   .profile-icon {
     font-size: 40px;
-    color: #555;
+    color: #ffffff;
   }
   
   .nav-button {
@@ -87,7 +87,7 @@ body {
   
 /* Ensure the main content pushes down for fixed header */
 .privacy-content {
-    padding-top: 70px; /* Adjust based on your actual header height */
+    padding-top: 25px; /* Adjust based on your actual header height */
     min-height: calc(100vh - 120px); /* Adjust to ensure footer is at bottom */
     display: flex;
     flex-direction: column;

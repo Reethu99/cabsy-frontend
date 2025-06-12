@@ -24,6 +24,19 @@ body {
     box-sizing: border-box;
 }
 
+
+.top-left-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    color: white;
+}
+
+.top-left-icon :hover {
+    color: #547793;
+}
+
 #signin {
     display: flex;
     justify-content: center;
@@ -68,6 +81,7 @@ body {
     from {
         width: 0;
     }
+
     to {
         width: 100%;
     }
@@ -266,19 +280,22 @@ label {
     /* Red for error */
 }
 
-.message{
+.message {
     font-size: 14px;
     margin-top: 2px;
     padding-bottom: 10px;
 
 }
-.error{
+
+.error {
     color: red;
 }
-.success{
+
+.success {
     color: green;
 }
-.password-change{
+
+.password-change {
     margin-bottom: 0px;
 }
 

@@ -66,7 +66,7 @@
 
 .profile-icon {
   font-size: 40px;
-  color: #555; /* Note: This will make the icon grey on a dark header. You might want white or light grey. */
+  color: #ffffff; /* Note: This will make the icon grey on a dark header. You might want white or light grey. */
 }
 
 .nav-button {
@@ -157,8 +157,8 @@
         <nav class="navbar">
             <div class="navbar-left">
                 <img src="../Assets/shared image.jpg" alt="Cabsy Logo" class="logo-img">
-                <a href="#" class="cabsy-title">Cabsy</a>
-                    <a href="/riderabout" class="nav">About</a>
+                <a href="/riderhome" class="cabsy-title">Cabsy</a>
+                    <a href="/riderabout" class="nav" style="padding-right: 10px;">About</a>
                     <a href="/riderhelp" class="nav">Help</a>
             </div>
             <div class="navbar-right">
@@ -181,15 +181,18 @@
             <li class="ride-template accepted-ride" style="display: none;">
                 <div class="ride-detail"><strong>Status:</strong> <span data-ride-status style="color: green;"></span>
                 </div>
-                <div class="ride-detail"><strong>From:</strong> <span data-pickup-location></span></div>
+                <div class="ride-detail"><strong>From:</strong> <span class="data-pickup-location"></span></div>
                 <div class="ride-detail"><strong>To:</strong> <span data-dropoff-location></span></div>
                 <div class="ride-detail"><strong>Rs.</strong> <span data-cost></span></div>
+                <div class="ride-detail"><strong>Start Time</strong> <span class="startTime"></span></div>
+                <div class="ride-detail"><strong>End Time</strong> <span class="endTime"></span></div>
+
                 <!-- <div class="ride-detail"><strong>Driver:</strong> <span data-driver-name></span></div> -->
             </li>
         </ul>
         <p id="noAcceptedRides" class="message" style="display: none;">No accepted rides found.</p>
 
-        <h2>Rejected Rides</h2>
+        <h2>Cancelled Rides</h2>
         <ul id="rejectedRidesList">
             <li class="ride-template rejected-ride" style="display: none;">
                 <div class="ride-detail"><strong>Ride ID:</strong> <span data-ride-id></span></div>
@@ -198,7 +201,7 @@
                 <div class="ride-detail"><strong>Reason:</strong> <span data-rejection-reason></span></div>
             </li>
         </ul>
-        <p id="noRejectedRides" class="message" style="display: none;">No rejected rides found.</p>
+        <p id="noRejectedRides" class="message" style="display: none;">No cancelled rides found.</p>
     </div>
     <footer>
         <p>&copy; 2025 Cabsy. All rights reserved.</p>
@@ -238,7 +241,6 @@
 
                     if (data.success) {
                         const allRides = data.data;
-
                         const acceptedRides = allRides.filter(ride => ride.status === 'COMPLETED');
                         populateRides(acceptedRides, acceptedRidesList, noAcceptedRides, acceptedRideTemplate, 'completed');
 
@@ -274,9 +276,11 @@
                         newRideItem.querySelector('[data-ride-status]').textContent = (ride.status === 'COMPLETED' ? 'COMPLETED' : 'CANCELLED') || 'N/A';
 
                         if (rideType === 'completed') {
-                            newRideItem.querySelector('[data-pickup-location]').textContent = ride.pickupAddress || 'N/A';
+                            newRideItem.querySelector('.data-pickup-location').textContent = ride.pickupAddress || 'N/A';
                             newRideItem.querySelector('[data-dropoff-location]').textContent = ride.destinationAddress || 'N/A';
                             newRideItem.querySelector('[data-cost]').textContent=Math.round(ride.actualFare*100)/100 || '';
+                            newRideItem.querySelector('.startTime').textContent=formatDateTime(ride.startTime) || '';
+                            newRideItem.querySelector('.endTime').textContent=formatDateTime(ride.endTime) || '';
                         } else if (rideType === 'cancelled') {
                             newRideItem.querySelector('[data-rejection-reason]').textContent = ride.rejectionReason || 'No specific reason provided.';
                         }

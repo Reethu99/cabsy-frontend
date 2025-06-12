@@ -114,7 +114,6 @@ async function bookRide() {
     const estimatedFare = distanceKm * FARE_PER_KM;
 
     const rideData = {
-        // Even without a map, the backend expects lat/lon. Send the dummy coords or actual if you have them.
         pickupLat: pickupLocation.lat, // Latitude
         pickupLon: pickupLocation.lon, // Longitude
         destinationLat: dropoffLocation.lat,
