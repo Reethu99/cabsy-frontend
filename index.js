@@ -66,14 +66,14 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.user) { // If already logged in, redirect to home
         // Determine redirect URL based on user type in session
-        const redirectUrl = req.session.user.userType === 'driver' ? '/captain' : '/riderhome';
+        const redirectUrl = req.session.user.userType === 'captain' ? '/captain' : '/riderhome';
         return res.redirect(redirectUrl);
     }
     res.sendFile(path.join(__dirname, 'public', 'Login', 'Login.html'));
 });
 
 app.get('/registration', (req, res) => {
-    if(isAuthenticated) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
+    if(req.session.user) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 
