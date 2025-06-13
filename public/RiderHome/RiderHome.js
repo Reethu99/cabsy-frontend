@@ -24,12 +24,14 @@ let paymentInitiatedForCurrentRide = false; // Flag to prevent duplicate payment
 // These don't need real coordinates if not using a map, but we'll keep them for consistency
 // in the booking DTO that expects lat/lon. You can use dummy values if they are just identifiers.
 const locations = [
-    { name: 'Chennai Central Railway Station', lat: 13.0827, lon: 80.2785, address: 'Periyamet, Chennai, Tamil Nadu 600003' },
-    { name: 'Chennai International Airport (MAA)', lat: 12.9904, lon: 80.1633, address: 'GST Rd, Meenambakkam, Chennai, Tamil Nadu 600027' },
-    { name: 'T. Nagar Ranganathan Street', lat: 13.0416, lon: 80.2405, address: 'Ranganathan St, T. Nagar, Chennai, Tamil Nadu 600017' },
-    { name: 'Marina Beach', lat: 13.0531, lon: 80.2829, address: 'Marina Beach Road, Chennai, Tamil Nadu' },
-    { name: 'Phoenix Market City', lat: 12.9667, lon: 80.2155, address: 'Velachery Main Rd, Velachery, Chennai, Tamil Nadu 600042' },
-    { name: 'Anna Nagar Tower Park', lat: 13.0863, lon: 80.2078, address: '3rd Ave, Anna Nagar, Chennai, Tamil Nadu 600040' }
+    { name: 'Chennai Central Railway Station', lat: 13.0827, lon: 80.2785, address: 'Chennai Central Railway Station' },
+    { name: 'Chennai International Airport (MAA)', lat: 12.9904, lon: 80.1633, address: 'Chennai International Airport (MAA)' },
+    { name: 'T. Nagar Ranganathan Street', lat: 13.0416, lon: 80.2405, address: 'T. Nagar Ranganathan Street' },
+    { name: 'Marina Beach', lat: 13.0531, lon: 80.2829, address: 'Marina Beach' },
+    { name: 'Phoenix Market City', lat: 12.9667, lon: 80.2155, address: 'Phoenix Market City' },
+    { name: 'Anna Nagar Tower Park', lat: 13.0863, lon: 80.2078, address: 'Anna Nagar Tower Park' },
+    { name: 'Velachery Main Rd', lat: 11.9697, lon: 60.2155, address: 'Velachery Main Rd' },
+    { name: '3rd Ave, Baghnagar', lat: 22.0863, lon: 50.2078, address: '3rd Ave, Baghnagar' }
 ];
 
 // Fare Calculation Configuration
@@ -83,7 +85,7 @@ function validateLocationsAndToggleBookButton() {
             dropoffLocation.lat, dropoffLocation.lon
         );
         const estimatedFare = distanceKm * FARE_PER_KM;
-        bookRideButton.textContent = `Book Ride (Est. ₹${estimatedFare.toFixed(2)})`;
+        bookRideButton.textContent = "Book Ride";
     } else {
         bookRideButton.textContent = 'Select locations to book';
     }
@@ -178,6 +180,7 @@ function displayCurrentRide(ride) {
     currentPickupSpan.textContent = ride.pickupAddress;
     currentDropoffSpan.textContent = ride.destinationAddress;
     currentStatusSpan.textContent = ride.status || "REQUESTED"; // Default to REQUESTED if not set
+    currentStatusSpan.style.color='green';
     currentFareSpan.textContent = ride.estimatedFare ? `₹${ride.estimatedFare.toFixed(2)}` : 'Calculating...';
     // Disable location selection and hide book button while a ride is active
     pickupSelect.disabled = true;
@@ -270,14 +273,6 @@ function startRideStatusPolling() {
                     rideStatusDiv.textContent = 'Searching for a captain...';
                 } else if (ride.status === 'ACCEPTED') {
                     rideStatusDiv.textContent = 'Captain accepted your ride! Getting ready...';
-                    // Simulate ride starting after a short delay (e.g., captain arriving at pickup)
-                    // If we want to move to IN_PROGRESS, captain or backend must trigger this.
-                    // For demo, we'll simulate it for now.
-                    if (!simulateRideProgressionTimeout) {
-                        simulateRideProgressionTimeout = setTimeout(() => {
-                            updateRideStatusOnBackend('IN_PROGRESS'); // Captain starts the ride
-                        }, 1000);
-                    }
                 } else if (ride.status === 'IN_PROGRESS') {
                     rideStatusDiv.textContent = 'Your ride is in progress!';
                     RideCancel.style.display='none';
@@ -309,6 +304,8 @@ function startRideStatusPolling() {
                     if (paymentInitiatedForCurrentRide && rideStatusInterval) {
                          clearInterval(rideStatusInterval);
                     }
+                    clearCurrentRide();
+                    alert('Ride completed!'); // You can make this a nicer notification
                 } else if (ride.status === 'CANCELLED') {
                     alert('Your ride is cancelled.');
                    clearCurrentRide();

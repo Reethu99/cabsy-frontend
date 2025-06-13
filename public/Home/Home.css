@@ -692,7 +692,18 @@ p {
     font-size: 0.85em;
     color: #888;
 }
- 
+
+#home-nav{
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+}
+
+#home-nav .btn {
+    flex-basis:150px; 
+    text-align: center; 
+}
+
 /* Responsive Adjustments */
 @media (max-width: 992px) {
     .hero-text h1 {
