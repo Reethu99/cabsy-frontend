@@ -399,6 +399,20 @@ function fetchAvailableRidesActual() {
             currentStatusCard.style.display = 'none'; // Hide current status card if showing a request
 
 
+
+            function formatDateTime(dateTimeString) {
+                if (!dateTimeString) return 'N/A';
+                try {
+                    const date = new Date(dateTimeString);
+                    // Use toLocaleString() for a user-friendly format based on local settings
+                    return date.toLocaleString();
+                } catch (e) {
+                    console.warn("Invalid date time string:", dateTimeString, e);
+                    return dateTimeString; // Return as is if invalid
+                }
+            }
+
+
             // Add event listeners for the Accept and Reject buttons
             const acceptBtn = document.getElementById('acceptRideBtn');
             if (acceptBtn) {

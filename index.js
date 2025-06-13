@@ -579,15 +579,17 @@ app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint
 //GET endpoint to fetch a specific ride's details by ID (for restoring active ride or current status)
 app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
-    const userId = req.session.user.id; // Get logged-in user's ID from session
+    const currentId = req.session.user.id; 
     console.log('ride in progress:', rideId)
     try {
         const backendResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
-
+        const id = req.session.user.userType=="captain"? backendResponse.data.data.driverId:backendResponse.data.data.userId;
         // IMPORTANT SECURITY CHECK: Ensure the ride belongs to the logged-in user
         // Assuming backendResponse.data.data will contain the ride details and a userId field
-        if (backendResponse.data.success && backendResponse.data.data.userId !== userId) {
-            console.warn(`Security alert: User ${userId} attempted to access ride ${rideId} belonging to another user.`);
+        if (backendResponse.data.success && id !== currentId) {
+            console.log(backendResponse.data.data)
+            console.log(req.session.user.userType)
+            console.warn(`Security alert: Driver ${currentId} attempted to access ride ${rideId} belonging to another Driver.`);
             return res.status(403).json({ success: false, message: 'Unauthorized access to ride details.' });
         }
 
@@ -606,7 +608,7 @@ app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
 app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
     const { status } = req.body; // Expecting status to be sent in the request body, e.g., { status: "COMPLETED" }
-    const userId = req.session.user.id; // Get logged-in user's ID from session
+    const currentId = req.session.user.id; // Get logged-in user's ID from session
 
     if (!status) {
         return res.status(400).json({ success: false, message: 'Missing ride status in request body.' });
@@ -616,8 +618,9 @@ app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
         // First, optionally fetch the ride to ensure it belongs to the user
         // This is a crucial security step to prevent one user from updating another's ride
         const rideCheckResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
-        if (!rideCheckResponse.data.success || rideCheckResponse.data.data.userId !== userId) {
-            console.warn(`Security alert: User ${userId} attempted to update status of ride ${rideId} belonging to another user.`);
+        const id = req.session.user.userType=="captain"? rideCheckResponse.data.data.driverId:rideCheckResponse.data.data.userId;
+        if (!rideCheckResponse.data.success || id !== currentId) {
+            console.warn(`Security alert: driver ${currentId} attempted to update status of ride ${currentId} belonging to another user.`);
             return res.status(403).json({ success: false, message: 'Unauthorized to update this ride status.' });
         }
 
