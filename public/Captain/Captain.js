@@ -187,7 +187,7 @@ function displayOngoingRide(ride) {
     // Disable End Ride until IN_PROGRESS, Disable Picked Up once IN_PROGRESS
     const endRideDisabled = isInProgress ? '' : 'disabled';
     const pickedUpDisabled = isInProgress || isCompletedOrCancelled ? 'disabled' : '';
-
+   
     onGoingRideSection.innerHTML = `
         <h2>On-Going Ride</h2>
         <div class="ride-details">
@@ -205,7 +205,8 @@ function displayOngoingRide(ride) {
             ${!isInProgress && !isCompletedOrCancelled ? `<button class="btn btn-warning" id="cancelRideBtn"><i class="fas fa-times-circle"></i> Cancel Ride</button>` : ''}
         </div>
     `;
-
+    if(endRideDisabled==='') document.getElementById('pickedUpBtn').style.opacity=0.5;
+    if(pickedUpDisabled==='') document.getElementById('endRideBtn').style.opacity=0.5;
     // Explicitly show the ongoing ride section and hide others
     currentStatusCard.style.display = 'none';
     rideRequestSection.style.display = 'none';
@@ -374,22 +375,22 @@ function fetchAvailableRidesActual() {
                 currentStatusCard.style.display = 'block'; // Show current status card
                 return;
             }
+            console.log('ridetoshow',rideToShow)
 
             // Populate the detailed ride request section
             rideRequestSection.innerHTML = `
                 <h2>New Ride Alert!</h2>
                 <div class="ride-details">
-                    <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
-                    <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off:</strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
-                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${rideToShow.actualFare || 'N/A'}</p>
-                    <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon) || '12'} km</p>
-                    <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> ${rideToShow.userName || 'N/A'}</p>
-                    <p><i class="fas fa-phone"></i> <strong>Phone:</strong> ${rideToShow.userPhone || '-'}</p>
-                    <p><i class="fas fa-clock"></i> <strong>Time to Pickup:</strong> ${rideToShow.eta || 'N/A'}</p>
+                    <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup :&nbsp;&nbsp; </strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
+                    <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off :&nbsp;&nbsp; </strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
+                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare :&nbsp;&nbsp; </strong> ₹ ${Math.round(rideToShow.actualFare*100)/100 || 'N/A'}</p>
+                    <p><i class="fas fa-road"></i> <strong>Distance :&nbsp;&nbsp; </strong> ${calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon) || '12'} km</p>
+                    <p><i class="fas fa-user-circle"></i> <strong>Passenger :&nbsp;&nbsp; </strong> ${rideToShow.userName || 'N/A'}</p>
+                    <p><i class="fas fa-phone"></i> <strong>Phone :&nbsp;&nbsp; </strong> ${rideToShow.userPhone || '-'}</p>
+                    <p><i class="fas fa-clock"></i> <strong>Booked at :&nbsp;&nbsp; </strong> ${formatDateTime(rideToShow.requestTime) || rideToShow.requestTime}</p>
                 </div>
                 <div class="ride-actions">
                     <button class="btn btn-accept" id="acceptRideBtn"><i class="fas fa-check-circle"></i> Accept Ride</button>
-                    <button class="btn btn-reject" id="rejectRideBtn"><i class="fas fa-times-circle"></i> Reject</button>
                 </div>
             `;
             // Only show the ride request if there's no ongoing ride (important for initial load/refresh)
@@ -425,12 +426,12 @@ function fetchAvailableRidesActual() {
 
                 rideItem.innerHTML = `
                     <div class="ride-item-header">
-                        <h3>Pickup: ${ride.pickupAddress || 'Unknown'}</h3>
-                        <span>ETA: ${ride.eta || 'N/A'}</span>
+                        <h3>Pickup : ${ride.pickupAddress || 'Unknown'}</h3>
+                        <span>ETA : ${formatDateTime(ride.requestTime) || ''}</span>
                     </div>
-                    <p>Drop-off: ${ride.destinationAddress || 'Unknown'}</p>
-                    <p>Est. Fare: ₹ ${ride.actualFare || 'N/A'}</p>
-                    <button class="btn btn-accept-small" data-id="${ride.id}">Select</button>
+                    <p>Drop-off : ${ride.destinationAddress || 'Unknown'}</p>
+                    <p>Est. Fare : ₹ ${Math.round(ride.actualFare*100)/100 || 'N/A'}</p>
+                    <button class="btn btn-accept-small" data-id="${ride.id} onclick="window.location.href='#dashboard-section'"">Select</button>
                 `;
 
                 // Add click listener to 'Select' button to show ride details
@@ -678,9 +679,9 @@ function fetchPreviousRides() {
                             <h3>To ${ride.destinationAddress || 'Unknown'}</h3>
                             <span class="status-completed">${ride.status ? ride.status.replace(/_/g, ' ') : 'Completed'}</span>
                         </div>
-                        <p><i class="fas fa-calendar-alt"></i> Date: ${new Date(ride.endTime).toLocaleDateString('en-IN')} |
-                           <i class="fas fa-rupee-sign"></i> Fare: ₹ ${Math.round(ride.actualFare*100)/100 || 'N/A'}</p>
-                        <p><i class="fas fa-user-circle"></i> Customer: ${ride.userName || 'N/A'}</p>
+                        <p><i class="fas fa-calendar-alt"></i> Date :&nbsp;&nbsp; ${new Date(ride.endTime).toLocaleDateString('en-IN')} |
+                           <i class="fas fa-rupee-sign"></i> Fare :&nbsp;&nbsp; ₹ ${Math.round(ride.actualFare*100)/100 || 'N/A'}</p>
+                        <p><i class="fas fa-user-circle"></i> Customer :&nbsp;&nbsp; ${ride.userName || 'N/A'}</p>
                         <div class="ride-item-actions">
                             <button class="btn btn-primary-small details-button" id="details-btn-${ride.id}">
                                 <i class="fas fa-info-circle"></i> ${isExpanded ? 'Hide Details' : 'Details'}
@@ -688,13 +689,13 @@ function fetchPreviousRides() {
                         </div>
                         <div class="ride-details-expanded" style="display: ${isExpanded ? 'block' : 'none'};">
                             ${isExpanded ? `
-                                <p><strong>Customer Name:</strong> ${ride.userName || 'N/A'}</p>
-                                <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
-                                <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
-                                <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
-                                <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
-                                <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
-                                <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
+                                <p><strong>Customer Name :&nbsp;&nbsp; </strong> ${ride.userName || 'N/A'}</p>
+                                <p><strong>Pickup :&nbsp;&nbsp; </strong> ${ride.pickupAddress || 'N/A'}</p>
+                                <p><strong>Destination :&nbsp;&nbsp; </strong> ${ride.destinationAddress || 'N/A'}</p>
+                                <p><strong>Status :&nbsp;&nbsp; </strong> ${ride.status || 'N/A'}</p>
+                                <p><strong>Started :&nbsp;&nbsp; </strong> ${formatDateTime(ride.startTime) || ''}</p>
+                                <p><strong>Ended :&nbsp;&nbsp; </strong> ${formatDateTime(ride.endTime) || ''}</p>
+                                <p><strong>Actual Fare :&nbsp;&nbsp; </strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
                             ` : ''}
                         </div>
                     `;
@@ -772,13 +773,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (expandedDetailsDiv.style.display === 'none') {
                     // Populate and show details
                     expandedDetailsDiv.innerHTML = `
-                        <p><strong>Customer Name:</strong> ${ride.userName || 'N/A'}</p>
-                        <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
-                        <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
-                        <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
-                        <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
-                        <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
-                        <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
+                        <p><strong>Customer Name :&nbsp;&nbsp;</strong> ${ride.userName || 'N/A'}</p>
+                        <p><strong>Pickup :&nbsp;&nbsp;</strong> ${ride.pickupAddress || 'N/A'}</p>
+                        <p><strong>Destination :&nbsp;&nbsp;</strong> ${ride.destinationAddress || 'N/A'}</p>
+                        <p><strong>Status :&nbsp;&nbsp;</strong> ${ride.status || 'N/A'}</p>
+                        <p><strong>Started :&nbsp;&nbsp;</strong> ${formatDateTime(ride.startTime)}</p>
+                        <p><strong>Ended :&nbsp;&nbsp;</strong> ${formatDateTime(ride.endTime)}</p>
+                        <p><strong>Actual Fare :&nbsp;&nbsp;</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
                     `;
                     expandedDetailsDiv.style.display = 'block';
                     clickedButton.textContent = 'Hide Details';

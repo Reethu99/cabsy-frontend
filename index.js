@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.user) { // If already logged in, redirect to home
         // Determine redirect URL based on user type in session
-        const redirectUrl = req.session.user.userType === 'driver' ? '/captainhome' : '/riderhome';
+        const redirectUrl = req.session.user.userType === 'driver' ? '/captain' : '/riderhome';
         return res.redirect(redirectUrl);
     }
     res.sendFile(path.join(__dirname, 'public', 'Login', 'Login.html'));
@@ -122,14 +122,6 @@ app.get('/captainaboutus', isAuthenticated, (req, res) => {
 
 app.get('/captainhelp', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'CaptainHelp', 'help.html'));
-});
-
-app.get('/captainhome', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'CaptainHome', 'captainhome.html'));
-});
-
-app.get('/captainsecurity', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'CaptainSecurity', 'CaptainSecurity.html'));
 });
 
 app.get('/editcaptainprofile', isAuthenticated, (req, res) => {
@@ -210,7 +202,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/session-user', (req, res) => {
+app.get('/session-user',isAuthenticated, (req, res) => {
     console.log("Session data requested....")
     res.send(req.session.user);
 });
@@ -254,8 +246,6 @@ app.post('/registration', async (req, res) => {
                 error: 'Incomplete registration data.'
             });
         }
-
-
 
         // Forward the registration data to the appropriate Spring Boot backend endpoint
         backendResponse = await axios.post(backendEndpoint, registrationData);
@@ -438,7 +428,7 @@ app.put('/forgotPassword', async (req, res) => {
 })
 
 // PUT endpoint to update a driver
-app.post('/edit-profile', async (req, res) => {
+app.post('/edit-profile',isAuthenticated, async (req, res) => {
     try {
 
         let updateData = {
@@ -479,7 +469,7 @@ app.post('/edit-profile', async (req, res) => {
     }
 });
 
-app.get('/available-rides', async (req, res) => {
+app.get('/available-rides',isAuthenticated, async (req, res) => {
     console.log('Requested to get available rides for driver:')
     try {
         const response = await axios.get(`${BACKEND_API_BASE_URL}/rides`);
@@ -493,14 +483,14 @@ app.get('/available-rides', async (req, res) => {
 });
 
 
-app.get('/previous-rides', async (req, res) => {
+app.get('/previous-rides',isAuthenticated, async (req, res) => {
 
     let driverId = req.session.user.id;
     console.log('Requested to get previous rides of driver:', driverId)
     try {
         const response = await axios.get(`${BACKEND_API_BASE_URL}/rides/driver/${driverId}`);
         req.session.previousRides = response.data;
-        console.log("Previous rides:", response.data)
+        console.log("Fetching Previous rides...")
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error('Previous rides-Backend Error:', error.message);
@@ -509,7 +499,7 @@ app.get('/previous-rides', async (req, res) => {
 });
 
 
-app.put(`/accept-ride/:rideId`, async (req, res) => {
+app.put(`/accept-ride/:rideId`,isAuthenticated, async (req, res) => {
     try {
         console.log("Attempted to assign ride:")
         let { rideId } = req.params;
@@ -692,7 +682,7 @@ app.post('/process-payment', isAuthenticated, async (req, res) => {
 });
 
 
-app.get('/ride-activity', async (req, res) => {
+app.get('/ride-activity',isAuthenticated, async (req, res) => {
     console.log("Rides Activity - Request received.");
     
     const userId = req.session.user ? req.session.user.id : null;
