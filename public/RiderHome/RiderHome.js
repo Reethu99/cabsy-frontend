@@ -312,6 +312,7 @@ function startRideStatusPolling() {
                 } else if (ride.status === 'CANCELLED') {
                     alert('Your ride is cancelled.');
                    clearCurrentRide();
+                   clearInterval(rideStatusInterval)
                 }
 
             } else {

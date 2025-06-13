@@ -102,7 +102,7 @@
         }
 
         li {
-            background-color: #e9ecef;
+            background-color: azure;
             margin-bottom: 10px;
             padding: 10px 15px;
             border-radius: 5px;
@@ -195,10 +195,12 @@
         <h2>Cancelled Rides</h2>
         <ul id="rejectedRidesList">
             <li class="ride-template rejected-ride" style="display: none;">
-                <div class="ride-detail"><strong>Ride ID:</strong> <span data-ride-id></span></div>
-                <div class="ride-detail"><strong>Status:</strong> <span data-ride-status style="color: red;"></span>
-                </div>
-                <div class="ride-detail"><strong>Reason:</strong> <span data-rejection-reason></span></div>
+                <!-- <div class="ride-detail"><strong>Ride ID:</strong> <span data-ride-id></span></div> -->
+                <div class="ride-detail"><strong>Status:</strong> <span data-ride-status style="color: red;"></span></div>
+                <div class="ride-detail"><strong>From:</strong> <span class="data-pickup-location"></span></div>
+                <div class="ride-detail"><strong>To:</strong> <span data-dropoff-location></span></div>
+                <div class="ride-detail"><strong>Time</strong> <span class="requestTime"></span></div>
+                <!-- <div class="ride-detail"><strong>Reason:</strong> <span data-rejection-reason></span></div> -->
             </li>
         </ul>
         <p id="noRejectedRides" class="message" style="display: none;">No cancelled rides found.</p>
@@ -237,8 +239,7 @@
 
                 try {
                     const response = await fetch('/ride-activity');
-                    const data = await response.json();
-
+                    const data = await response.json();                
                     if (data.success) {
                         const allRides = data.data;
                         const acceptedRides = allRides.filter(ride => ride.status === 'COMPLETED');
@@ -282,7 +283,10 @@
                             newRideItem.querySelector('.startTime').textContent=formatDateTime(ride.startTime) || '';
                             newRideItem.querySelector('.endTime').textContent=formatDateTime(ride.endTime) || '';
                         } else if (rideType === 'cancelled') {
-                            newRideItem.querySelector('[data-rejection-reason]').textContent = ride.rejectionReason || 'No specific reason provided.';
+                            newRideItem.querySelector('.data-pickup-location').textContent = ride.pickupAddress || 'N/A';
+                            newRideItem.querySelector('[data-dropoff-location]').textContent = ride.destinationAddress || 'N/A';
+                            newRideItem.querySelector('.requestTime').textContent=formatDateTime(ride.requestTime) || '';
+                            // newRideItem.querySelector('[data-rejection-reason]').textContent = ride.rejectionReason || 'No specific reason provided.';
                         }
 
                         ulElement.appendChild(newRideItem);

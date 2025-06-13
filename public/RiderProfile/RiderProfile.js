@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                 } else if (fieldType === 'phone') {
-                    // Simple phone number validation (e.g., optional '+' at start, then 7-15 digits)
+                    // Simple phone number validation (e.g., optional '+' at start, then 10 digits)
                     if (!/^\+?[0-9]{10}$/.test(newValue)) {
                         errorMessageElement.textContent = 'Please enter a valid phone number (digits only, optional leading +).';
                         return;
