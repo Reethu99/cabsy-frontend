@@ -2,11 +2,11 @@ import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
-import session from 'express-session'; // Import express-session
-import axios from 'axios'; // Import axios for making HTTP requests
-import dotenv from 'dotenv'; // Import dotenv for environment variables
+import session from 'express-session'; 
+import axios from 'axios'; 
+import dotenv from 'dotenv';
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
 // Get __dirname using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
@@ -24,40 +24,30 @@ console.log(`Backend API Base URL: ${BACKEND_API_BASE_URL}`);
 // This middleware manages user session
 app.use(session({
     secret: process.env.SESSION_SECRET || 'YOUR_SUPER_SECRET_KEY_FOR_SESSION_SIGNING_12345', // !!! IMPORTANT: Use a strong, random key from env !!!
-    resave: false, // Don't save session if unmodified
-    saveUninitialized: false, // Don't create session until something is stored
+    resave: false, 
+    saveUninitialized: false, 
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production (requires HTTPS)
-        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-        maxAge: 1000 * 60 * 60 * 24 // Session lasts 24 hours (in milliseconds)
+        secure: process.env.NODE_ENV === 'production', 
+        httpOnly: true, 
+        maxAge: 1000 * 60 * 60 * 24 
     }
 }));
-// --- End Session Configuration ---
 
-// Use body-parser middleware to parse JSON and URL-encoded data
-// This is essential for req.body to work with JSON sent from the client
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Authentication Middleware ---
 // This middleware checks if a user is logged in before allowing access to certain routes.
 function isAuthenticated(req, res, next) {
-    if (req.session.user) { // Check if user data exists in the session
-        next(); // User is authenticated, proceed to the next route handler
+    if (req.session.user) {
+        next();
     } else {
-        // User is not authenticated, redirect to the login page
         res.redirect('/login');
     }
 }
-// --- End Authentication Middleware ---
 
-
-// --- Route Definitions ---
-
-// Define a route for the root URL (/)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Home', 'Home.html'));
 });
@@ -76,7 +66,6 @@ app.get('/registration', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 
-// Rider routes (protected by isAuthenticated middleware)
 app.get('/riderhome', isAuthenticated, (req, res) => {
     // If we reach here, req.session.user contains the logged-in user's data
     console.log('User accessing rider home:', req.session.user.email);
@@ -128,7 +117,6 @@ app.get('/editcaptainprofile', isAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'EditCaptainProfile', 'editcaptainprofile.html'));
 });
 
-// --- POST route for Login (MODIFIED) ---
 app.post('/login', async (req, res) => {
     const { email, password, role } = req.body; // Receive 'role' from frontend
     console.log(`Login attempt for ${role}:`, email);
@@ -207,7 +195,6 @@ app.get('/session-user',isAuthenticated, (req, res) => {
     res.send(req.session.user);
 });
 
-// --- POST route for Registration (Fixed duplicate try block) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
 
@@ -375,7 +362,6 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// --- POST route for Logout ---
 app.post('/logout', (req, res) => {
     // Destroy the session on the server side
     req.session.destroy(err => {
@@ -389,7 +375,6 @@ app.post('/logout', (req, res) => {
     });
 });
 
-//Change Password
 app.put('/forgotPassword', async (req, res) => {
 
     const password = req.body.password;
@@ -423,7 +408,6 @@ app.put('/forgotPassword', async (req, res) => {
 
 })
 
-// PUT endpoint to update a driver
 app.post('/edit-profile',isAuthenticated, async (req, res) => {
     try {
 
@@ -519,6 +503,7 @@ app.put(`/accept-ride/:rideId`,isAuthenticated, async (req, res) => {
         });
     }
 });
+
 app.get("/checkEmail",(res,req)=>{
     email = req.body.email;
     userType = req.body.userType;
@@ -527,7 +512,7 @@ app.get("/checkEmail",(res,req)=>{
     return 0;
 })
 
-app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint name to /bookride
+app.post('/bookride', isAuthenticated, async (req, res) => { 
     // Ensure the user booking the ride is a rider and has an ID in session
     if (req.session.user.userType !== 'rider' || !req.session.user.id) {
         return res.status(403).json({ success: false, message: 'Unauthorized: Only logged-in riders can book rides.' });
@@ -572,7 +557,6 @@ app.post('/bookride', isAuthenticated, async (req, res) => { // Changed endpoint
     }
 });
 
-//GET endpoint to fetch a specific ride's details by ID (for restoring active ride or current status)
 app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
     const userId = req.session.user.id; // Get logged-in user's ID from session
@@ -598,7 +582,6 @@ app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
     }
 });
 
-// NEW: PUT endpoint to update a ride's status (used by rider to signal completion or cancellation)
 app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
     const { status } = req.body; // Expecting status to be sent in the request body, e.g., { status: "COMPLETED" }
@@ -632,7 +615,6 @@ app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
     }
 });
 
-// NEW: POST endpoint to process payments
 app.post('/process-payment', isAuthenticated, async (req, res) => {
     // Ensure the user initiating the payment is a rider
     if (req.session.user.userType !== 'rider') {
