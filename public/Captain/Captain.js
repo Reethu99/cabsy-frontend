@@ -143,7 +143,7 @@ window.addEventListener('resize', () => {
 // --- Online Status Toggle ---
 function updateDriverStatus() {
     const isOnline = onlineStatusToggle.checked;
-    onlineStatusMessage.innerHTML = isOnline ? 'You are Online' : 'You are Offline';
+    onlineStatusMessage.innerHTML = isOnline ? 'You are **Online**' : 'You are **Offline**';
     onlineStatusMessage.style.color = isOnline ? '#46ba57' : '#dc3545'; // Green for online, red for offline
 
     if (isOnline) {
@@ -194,8 +194,9 @@ function displayOngoingRide(ride) {
             <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> ${ride.userName || 'N/A'}</p>
             <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> ${ride.pickupAddress || 'Unknown'}</p>
             <p><i class="fas fa-flag-checkered"></i> <strong>Destination:</strong> ${ride.destinationAddress || 'Unknown'}</p>
-            <p><i class="fas fa-rupee-sign"></i> <strong>Fare:</strong> ₹ ${Math.round(ride.actualFare*100)/100|| 'N/A'}</p>
-            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${calculateHaversineDistance(ride.pickupLat,ride.pickupLon,ride.destinationLat,ride.destinationLon) || '7'} km</p>
+            <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${parseFloat(ride.actualFare) || 'N/A'}</p>
+            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${ride.distance || 'N/A'} km</p>
+            <p><i class="fas fa-clock"></i> <strong>Approx. Time Left:</strong> <span id="time-left">${ride.duration || 'N/A'}</span></p>
             <p><i class="fas fa-info-circle"></i> <strong>Ride Status:</strong> <span id="current-ride-status">${ride.status ? ride.status.replace(/_/g, ' ') : 'N/A'}</span></p>
         </div>
         <div class="ride-actions">
@@ -275,7 +276,7 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // Distance in kilometers
-    return Math.round(distance*100)/100;
+    return distance;
 }
 
 
@@ -331,19 +332,6 @@ function fetchAvailableRides() {
     }
 }
 
-// Helper function to format date and time (handles ISO strings)
-function formatDateTime(dateTimeString) {
-    if (!dateTimeString) return 'N/A';
-    try {
-        const date = new Date(dateTimeString);
-        // Use toLocaleString() for a user-friendly format based on local settings
-        return date.toLocaleString();
-    } catch (e) {
-        console.warn("Invalid date time string:", dateTimeString, e);
-        return dateTimeString; // Return as is if invalid
-    }
-}
-
 function fetchAvailableRidesActual() {
     console.log("Fetching actual available rides from server...");
     fetch('/available-rides')
@@ -393,11 +381,11 @@ function fetchAvailableRidesActual() {
                 <div class="ride-details">
                     <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
                     <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off:</strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
-                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${Math.round(rideToShow.actualFare*100)/100 || 'N/A'}</p>
+                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${rideToShow.actualFare || 'N/A'}</p>
                     <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon) || '12'} km</p>
                     <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> ${rideToShow.userName || 'N/A'}</p>
                     <p><i class="fas fa-phone"></i> <strong>Phone:</strong> ${rideToShow.userPhone || '-'}</p>
-                    <p><i class="fas fa-clock"></i> <strong>Time to Pickup:</strong> ${formatDateTime(rideToShow.startTime) || ''}</p>
+                    <p><i class="fas fa-clock"></i> <strong>Time to Pickup:</strong> ${rideToShow.eta || 'N/A'}</p>
                 </div>
                 <div class="ride-actions">
                     <button class="btn btn-accept" id="acceptRideBtn"><i class="fas fa-check-circle"></i> Accept Ride</button>
@@ -438,10 +426,10 @@ function fetchAvailableRidesActual() {
                 rideItem.innerHTML = `
                     <div class="ride-item-header">
                         <h3>Pickup: ${ride.pickupAddress || 'Unknown'}</h3>
-                        <span>ETA: ${formatDateTime(ride.requestTime) || ''}</span>
+                        <span>ETA: ${ride.eta || 'N/A'}</span>
                     </div>
                     <p>Drop-off: ${ride.destinationAddress || 'Unknown'}</p>
-                    <p>Est. Fare: ₹ ${Math.round(ride.actualFare*100)/100 || 'N/A'}</p>
+                    <p>Est. Fare: ₹ ${ride.actualFare || 'N/A'}</p>
                     <button class="btn btn-accept-small" data-id="${ride.id}">Select</button>
                 `;
 
@@ -704,13 +692,12 @@ function fetchPreviousRides() {
                                 <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
                                 <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
                                 <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
-                                <p><strong>Started:</strong> ${formatDateTime(ride.startTime) || ''}</p>
-                                <p><strong>Ended:</strong> ${formatDateTime(ride.endTime) || ''}</p>
+                                <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
+                                <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
                                 <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
                             ` : ''}
                         </div>
                     `;
-                    
                     if (previousRidesList) {
                         previousRidesList.appendChild(rideItem);
                     }
@@ -727,7 +714,7 @@ function fetchPreviousRides() {
 
             // Update dashboard status indicators
             if (ridesTodayElement) ridesTodayElement.textContent = totalRidesCount;
-            if (earningsTodayElement) earningsTodayElement.textContent = `₹ ${Math.round(totalFare*100)/100}`;
+            if (earningsTodayElement) earningsTodayElement.textContent = `₹ ${totalFare.toLocaleString('en-IN')}`;
 
             // Update Ride Performance section
             const totalRidesStat = document.getElementById('total-rides-stat');
@@ -789,8 +776,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p><strong>Pickup:</strong> ${ride.pickupAddress || 'N/A'}</p>
                         <p><strong>Destination:</strong> ${ride.destinationAddress || 'N/A'}</p>
                         <p><strong>Status:</strong> ${ride.status || 'N/A'}</p>
-                        <p><strong>Started:</strong> ${formatDateTime(ride.startTime)}</p>
-                        <p><strong>Ended:</strong> ${formatDateTime(ride.endTime)}</p>
+                        <p><strong>Started:</strong> ${ride.startTime ? new Date(ride.startTime).toLocaleString('en-IN') : 'N/A'}</p>
+                        <p><strong>Ended:</strong> ${ride.endTime ? new Date(ride.endTime).toLocaleString('en-IN') : 'N/A'}</p>
                         <p><strong>Actual Fare:</strong> ₹ ${ride.actualFare ? Math.round(ride.actualFare*100)/100 : 'N/A'}</p>
                     `;
                     expandedDetailsDiv.style.display = 'block';

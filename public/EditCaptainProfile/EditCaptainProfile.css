@@ -31,25 +31,6 @@
 
 }
 
-.driver-info a {
-    display: flex;
-    align-items: center;
-}
-
-.profile-container {
-    margin-right: 10px;
-}
-
-.profile-icon {
-    font-size: 40px;
-    color: #ffffff;
-    /* Changed to white for better visibility on dark header */
-}
-
-a {
-    text-decoration: none;
-}
-
 /* --- Global Styles --- */
 body {
     font-family: var(--font-family);
@@ -121,6 +102,16 @@ body {
     color: var(--color-white);
     font-size: 1.05em;
     font-weight: 500;
+    margin-right: var(--spacing-md);
+}
+
+.driver-avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-muted-blue-gray);
+    margin-left: var(--spacing-xs);
 }
 
 .logout-btn {
@@ -184,17 +175,6 @@ h2 {
 }
 
 /* Profile Picture Section */
-
-
-.profile-container {
-    margin-left: 42%;
-    margin-bottom: 5%;
-  } 
-  
-  .profile-icon {
-    font-size: 100px;
-    color:grey; /* Changed to white for better visibility on dark header */
-  }
 .profile-picture-upload {
     text-align: center;
     margin-bottom: 30px;
@@ -225,12 +205,31 @@ h2 {
     display: block;
 }
 
-#profilePicturePreview i{
-    color: #000000;
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.profile-picture-label:hover .upload-overlay {
+    opacity: 1;
+}
+
+.upload-overlay i {
+    font-size: 1.8em;
+    margin-bottom: 5px;
 }
 
 .visually-hidden {
