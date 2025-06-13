@@ -23,17 +23,29 @@
         <div class="header-right">
             <div class="driver-info">
                 <span id="driver-name" class="h-name">Hi, John Doe</p></span>
-                <a href="/editcaptainprofile" class="profile-link">
+                <!-- <a href="/editcaptainprofile" class="profile-link">
                 <img src="https://via.placeholder.com/40" alt="Driver Avatar" class="driver-avatar">
-                </a>
+                </a> -->
+
+                <div class="profile-container">
+                    <a href="/editcaptainprofile" class="profile-link">
+                        <i class="fas fa-user-circle profile-icon"></i> </a>
+                </div>
             </div>
             <button class="logout-btn" title="Logout" onclick="window.location.href='../Login/Login.html'"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </header>
 
     <nav class="left-navbar" id="mainNavbar">
-        <button class="close-navbar-btn" id="closeNavbarBtn"><i class="fas fa-times"></i></button> <div class="profile-summary">
-            <img src="https://via.placeholder.com/80" alt="Driver Avatar" class="avatar">
+        <!-- <button class="close-navbar-btn" id="closeNavbarBtn"><i class="fas fa-times"></i></button> <div class="profile-summary">
+            <img src="https://via.placeholder.com/80" alt="Driver Avatar" class="avatar"> -->
+
+
+            <button class="close-navbar-btn" id="closeNavbarBtn"><i class="fas fa-times"></i></button> 
+            <div class="profile-summary">
+                <div class="profile-container">
+                        <i class="fas fa-user-circle profile-icon"></i>
+                </div>
             <div class="text-content">
                 <h3 class="name">John Doe</h3>
                 <div class="status-toggle">

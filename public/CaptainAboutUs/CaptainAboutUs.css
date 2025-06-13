@@ -10,6 +10,25 @@
     --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+.driver-info a {
+    display: flex;
+    align-items: center;
+}
+
+.profile-container {
+    margin-left: 6px;
+}
+
+.profile-icon {
+    font-size: 40px;
+    color: #ffffff;
+    /* Changed to white for better visibility on dark header */
+}
+
+a {
+    text-decoration: none;
+}
+
 /* General Reset & Body */
 * {
     box-sizing: border-box;
@@ -394,16 +413,6 @@ header {
     color: var(--color-white);
     font-size: 1.05em;
     font-weight: 500;
-    margin-right: var(--spacing-md);
-}
-
-.driver-avatar {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--color-muted-blue-gray);
-    margin-left: var(--spacing-xs);
 }
 
 .logout-btn {

@@ -42,6 +42,21 @@ html {
     scroll-behavior: smooth; /* Smooth scrolling for anchor links */
 }
 
+
+.profile-container {
+    margin-left: 6px;
+}
+
+.profile-icon {
+    font-size: 40px;
+    color: #ffffff;
+    /* Changed to white for better visibility on dark header */
+}
+
+a {
+    text-decoration: none;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--color-light-gray-bg);
@@ -163,7 +178,6 @@ header {
 .driver-info a{
     display: flex;
     align-items: center;
-    margin-right: var(--spacing-md);
 }
 
 .driver-avatar {

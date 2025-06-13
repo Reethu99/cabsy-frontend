@@ -21,10 +21,6 @@
             <a href="/captainaboutus" class="active">About Us</a>
         </div>
         <div class="header-right">
-            <div class="driver-info">
-                <span id="driver-name">Hi, Captain John Doe</span>
-                <img src="https://via.placeholder.com/40" alt="Driver Avatar" class="driver-avatar">
-            </div>
             <button class="logout-btn" title="Logout" onclick="window.location.href='/login'"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </header>
@@ -32,18 +28,24 @@
     <div class="container">
         <header class="main">
             <h1>Edit Captain Profile</h1>
-            <p>Update your personal, vehicle, and document details.</p>
+            <p>Update your personal and vehicle details.</p>
         </header>
 
   <form id="captainProfileForm" action="/edit-profile" method="POST">
   <section class="profile-section">
-    <div class="profile-picture-upload">
+    <!-- <div class="profile-picture-upload">
       <label for="profilePicture" class="profile-picture-label">
-        <img id="profilePicturePreview" src="https://via.placeholder.com/150/EEEEEE/888888?text=Add+Photo" alt="Profile Picture Preview">
+        <div id="profilePicturePreview">
+              <i class="fas fa-user-circle profile-icon"></i> </a>
+      </div>
         <span class="upload-overlay"><i class="fas fa-camera"></i> Change Photo</span>
         <input type="file" id="profilePicture" accept="image/*" class="visually-hidden">
       </label>
-    </div>
+    </div> -->
+
+    <div class="profile-container">
+      <i class="fas fa-user-circle profile-icon"></i>
+  </div>
 
     <div class="form-grid">
       <div class="form-group">

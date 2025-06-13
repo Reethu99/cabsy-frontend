@@ -143,7 +143,7 @@ window.addEventListener('resize', () => {
 // --- Online Status Toggle ---
 function updateDriverStatus() {
     const isOnline = onlineStatusToggle.checked;
-    onlineStatusMessage.innerHTML = isOnline ? 'You are **Online**' : 'You are **Offline**';
+    onlineStatusMessage.innerHTML = isOnline ? 'You are Online' : 'You are Offline';
     onlineStatusMessage.style.color = isOnline ? '#46ba57' : '#dc3545'; // Green for online, red for offline
 
     if (isOnline) {
@@ -187,16 +187,15 @@ function displayOngoingRide(ride) {
     // Disable End Ride until IN_PROGRESS, Disable Picked Up once IN_PROGRESS
     const endRideDisabled = isInProgress ? '' : 'disabled';
     const pickedUpDisabled = isInProgress || isCompletedOrCancelled ? 'disabled' : '';
-   
+   console.log("on going:",ride)
     onGoingRideSection.innerHTML = `
         <h2>On-Going Ride</h2>
         <div class="ride-details">
             <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> ${ride.userName || 'N/A'}</p>
             <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> ${ride.pickupAddress || 'Unknown'}</p>
             <p><i class="fas fa-flag-checkered"></i> <strong>Destination:</strong> ${ride.destinationAddress || 'Unknown'}</p>
-            <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${parseFloat(ride.actualFare) || 'N/A'}</p>
-            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${ride.distance || 'N/A'} km</p>
-            <p><i class="fas fa-clock"></i> <strong>Approx. Time Left:</strong> <span id="time-left">${ride.duration || 'N/A'}</span></p>
+            <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${Math.round(ride.estimatedFare)*100/100 || 'N/A'}</p>
+            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${Math.round(calculateHaversineDistance(ride.pickupLat,ride.pickupLon,ride.destinationLat,ride.destinationLon)*100)/100 || '12'} km</p>
             <p><i class="fas fa-info-circle"></i> <strong>Ride Status:</strong> <span id="current-ride-status">${ride.status ? ride.status.replace(/_/g, ' ') : 'N/A'}</span></p>
         </div>
         <div class="ride-actions">
@@ -206,7 +205,7 @@ function displayOngoingRide(ride) {
         </div>
     `;
     if(endRideDisabled==='') document.getElementById('pickedUpBtn').style.opacity=0.5;
-    if(pickedUpDisabled==='') document.getElementById('endRideBtn').style.opacity=0.5;
+    if(pickedUpDisabled==='') document.getElementById('endRideBtn').style.opacity=0.2;
     // Explicitly show the ongoing ride section and hide others
     currentStatusCard.style.display = 'none';
     rideRequestSection.style.display = 'none';
@@ -383,8 +382,8 @@ function fetchAvailableRidesActual() {
                 <div class="ride-details">
                     <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup :&nbsp;&nbsp; </strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
                     <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off :&nbsp;&nbsp; </strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
-                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare :&nbsp;&nbsp; </strong> ₹ ${Math.round(rideToShow.actualFare*100)/100 || 'N/A'}</p>
-                    <p><i class="fas fa-road"></i> <strong>Distance :&nbsp;&nbsp; </strong> ${calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon) || '12'} km</p>
+                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare :&nbsp;&nbsp; </strong> ₹ ${Math.round(rideToShow.estimatedFare*100)/100 || 'N/A'}</p>
+                    <p><i class="fas fa-road"></i> <strong>Distance :&nbsp;&nbsp; </strong> ${Math.round(calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon)*100)/100 || '12'} km</p>
                     <p><i class="fas fa-user-circle"></i> <strong>Passenger :&nbsp;&nbsp; </strong> ${rideToShow.userName || 'N/A'}</p>
                     <p><i class="fas fa-phone"></i> <strong>Phone :&nbsp;&nbsp; </strong> ${rideToShow.userPhone || '-'}</p>
                     <p><i class="fas fa-clock"></i> <strong>Booked at :&nbsp;&nbsp; </strong> ${formatDateTime(rideToShow.requestTime) || rideToShow.requestTime}</p>

@@ -11,7 +11,7 @@
     <style>
         /* Basic styling for the ride completed popup */
         #rideCompletedPopup {
-            display: none!important; 
+            display: none; 
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -23,10 +23,11 @@
             z-index: 1000; /* Ensure it's on top */
             text-align: center;
             opacity: 0; /* For fade in/out effect */
-            transition: opacity 0.3s ease-in-out; /* Smooth transition */
+            transition: opacity 3s ease-in-out; /* Smooth transition */
         }
         #rideCompletedPopup.show {
             opacity: 1; /* Make visible */
+            display: block!important;
         }
         #rideCompletedPopup h3 {
             margin-top: 0;

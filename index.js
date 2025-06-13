@@ -73,6 +73,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/registration', (req, res) => {
+    if(isAuthenticated) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 
@@ -210,7 +211,7 @@ app.get('/session-user',isAuthenticated, (req, res) => {
 // --- POST route for Registration (Fixed duplicate try block) ---
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
-
+    
     try {
         let backendResponse;
         let registrationData;
