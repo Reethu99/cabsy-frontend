@@ -187,15 +187,15 @@ function displayOngoingRide(ride) {
     // Disable End Ride until IN_PROGRESS, Disable Picked Up once IN_PROGRESS
     const endRideDisabled = isInProgress ? '' : 'disabled';
     const pickedUpDisabled = isInProgress || isCompletedOrCancelled ? 'disabled' : '';
-   
+   console.log("on going:",ride)
     onGoingRideSection.innerHTML = `
         <h2>On-Going Ride</h2>
         <div class="ride-details">
             <p><i class="fas fa-user-circle"></i> <strong>Passenger:</strong> ${ride.userName || 'N/A'}</p>
             <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup:</strong> ${ride.pickupAddress || 'Unknown'}</p>
             <p><i class="fas fa-flag-checkered"></i> <strong>Destination:</strong> ${ride.destinationAddress || 'Unknown'}</p>
-            <p><i class="fas fa-rupee-sign"></i> <strong>Fare:</strong> ₹ ${Math.round(ride.actualFare*100)/100|| 'N/A'}</p>
-            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${calculateHaversineDistance(ride.pickupLat,ride.pickupLon,ride.destinationLat,ride.destinationLon) || '7'} km</p>
+            <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare:</strong> ₹ ${Math.round(ride.estimatedFare)*100/100 || 'N/A'}</p>
+            <p><i class="fas fa-road"></i> <strong>Distance:</strong> ${Math.round(calculateHaversineDistance(ride.pickupLat,ride.pickupLon,ride.destinationLat,ride.destinationLon)*100)/100 || '12'} km</p>
             <p><i class="fas fa-info-circle"></i> <strong>Ride Status:</strong> <span id="current-ride-status">${ride.status ? ride.status.replace(/_/g, ' ') : 'N/A'}</span></p>
         </div>
         <div class="ride-actions">
@@ -205,7 +205,7 @@ function displayOngoingRide(ride) {
         </div>
     `;
     if(endRideDisabled==='') document.getElementById('pickedUpBtn').style.opacity=0.5;
-    if(pickedUpDisabled==='') document.getElementById('endRideBtn').style.opacity=0.5;
+    if(pickedUpDisabled==='') document.getElementById('endRideBtn').style.opacity=0.2;
     // Explicitly show the ongoing ride section and hide others
     currentStatusCard.style.display = 'none';
     rideRequestSection.style.display = 'none';
@@ -276,7 +276,7 @@ function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c; // Distance in kilometers
-    return Math.round(distance*100)/100;
+    return distance;
 }
 
 
@@ -332,7 +332,6 @@ function fetchAvailableRides() {
     }
 }
 
-// Helper function to format date and time (handles ISO strings)
 function formatDateTime(dateTimeString) {
     if (!dateTimeString) return 'N/A';
     try {
@@ -344,6 +343,8 @@ function formatDateTime(dateTimeString) {
         return dateTimeString; // Return as is if invalid
     }
 }
+
+
 
 function fetchAvailableRidesActual() {
     console.log("Fetching actual available rides from server...");
@@ -395,8 +396,8 @@ function fetchAvailableRidesActual() {
                 <div class="ride-details">
                     <p><i class="fas fa-map-marker-alt"></i> <strong>Pickup :&nbsp;&nbsp; </strong> ${rideToShow.pickupAddress || 'Unknown'}</p>
                     <p><i class="fas fa-flag-checkered"></i> <strong>Drop-off :&nbsp;&nbsp; </strong> ${rideToShow.destinationAddress || 'Unknown'}</p>
-                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare :&nbsp;&nbsp; </strong> ₹ ${Math.round(rideToShow.actualFare*100)/100 || 'N/A'}</p>
-                    <p><i class="fas fa-road"></i> <strong>Distance :&nbsp;&nbsp; </strong> ${calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon) || '12'} km</p>
+                    <p><i class="fas fa-rupee-sign"></i> <strong>Est. Fare :&nbsp;&nbsp; </strong> ₹ ${Math.round(rideToShow.estimatedFare*100)/100 || 'N/A'}</p>
+                    <p><i class="fas fa-road"></i> <strong>Distance :&nbsp;&nbsp; </strong> ${Math.round(calculateHaversineDistance(rideToShow.pickupLat,rideToShow.pickupLon,rideToShow.destinationLat,rideToShow.destinationLon)*100)/100 || '12'} km</p>
                     <p><i class="fas fa-user-circle"></i> <strong>Passenger :&nbsp;&nbsp; </strong> ${rideToShow.userName || 'N/A'}</p>
                     <p><i class="fas fa-phone"></i> <strong>Phone :&nbsp;&nbsp; </strong> ${rideToShow.userPhone || '-'}</p>
                     <p><i class="fas fa-clock"></i> <strong>Booked at :&nbsp;&nbsp; </strong> ${formatDateTime(rideToShow.requestTime) || rideToShow.requestTime}</p>
@@ -410,6 +411,9 @@ function fetchAvailableRidesActual() {
             rideRequestSection.style.display = 'block';
             currentStatusCard.style.display = 'none'; // Hide current status card if showing a request
 
+
+
+         
 
             // Add event listeners for the Accept and Reject buttons
             const acceptBtn = document.getElementById('acceptRideBtn');
@@ -711,7 +715,6 @@ function fetchPreviousRides() {
                             ` : ''}
                         </div>
                     `;
-                    
                     if (previousRidesList) {
                         previousRidesList.appendChild(rideItem);
                     }
@@ -728,7 +731,7 @@ function fetchPreviousRides() {
 
             // Update dashboard status indicators
             if (ridesTodayElement) ridesTodayElement.textContent = totalRidesCount;
-            if (earningsTodayElement) earningsTodayElement.textContent = `₹ ${Math.round(totalFare*100)/100}`;
+            if (earningsTodayElement) earningsTodayElement.textContent = `₹ ${totalFare.toLocaleString('en-IN')}`;
 
             // Update Ride Performance section
             const totalRidesStat = document.getElementById('total-rides-stat');

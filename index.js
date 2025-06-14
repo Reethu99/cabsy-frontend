@@ -56,13 +56,14 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.user) { // If already logged in, redirect to home
         // Determine redirect URL based on user type in session
-        const redirectUrl = req.session.user.userType === 'driver' ? '/captain' : '/riderhome';
+        const redirectUrl = req.session.user.userType === 'captain' ? '/captain' : '/riderhome';
         return res.redirect(redirectUrl);
     }
     res.sendFile(path.join(__dirname, 'public', 'Login', 'Login.html'));
 });
 
 app.get('/registration', (req, res) => {
+    if(req.session.user) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 
@@ -184,7 +185,7 @@ app.post('/login', async (req, res) => {
         console.error('Error during login request to backend:', error.response ? error.response.data : error.message);
         res.status(error.response ? error.response.status : 500).json({
             success: false,
-            message: 'Login failed due to server error.',
+            message: error.response ? error.response.data : error.message,
             error: error.response ? error.response.data : error.message
         });
     }
@@ -197,7 +198,7 @@ app.get('/session-user',isAuthenticated, (req, res) => {
 
 app.post('/registration', async (req, res) => {
     console.log('Received registration data:', req.body);
-
+    
     try {
         let backendResponse;
         let registrationData;
@@ -283,9 +284,10 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         console.error('Validation failed for rider update:', { riderId, field, isFieldSupported: ['name', 'email', 'phone', 'password'].includes(field) });
         return res.status(400).json({ success: false, message: 'Invalid request: Missing rider ID or unsupported field.' });
     }
-    const newValue = requestBody[field]; 
+    // ... rest of the code (your existing validation for password/other fields)
+    const newValue = requestBody[field]; // This line should be present
 
-    if (field !== 'password' && (!newValue || newValue.trim() === '')) { 
+    if (field !== 'password' && (!newValue || newValue.trim() === '')) { // <-- Ensure this is correctly fixed
         console.error(`Validation failed: ${field} cannot be empty.`);
         return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
     }
@@ -311,6 +313,7 @@ app.put('/rider/:field/:id', isAuthenticated, async (req, res) => {
         if (!newValue || newValue.trim() === '') {
             return res.status(400).json({ success: false, message: `${field} cannot be empty.` });
         }
+        // Add more specific validation for email/phone if desired, mirroring frontend
     }
 
 
@@ -375,11 +378,11 @@ app.post('/logout', (req, res) => {
     });
 });
 
+//Forgot Password
 app.put('/forgotPassword', async (req, res) => {
-
     const password = req.body.password;
     const email = req.body.email;
-    const userType = req.body.userType;
+    const userType = req.session.user.userType;
     console.log("Requested to update password:", req.body);
 
     try {
@@ -408,6 +411,70 @@ app.put('/forgotPassword', async (req, res) => {
 
 })
 
+//Driver Change password
+app.put('/driver/password/:id', isAuthenticated, async (req, res) => {
+    const userIdFromUrl = req.params.id;
+    const { oldPassword, newPassword } = req.body; // Expecting both old and new passwords
+
+    // --- Critical Security Check: Authorization ---
+    // Ensure the authenticated user (from session/token) is the one they're trying to modify.
+    // This prevents one user from changing another user's password if they somehow guess the ID.
+    if (!req.session.user || String(req.session.user.id) !== String(userIdFromUrl)) {
+        console.warn(`Forbidden access attempt: User ${req.user ? req.user.id : 'N/A'} tried to change password for ID ${userIdFromUrl}`);
+        return res.status(403).json({ success: false, message: 'Forbidden: You can only change your own password.' });
+    }
+
+    console.log(`Received password change request for user ID: ${userIdFromUrl}`);
+
+    // --- Basic Server-Side Validation ---
+    if (!oldPassword || !newPassword) {
+        return res.status(400).json({ success: false, message: 'Old password and new password are required.' });
+    }
+    if (newPassword.length < 8) { // Matches client-side validation
+        return res.status(400).json({ success: false, message: 'New password must be at least 8 characters long.' });
+    }
+    // Add more password complexity validation if needed (e.g., regex for special characters, numbers)
+
+    try {
+        console.log(`Forwarding password change request for user ID: ${userIdFromUrl} to backend.`);
+
+        // --- Forward Request to Java Backend ---
+        // Your Java backend should have a PUT endpoint like `/api/drivers/{driverId}/password`
+        // that accepts `oldPassword` and `newPassword`.
+        const backendResponse = await axios.put(`${BACKEND_API_BASE_URL}/auth/driver/${userIdFromUrl}/password`, {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        });
+        // If the Java backend responds with success (2xx status and 'success: true' in body)
+        if (backendResponse.status >= 200 && backendResponse.status < 300) {
+            console.log('Password updated successfully by backend for user ID:', userIdFromUrl);
+            res.status(200).json({
+                success: true,
+                message: backendResponse.data.message || 'Password updated successfully.'
+            });
+        } else {
+            // Forward error message from Java backend if it indicates failure
+            const errorMessage = backendResponse.data.message || 'Password update failed on backend.';
+            console.error('Backend reported password update failure:', errorMessage, backendResponse.data);
+            return res.status(backendResponse.status || 400).json({
+                success: false,
+                message: errorMessage
+            });
+        }
+    } catch (error) {
+        // --- Handle Network or Backend Errors ---
+        console.error('Error during driver password change', error.response ? error.response.data : error.message);
+
+        const statusCode = error.response ? error.response.status : 500;
+        const errorMessage = error.response && error.response.data && (error.response.data || error.message)
+                             ? (error.response.data || error.message)
+                             : 'Internal server error. Please try again later.';
+
+        return res.status(statusCode).json({ success: false, message: errorMessage });
+    }
+});
+
+// PUT endpoint to update a driver
 app.post('/edit-profile',isAuthenticated, async (req, res) => {
     try {
 
@@ -417,7 +484,7 @@ app.post('/edit-profile',isAuthenticated, async (req, res) => {
             phoneNumber: req.body.phoneNumber,
             licenseNumber: req.body.licenseNumber
         }
-        console.log("Requested to update profile:", updateData);
+        console.log("Rquested to update profile:", updateData);
         let id = req.session.user.id;
         let backendResponse = await axios.post(`${BACKEND_API_BASE_URL}/auth/driver/${id}`, updateData);
         console.log('Profile updated successfully:', backendResponse.data)
@@ -454,7 +521,7 @@ app.get('/available-rides',isAuthenticated, async (req, res) => {
     try {
         const response = await axios.get(`${BACKEND_API_BASE_URL}/rides`);
         req.session.availableRides = response.data;
-        console.log("Fetching Available rides...")
+        console.log("Available rides:", response.data)
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error('Available rides-Backend Error:', error.message);
@@ -559,15 +626,17 @@ app.post('/bookride', isAuthenticated, async (req, res) => {
 
 app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
-    const userId = req.session.user.id; // Get logged-in user's ID from session
+    const currentId = req.session.user.id; 
     console.log('ride in progress:', rideId)
     try {
         const backendResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
-
+        const id = req.session.user.userType=="captain"? backendResponse.data.data.driverId:backendResponse.data.data.userId;
         // IMPORTANT SECURITY CHECK: Ensure the ride belongs to the logged-in user
         // Assuming backendResponse.data.data will contain the ride details and a userId field
-        if (backendResponse.data.success && backendResponse.data.data.userId !== userId) {
-            console.warn(`Security alert: User ${userId} attempted to access ride ${rideId} belonging to another user.`);
+        if (backendResponse.data.success && id !== currentId) {
+            console.log(backendResponse.data.data)
+            console.log(req.session.user.userType)
+            console.warn(`Security alert: Driver ${currentId} attempted to access ride ${rideId} belonging to another Driver.`);
             return res.status(403).json({ success: false, message: 'Unauthorized access to ride details.' });
         }
 
@@ -585,7 +654,7 @@ app.get('/ride-details/:rideId', isAuthenticated, async (req, res) => {
 app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
     const { rideId } = req.params;
     const { status } = req.body; // Expecting status to be sent in the request body, e.g., { status: "COMPLETED" }
-    const userId = req.session.user.id; // Get logged-in user's ID from session
+    const currentId = req.session.user.id; // Get logged-in user's ID from session
 
     if (!status) {
         return res.status(400).json({ success: false, message: 'Missing ride status in request body.' });
@@ -595,8 +664,9 @@ app.put('/update-ride-status/:rideId', isAuthenticated, async (req, res) => {
         // First, optionally fetch the ride to ensure it belongs to the user
         // This is a crucial security step to prevent one user from updating another's ride
         const rideCheckResponse = await axios.get(`${BACKEND_API_BASE_URL}/rides/${rideId}`);
-        if (!rideCheckResponse.data.success || rideCheckResponse.data.data.userId !== userId) {
-            console.warn(`Security alert: User ${userId} attempted to update status of ride ${rideId} belonging to another user.`);
+        const id = req.session.user.userType=="captain"? rideCheckResponse.data.data.driverId:rideCheckResponse.data.data.userId;
+        if (!rideCheckResponse.data.success || id !== currentId) {
+            console.warn(`Security alert: driver ${currentId} attempted to update status of ride ${currentId} belonging to another user.`);
             return res.status(403).json({ success: false, message: 'Unauthorized to update this ride status.' });
         }
 

@@ -171,7 +171,7 @@ let  userType = "rider";
                 }
             } else {
                 // Handle login error from Express/Backend
-                alert(data.message || "Login failed. Please try again.");
+                alert(data.error.error || "Login failed. Please try again.");
                 console.error("Login failed details:", data.error);
             }
         } catch (error) {
