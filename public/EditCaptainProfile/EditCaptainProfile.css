@@ -422,6 +422,52 @@ textarea {
     }
 }
 
+/* Specific styling for password section inputs when in edit mode */
+#password-section .field-edit input {
+    width: calc(100% - 180px); /* Adjust width to fit labels and buttons */
+    margin-bottom: 10px; /* Space between password inputs */
+}
+
+#password-section .field-edit label {
+    flex-basis: auto; /* Allow labels to adjust */
+    text-align: left;
+    margin-right: 0;
+    width: 150px; /* Fixed width for password labels */
+}
+
+#password-section .field-edit {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: flex-start; /* Align to the left */
+}
+
+.field-edit button{
+    padding:6px 15px;
+    border-radius: 8px;
+    border-color: gray;
+}
+
+.field-edit .buttons{
+    display: flex;
+    gap:20px;
+}
+
+.field-edit button:hover{
+    box-shadow: 3px 5px 10px rgba(75, 81, 83, 0.3);
+}
+
+#password-section .field-edit button {
+    margin-top: 10px;
+    margin-left: 0;
+    width: auto;
+}
+
+#password-section .field-edit div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 
 /* --- Footer --- */
 footer {

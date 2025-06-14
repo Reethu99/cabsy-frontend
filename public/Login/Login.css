@@ -23,6 +23,7 @@ body {
 .toggle-container {
   display: flex;
   align-items: center;
+  margin-left: 30px;
 }
 
 .toggle-option {
@@ -89,9 +90,10 @@ body {
   flex-direction: column;
   align-items: center;
 }
- 
+
 h2 {
   margin-bottom: 20px;
+  margin-left: 113px;;
 }
  
 select,
@@ -105,7 +107,7 @@ input {
 }
  
 .login-btn {
-  width: 80%;
+  width: 85%;
   padding: 10px;
   background-color: #547793;
   border: none;

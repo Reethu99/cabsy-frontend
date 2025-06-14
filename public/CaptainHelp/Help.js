@@ -1,7 +1,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     // FAQ Accordion Functionality
     const faqQuestions = document.querySelectorAll('.faq-question');
-
+    const logoutButton = document.getElementById("logout-btn");
+    logoutButton.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('Logged out successfully!');
+                window.location.href = data.redirectUrl; // Redirect to homepage
+            } else {
+                alert('Logout failed: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error during logout:', error);
+            alert('An error occurred during logout.');
+        }
+    });
     faqQuestions.forEach(question => {
         question.addEventListener('click', function() {
             this.classList.toggle('active');

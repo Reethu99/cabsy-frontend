@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     if (req.session.user) { // If already logged in, redirect to home
         // Determine redirect URL based on user type in session
-        const redirectUrl = req.session.user.userType === 'driver' ? '/captain' : '/riderhome';
+        const redirectUrl = req.session.user.userType === 'captain' ? '/captain' : '/riderhome';
         return res.redirect(redirectUrl);
     }
     res.sendFile(path.join(__dirname, 'public', 'Login', 'Login.html'));
@@ -392,15 +392,12 @@ app.post('/logout', (req, res) => {
     });
 });
 
-//Change Password
+//Forgot Password
 app.put('/forgotPassword', async (req, res) => {
-
     const password = req.body.password;
     const email = req.body.email;
-    const userType = req.body.userType;
+    const userType = req.session.user.userType;
     console.log("Requested to update password:", req.body);
-
-
 
     try {
         
@@ -427,6 +424,69 @@ app.put('/forgotPassword', async (req, res) => {
     }
 
 })
+
+//Driver Change password
+app.put('/driver/password/:id', isAuthenticated, async (req, res) => {
+    const userIdFromUrl = req.params.id;
+    const { oldPassword, newPassword } = req.body; // Expecting both old and new passwords
+
+    // --- Critical Security Check: Authorization ---
+    // Ensure the authenticated user (from session/token) is the one they're trying to modify.
+    // This prevents one user from changing another user's password if they somehow guess the ID.
+    if (!req.session.user || String(req.session.user.id) !== String(userIdFromUrl)) {
+        console.warn(`Forbidden access attempt: User ${req.user ? req.user.id : 'N/A'} tried to change password for ID ${userIdFromUrl}`);
+        return res.status(403).json({ success: false, message: 'Forbidden: You can only change your own password.' });
+    }
+
+    console.log(`Received password change request for user ID: ${userIdFromUrl}`);
+
+    // --- Basic Server-Side Validation ---
+    if (!oldPassword || !newPassword) {
+        return res.status(400).json({ success: false, message: 'Old password and new password are required.' });
+    }
+    if (newPassword.length < 8) { // Matches client-side validation
+        return res.status(400).json({ success: false, message: 'New password must be at least 8 characters long.' });
+    }
+    // Add more password complexity validation if needed (e.g., regex for special characters, numbers)
+
+    try {
+        console.log(`Forwarding password change request for user ID: ${userIdFromUrl} to backend.`);
+
+        // --- Forward Request to Java Backend ---
+        // Your Java backend should have a PUT endpoint like `/api/drivers/{driverId}/password`
+        // that accepts `oldPassword` and `newPassword`.
+        const backendResponse = await axios.put(`${BACKEND_API_BASE_URL}/auth/driver/${userIdFromUrl}/password`, {
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        });
+        // If the Java backend responds with success (2xx status and 'success: true' in body)
+        if (backendResponse.status >= 200 && backendResponse.status < 300) {
+            console.log('Password updated successfully by backend for user ID:', userIdFromUrl);
+            res.status(200).json({
+                success: true,
+                message: backendResponse.data.message || 'Password updated successfully.'
+            });
+        } else {
+            // Forward error message from Java backend if it indicates failure
+            const errorMessage = backendResponse.data.message || 'Password update failed on backend.';
+            console.error('Backend reported password update failure:', errorMessage, backendResponse.data);
+            return res.status(backendResponse.status || 400).json({
+                success: false,
+                message: errorMessage
+            });
+        }
+    } catch (error) {
+        // --- Handle Network or Backend Errors ---
+        console.error('Error during driver password change', error.response ? error.response.data : error.message);
+
+        const statusCode = error.response ? error.response.status : 500;
+        const errorMessage = error.response && error.response.data && (error.response.data || error.message)
+                             ? (error.response.data || error.message)
+                             : 'Internal server error. Please try again later.';
+
+        return res.status(statusCode).json({ success: false, message: errorMessage });
+    }
+});
 
 // PUT endpoint to update a driver
 app.post('/edit-profile',isAuthenticated, async (req, res) => {
@@ -524,6 +584,7 @@ app.put(`/accept-ride/:rideId`,isAuthenticated, async (req, res) => {
         });
     }
 });
+
 app.get("/checkEmail",(res,req)=>{
     email = req.body.email;
     userType = req.body.userType;
