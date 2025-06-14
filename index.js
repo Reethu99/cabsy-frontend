@@ -73,7 +73,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/registration', (req, res) => {
-    if(isAuthenticated) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
+    if(req.session.user) res.redirect(req.session.user.userType == 'captain'?"/captain":"/riderhome")
     res.sendFile(path.join(__dirname, 'public', 'Registration', 'Registration.html'));
 });
 

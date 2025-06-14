@@ -332,6 +332,20 @@ function fetchAvailableRides() {
     }
 }
 
+function formatDateTime(dateTimeString) {
+    if (!dateTimeString) return 'N/A';
+    try {
+        const date = new Date(dateTimeString);
+        // Use toLocaleString() for a user-friendly format based on local settings
+        return date.toLocaleString();
+    } catch (e) {
+        console.warn("Invalid date time string:", dateTimeString, e);
+        return dateTimeString; // Return as is if invalid
+    }
+}
+
+
+
 function fetchAvailableRidesActual() {
     console.log("Fetching actual available rides from server...");
     fetch('/available-rides')
@@ -399,18 +413,7 @@ function fetchAvailableRidesActual() {
 
 
 
-            function formatDateTime(dateTimeString) {
-                if (!dateTimeString) return 'N/A';
-                try {
-                    const date = new Date(dateTimeString);
-                    // Use toLocaleString() for a user-friendly format based on local settings
-                    return date.toLocaleString();
-                } catch (e) {
-                    console.warn("Invalid date time string:", dateTimeString, e);
-                    return dateTimeString; // Return as is if invalid
-                }
-            }
-
+         
 
             // Add event listeners for the Accept and Reject buttons
             const acceptBtn = document.getElementById('acceptRideBtn');
