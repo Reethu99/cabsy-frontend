@@ -345,12 +345,13 @@ let  userType = "rider";
 
             
 const data = await response.json();
+
 if (response.ok && data.success) { // Check both HTTP status (2xx) AND backend's success flag
     alert(data.message || 'Password updated successfully!'); // Display success message
     await showLoginForm(); // Only go back to login on success
 } else {
     // Display error message from backend if available, otherwise a generic one
-    alert(data.error || data.message || 'Failed to update password. Please try again.');
+    alert(data.error.error || data.error.message || 'Failed to update password. Please try again.');
     // Do not showLoginForm on error, so user can see the message or retry
 }
         } else if (!newPass || newPass.length < 6) {

@@ -382,7 +382,7 @@ app.post('/logout', (req, res) => {
 app.put('/forgotPassword', async (req, res) => {
     const password = req.body.password;
     const email = req.body.email;
-    const userType = req.session.user.userType;
+    const userType = req.body.userType;
     console.log("Requested to update password:", req.body);
 
     try {
